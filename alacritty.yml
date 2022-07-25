@@ -1,0 +1,43 @@
+font:
+  normal:
+    family: "MesloLGS NF"
+
+window:
+  decorations: none
+  padding:
+    x: 3
+    y: 6
+
+cursor:
+  style:
+    shape: Underline
+    blinking: Always
+    blink_interval: 90
+
+
+#My theme
+colors:
+  primary:
+    background: '#27292D' 
+    foreground: '#E9EAEB' 
+
+  normal:
+    black:   '#18191A'
+    red:     '#B85261' 
+    green:   '#94B852' 
+    yellow:  '#B8A952'
+    blue:    '#7652B8' 
+    magenta: '#B85294'
+    cyan:    '#5294B8' 
+    white:   '#E9EAEB' 
+
+  bright:
+    black:   '#1B1C1D' 
+    red:     '#D9798E'
+    green:   '#C8DB46'
+    yellow:  '#EEE766'
+    blue:    '#CEC2E5'
+    magenta: '#E7C0D8'
+    cyan:    '#74BCD5'
+    white:   '#E9EAEB'
+
