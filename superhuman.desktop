@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Superhuman
+GenericName=Task Client
+Comment=E-Mail Client
+Exec=google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U
+Terminal=false
+Icon=gmail-offline
+Type=Application
+StartupWMClass=superhuman
+Categories=Network;
