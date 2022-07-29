@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Datev
+Comment=Datev Unternehmen Online
+Exec=google-chrome --new-window --class=datev --app=https://login.datev.de/wopl/FC/FC --user-data-dir=/home/thyriaen/.webapps/datev %U
+Terminal=false
+Icon=datev2.svg
+Type=Application
+StartupWMClass=datev
+Categories=Network;
