@@ -42,7 +42,7 @@ xkb_symbols "basic" {
     key <AC08> {    [     k,    K                           ]   };
     key <AC09> {    [     l,    L                           ]   };
     key <AC10> {    [ semicolon,  colon                     ]   };
-    key <AC11> {    [ apostrophe, asciitilde                ]   };
+    key <AC11> {    [ asciitilde, apostrophe                ]   };
 
     key <AB01> {    [     z,    Z               ]   };
     key <AB02> {    [     x,    X               ]   };
