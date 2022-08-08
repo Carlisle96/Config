@@ -34,5 +34,7 @@ material light cursors icons
 <geekosaur> also you can't reliably match browser windows, see https://hackage.haskell.org/package/xmonad-contrib-0.17.0/docs/XMonad-Hooks-DynamicProperty.html
 <geekosaur> https://github.com/geekosaur/xmonad.hs/blob/skkukuk/xmonad.hs#L150-L172 example manageHook
 
+upower -i /org/freedesktop/UPower/devices/battery_BAT0
+
 https://hackage.haskell.org/package/xmonad-contrib-0.17.0/docs/XMonad-Layout-Decoration.html#t:DecorationStyle
 https://hackage.haskell.org/package/xmonad-contrib-0.17.0/docs/XMonad-Layout-Tabbed.html
