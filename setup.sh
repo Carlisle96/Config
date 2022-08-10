@@ -1,12 +1,12 @@
 # Install basics
 sudo dnf -y upgrade
-sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 sudo dnf -y remove i3 awesome ratpoison openbox xterm
-sudo dnf copr enable emixampp/synology-drive
+sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf --refresh -y install redhat-rpm-config terminology vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim pdftoppm lxappearance synology-drive-noextra
 
 # Laptop Only section
-sudo dnf install tlp
+sudo dnf -y install tlp
 
 # Sublime Text
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
