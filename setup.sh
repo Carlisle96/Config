@@ -4,15 +4,14 @@ sudo dnf remove i3 awesome ratpoison openbox xterm
 sudo dnf copr enable emixampp/synology-drive
 sudo dnf --refresh install redhat-rpm-config terminology vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim pdftoppm lxappearance synology-drive-noextra
 sudo dnf install tlp
+
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
 sudo dnf install sublime-text
+
+wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+sudo dnf install google-chrome-stable_current_x86_64
+
 hostnamectl set-hostname thymonad
-
-# install fzf keybindings
-# set zsh as default shell
-# flicker free boot
-
-# /usr/share/X11/xkb/
 
 pip install td-watson
 systemctl --user enable syncthing.service
@@ -23,7 +22,20 @@ sudo updatedb
 # change in /etc/lightdm/slick-greeter.conf and set slick greeter ofc
 # pip command line completen guide tailordev.github.io/Watson/
 
-material light cursors icons
+cp apps/*.desktop ~/.local/share/applications
+#cp cfg/terminology ~/.config/terminology/
+mkdir ~/Pictures
+cp Wallpaper.jpg ~/Pictures
+
+sudo cp xkb/thy /usr/share/X11/xkb/symbols/
+sudo cp xkb/evdev.xml /usr/share/X11/xkb/rules/
+
+cp xmonad/xmonad.hs ~/.xmonad/
+
+# /usr/share/X11/xkb/
+# flicker free boot
+# set zsh as default shell
+# install fzf keybindings
 
 #<thyriaen> btw is there a way to define some windows as always floating and assign size and position to them where they should be when i start them ?
 #<geekosaur> border is separate from the layout
