@@ -1,20 +1,20 @@
 # Install basics
 sudo dnf -y upgrade
-sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 sudo dnf -y remove i3 awesome ratpoison openbox xterm
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install redhat-rpm-config terminology vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim pdftoppm lxappearance synology-drive-noextra
+sudo dnf --refresh -y install redhat-rpm-config terminology vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
 
 # Sublime Text
+sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
 sudo dnf -y install sublime-text
 
 # Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-sudo dnf -y install google-chrome-stable_current_x86_64
+sudo dnf -y install google-chrome-stable_current_x86_64.rpm
 
 # Watson
 pip install td-watson
@@ -28,26 +28,26 @@ sudo grub2-mkconfig
 sudo updatedb
 
 # Putting files at locations
+mkdir -p ~/.xmonad/hooks/
 cp home/profile ~/.profile
-cp home/startup.sh ~/.xmonad/hooks/startup.sh
+cp home/startup.sh ~/.xmonad/hooks/
 cp home/zshrc ~/.zshrc
 
-mkdir ~/.xmonad
-cp xmonad/xmonad.hs ~/.xmonad/
+cp xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 
 sudo cp xkb/thy /usr/share/X11/xkb/symbols/
 sudo cp xkb/evdev.xml /usr/share/X11/xkb/rules/
 
-mkdir ~/Pictures
+mkdir -p ~/Pictures
 cp Wallpaper.jpg ~/Pictures
 
-mkdir ~/.local/share/applications
+mkdir -p ~/.local/share/applications
 cp apps/*.desktop ~/.local/share/applications
 
-mkdir ~/.config/terminology/colorchemes
+mkdir -p ~/.config/terminology/colorchemes
 cp cfg/terminology/thy.eet ~/.config/terminology/colorchemes/thy.eet
 
-mkdir ~/.icons
+mkdir -p ~/.icons
 mv material_light_cursors ~/.icons/
 
 # Useful commands
