@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install redhat-rpm-config alacritty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install redhat-rpm-config feh alacritty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
@@ -44,8 +44,11 @@ cp Wallpaper.jpg ~/Pictures
 mkdir -p ~/.local/share/applications
 cp apps/*.desktop ~/.local/share/applications
 
-mkdir -p ~/.config/terminology/colorchemes
-cp cfg/terminology/thy.eet ~/.config/terminology/colorchemes/thy.eet
+mkdir -p ~/.config/alacritty/
+cp cfg/alacritty/alacritty.yml ~/.config/alacritty/
+
+# mkdir -p ~/.config/terminology/colorchemes
+# cp cfg/terminology/thy.eet ~/.config/terminology/colorchemes/thy.eet
 
 mkdir -p ~/.icons
 mv material_light_cursors ~/.icons/
