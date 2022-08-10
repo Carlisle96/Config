@@ -17,7 +17,7 @@ import XMonad.Hooks.Script
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-myTerminal      = "terminology"
+myTerminal      = "alacritty"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool

@@ -1,8 +1,8 @@
 # Install basics
 sudo dnf -y upgrade
-sudo dnf -y remove i3 awesome ratpoison openbox xterm
+sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install redhat-rpm-config terminology vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install redhat-rpm-config alacritty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
