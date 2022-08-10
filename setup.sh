@@ -1,41 +1,67 @@
-sudo dnf upgrade
+# Install basics
+sudo dnf -y upgrade
 sudo dnf config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-sudo dnf remove i3 awesome ratpoison openbox xterm
+sudo dnf -y remove i3 awesome ratpoison openbox xterm
 sudo dnf copr enable emixampp/synology-drive
-sudo dnf --refresh install redhat-rpm-config terminology vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim pdftoppm lxappearance synology-drive-noextra
+sudo dnf --refresh -y install redhat-rpm-config terminology vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim pdftoppm lxappearance synology-drive-noextra
+
+# Laptop Only section
 sudo dnf install tlp
 
+# Sublime Text
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-sudo dnf install sublime-text
+sudo dnf -y install sublime-text
 
+# Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
-sudo dnf install google-chrome-stable_current_x86_64
+sudo dnf -y install google-chrome-stable_current_x86_64
 
-hostnamectl set-hostname thymonad
-
+# Watson
 pip install td-watson
+
+# Configs
+hostnamectl set-hostname carthy
 systemctl --user enable syncthing.service
 systemctl --user start syncthing.service
 sudo grub2-editenv - set menu_auto_hide=1
 sudo grub2-mkconfig
 sudo updatedb
-# change in /etc/lightdm/slick-greeter.conf and set slick greeter ofc
-# pip command line completen guide tailordev.github.io/Watson/
 
-cp apps/*.desktop ~/.local/share/applications
-#cp cfg/terminology ~/.config/terminology/
-mkdir ~/Pictures
-cp Wallpaper.jpg ~/Pictures
+# Putting files at locations
+cp home/profile ~/.profile
+cp home/startup.sh ~/.xmonad/hooks/startup.sh
+cp home/zshrc ~/.zshrc
+
+mkdir ~/.xmonad
+cp xmonad/xmonad.hs ~/.xmonad/
 
 sudo cp xkb/thy /usr/share/X11/xkb/symbols/
 sudo cp xkb/evdev.xml /usr/share/X11/xkb/rules/
 
-cp xmonad/xmonad.hs ~/.xmonad/
+mkdir ~/Pictures
+cp Wallpaper.jpg ~/Pictures
 
-# /usr/share/X11/xkb/
-# flicker free boot
+mkdir ~/.local/share/applications
+cp apps/*.desktop ~/.local/share/applications
+
+mkdir ~/.config/terminology/colorchemes
+cp cfg/terminology/thy.eet ~/.config/terminology/colorchemes/thy.eet
+
+mkdir ~/.icons
+mv material_light_cursors ~/.icons/
+
+# Useful commands
+# upower -i /org/freedesktop/UPower/devices/battery_BAT0
+
+# Manual Install
+echo "Install complete"
+echo "run lxappreance for manual install now"
+
+# Todo
 # set zsh as default shell
 # install fzf keybindings
+# lightdm greeter
+# pip command line completen guide tailordev.github.io/Watson/
 
 #<thyriaen> btw is there a way to define some windows as always floating and assign size and position to them where they should be when i start them ?
 #<geekosaur> border is separate from the layout
@@ -46,5 +72,4 @@ cp xmonad/xmonad.hs ~/.xmonad/
 #<geekosaur> also you can't reliably match browser windows, see https://hackage.haskell.org/package/xmonad-contrib-0.17.0/docs/XMonad-Hooks-DynamicProperty.html
 #<geekosaur> https://github.com/geekosaur/xmonad.hs/blob/skkukuk/xmonad.hs#L150-L172 example manageHook#
 
-#upower -i /org/freedesktop/UPower/devices/battery_BAT0
-# https://www.gnome-look.org/p/1346778/
+
