@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install keepassxc redhat-rpm-config feh nnn alacritty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip poppler-utils python3-devel xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install gtk3-devel zathura zathura-pdf-mupdf keepassxc redhat-rpm-config feh nnn alacritty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip poppler-utils python3-devel xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
@@ -31,8 +31,16 @@ sudo updatedb
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 
 # nnn
+xdg-mime default org.pwmt.zathura.desktop application/pdf
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 pip install ueberzug
+git clone https://github.com/mwh/dragon.git
+cd dragon
+make
+cp dragon ~/.local/bin/
+cd ..
+cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
+
 # and more
 
 # Signal
