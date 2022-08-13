@@ -30,5 +30,5 @@ source ~/.term/powerlevel10k/powerlevel10k.zsh-theme
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
-source ~/.term/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/doc/fzf/examples/key-bindings.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+#source /usr/share/doc/fzf/examples/key-bindings.zsh

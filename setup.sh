@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install redhat-rpm-config feh nnn alacritty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install keepassxc redhat-rpm-config feh nnn alacritty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite python3-pip poppler-utils python3-devel xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
@@ -27,11 +27,26 @@ sudo grub2-editenv - set menu_auto_hide=1
 sudo grub2-mkconfig
 sudo updatedb
 
+# Terminal
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
+
+# nnn
+curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+pip install ueberzug
+# and more
+
+# Signal
+flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub org.signal.Signal
+
 # Putting files at locations
 mkdir -p ~/.xmonad/hooks/
 cp home/profile ~/.profile
 cp home/startup.sh ~/.xmonad/hooks/
 cp home/zshrc ~/.zshrc
+
+mkdir -p ~/.local/share/
+mv fonts ~/.local/share/
 
 cp xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 

@@ -130,25 +130,28 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ------------------------------------------------------------------------
 -- Layouts:
 
+myTabConfig = def { fontName = "xft:mononoki Nerd Font:pixelsize=14:antialias=true:hinting=true"
+              , activeColor = "#7652B8"
+              , activeTextColor = "#18191A"
+              , activeBorderColor = "#18191A"
+              , inactiveColor = "#27292D"
+              , inactiveTextColor = "#E9EAEB"
+              , inactiveBorderColor = "#18191A"
+--                  , normalBorderColor  = "#18191A"
+              , decoHeight = 24 }
+
 myLayout = windowNavigation layouts
   where
-    layouts = tiled ||| noBorders ( addTabsBottom shrinkText myTabConfig Full ) ||| doubleTabs ||| noBorders Full
+    layouts = addTabsBottom shrinkText myTabConfig ( gap Simplest ) ||| doubleTabs -- ||| tilted ||| noBorders Full
     doubleTabs = combineTwo (TwoPane 0.03 0.5)
                             ( addTabsBottom shrinkText myTabConfig ( gapl Simplest ) )
                             ( addTabsBottom shrinkText myTabConfig ( gapr Simplest ) )
      -- default tiling algorithm partitions the screen into two panes
-    gapl = spacingRaw False (Border 4 4 1 4) True (Border 4 4 4 4) True
-    gapr = spacingRaw False (Border 4 4 4 4) True (Border 4 4 4 1) True
+    gapl = spacingRaw False (Border 8 8 2 8) True (Border 8 8 8 8) True
+    gapr = spacingRaw False (Border 8 8 8 8) True (Border 8 8 8 2) True
+    gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
     --gaps = spacingRaw False (Border 4 4 4 4) True (Border 4 4 4 4) True
-    myTabConfig = def { fontName = "MesloLGS NF"
-                  , activeColor = "#7652B8"
-                  , activeTextColor = "#E9EAEB"
-                  , activeBorderColor = "#18191A"
-                  , inactiveColor = "#E9EAEB"
-                  , inactiveTextColor = "#18191A"
-                  , inactiveBorderColor = "#18191A"
---                  , normalBorderColor  = "#18191A"
-                  , decoHeight = 24 }
+
     tiled = gapr $ Tall nmaster delta ratio
      -- The default number of windows in the master pane
     nmaster = 1

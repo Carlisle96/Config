@@ -1,6 +1,9 @@
 font:
   normal:
-    family: "MesloLGS NF"
+    family: "mononoki Nerd Font"
+  size: 12
+
+shell: /usr/bin/zsh
 
 window:
   decorations: none
@@ -13,7 +16,6 @@ cursor:
     shape: Underline
     blinking: Always
     blink_interval: 90
-
 
 #My theme
 colors:
