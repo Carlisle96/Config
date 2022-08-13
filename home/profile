@@ -41,5 +41,8 @@ alias egrep='egrep --color=auto'
 PATH=$PATH:~/.local/bin
 
 export NNN_FIFO=/tmp/nnn.fifo
-export NNN_PLUG='p:preview-tui'
+export NNN_PLUG='p:preview-tui;d:drag'
 export TERMINAL=alacritty
+
+export EDITOR=vi
+export VISUAL=vi

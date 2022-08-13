@@ -9,10 +9,14 @@ import XMonad.Layout.Combo
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
+import XMonad.Layout.Reflect
+
 import XMonad.Util.EZConfig
 import XMonad.Util.Cursor
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.Script
+import XMonad.Hooks.InsertPosition
+
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -142,8 +146,8 @@ myTabConfig = def { fontName = "xft:mononoki Nerd Font:pixelsize=14:antialias=tr
 
 myLayout = windowNavigation layouts
   where
-    layouts = addTabsBottom shrinkText myTabConfig ( gap Simplest ) ||| doubleTabs -- ||| tilted ||| noBorders Full
-    doubleTabs = combineTwo (TwoPane 0.03 0.5)
+    layouts = addTabsBottom shrinkText myTabConfig ( gap Simplest ) ||| doubleTabs ||| noBorders Full
+    doubleTabs = reflectHoriz $ combineTwo (TwoPane 0.03 0.5)
                             ( addTabsBottom shrinkText myTabConfig ( gapl Simplest ) )
                             ( addTabsBottom shrinkText myTabConfig ( gapr Simplest ) )
      -- default tiling algorithm partitions the screen into two panes
@@ -177,6 +181,8 @@ myLayout = windowNavigation layouts
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
+
+-- insertPosition Master Newer <> myManageHook
 myManageHook = composeAll
     [ className =? "MPlayer"        --> doFloat
     , className =? "Gimp"           --> doFloat
