@@ -21,7 +21,7 @@ import XMonad.Hooks.InsertPosition
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
-myTerminal      = "alacritty"
+myTerminal      = "kitty"
 
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
@@ -134,7 +134,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ------------------------------------------------------------------------
 -- Layouts:
 
-myTabConfig = def { fontName = "xft:mononoki Nerd Font:pixelsize=14:antialias=true:hinting=true"
+myTabConfig = def { fontName = "xft:Liberation Mono:pixelsize=14:antialias=true:hinting=true"
               , activeColor = "#7652B8"
               , activeTextColor = "#18191A"
               , activeBorderColor = "#18191A"

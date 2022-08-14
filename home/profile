@@ -42,7 +42,7 @@ PATH=$PATH:~/.local/bin
 
 export NNN_FIFO=/tmp/nnn.fifo
 export NNN_PLUG='p:preview-tui;d:drag'
-export TERMINAL=alacritty
+export TERMINAL=kitty
 
 export EDITOR=vi
 export VISUAL=vi
