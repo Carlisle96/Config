@@ -136,7 +136,7 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
 myTabConfig = def { fontName = "xft:Liberation Mono:pixelsize=14:antialias=true:hinting=true"
               , activeColor = "#7652B8"
-              , activeTextColor = "#18191A"
+              , activeTextColor = "#E9EAEB"
               , activeBorderColor = "#18191A"
               , inactiveColor = "#27292D"
               , inactiveTextColor = "#E9EAEB"
