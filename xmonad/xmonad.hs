@@ -48,7 +48,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_space     ), spawn "rofi -show drun")
     , ((modm, xK_b), spawn "google-chrome")
     , ((modm, xK_p), spawn "maim -s -u -o -b 3 | xclip -selection clipboard -t image/png -i")
---    , ((modm, xK_e), spawn "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U")
+    , ((modm, xK_e), spawn "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=~/.webapps/superhuman %U")
 
     , ((modm , xK_q     ), kill)
     , ((modm,               xK_Return ), sendMessage NextLayout)
@@ -134,14 +134,14 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ------------------------------------------------------------------------
 -- Layouts:
 
-myTabConfig = def { fontName = "xft:Liberation Mono:pixelsize=14:antialias=true:hinting=true"
+myTabConfig = def { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=true"
               , activeColor = "#7652B8"
               , activeTextColor = "#E9EAEB"
               , activeBorderColor = "#18191A"
               , inactiveColor = "#27292D"
               , inactiveTextColor = "#E9EAEB"
               , inactiveBorderColor = "#18191A"
---                  , normalBorderColor  = "#18191A"
+--            , normalBorderColor  = "#18191A"
               , decoHeight = 24 }
 
 myLayout = windowNavigation layouts

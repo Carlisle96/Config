@@ -1,0 +1,14 @@
+{
+	"theme": "Default Dark.sublime-theme",
+	"ignored_packages":
+	[
+		"Vintage",
+	],
+	"color_scheme": "Monokai Thyriaen.sublime-color-scheme",
+    "gtk_client_side_window_decorations": false,
+	/*"font_size": 18,*/
+	"dark_theme": "Default.sublime-theme",
+	"light_theme": "Default Dark.sublime-theme",
+	"font_face": "Hasklig",
+	"font_size": 11
+}
