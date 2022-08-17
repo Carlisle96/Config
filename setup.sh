@@ -2,15 +2,18 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh nnn kitty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install materia-gtk-theme	hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh nnn kitty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
+hostnamectl set-hostname carthy
 
 # Sublime Text
 sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
 sudo dnf -y install sublime-text
+mkdir -p ~/.config/sublime-text/Packages/User/
+cp ./cfg/sublime/* ~/.config/sublime-text/Packages/User/
 
 # Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
@@ -20,7 +23,6 @@ sudo dnf -y install google-chrome-stable_current_x86_64.rpm
 pip install td-watson
 
 # Configs
-hostnamectl set-hostname carthy
 systemctl --user enable syncthing.service
 systemctl --user start syncthing.service
 sudo grub2-editenv - set menu_auto_hide=1
@@ -40,8 +42,6 @@ cp dragon ~/.local/bin/
 cd ..
 cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
 
-# and more
-
 # Signal
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub org.signal.Signal
@@ -52,8 +52,8 @@ cp home/profile ~/.profile
 cp home/startup.sh ~/.xmonad/hooks/
 cp home/zshrc ~/.zshrc
 
-mkdir -p ~/.local/share/
-mv fonts ~/.local/share/
+mkdir -p ~/.local/share/fonts/
+mv fonts/* ~/.local/share/fonts/
 
 cp xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 
