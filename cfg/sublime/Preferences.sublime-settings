@@ -10,5 +10,6 @@
 	"dark_theme": "Default.sublime-theme",
 	"light_theme": "Default Dark.sublime-theme",
 	"font_face": "Hasklig",
-	"font_size": 11
+	"font_size": 11,
+	"dictionary": "Dictionaries/de_DE.dic",
 }
