@@ -48,32 +48,32 @@ flatpak install flathub org.signal.Signal
 
 # Putting files at locations
 mkdir -p ~/.xmonad/hooks/
-cp home/profile ~/.profile
-cp home/startup.sh ~/.xmonad/hooks/
-cp home/zshrc ~/.zshrc
+cp ./home/profile ~/.profile
+cp ./home/startup.sh ~/.xmonad/hooks/
+cp ./home/zshrc ~/.zshrc
 
 mkdir -p ~/.local/share/fonts/
-mv fonts/* ~/.local/share/fonts/
+mv ./fonts/* ~/.local/share/fonts/
 
-cp xmonad/xmonad.hs ~/.xmonad/xmonad.hs
+cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 
-sudo cp xkb/thy /usr/share/X11/xkb/symbols/
-sudo cp xkb/evdev.xml /usr/share/X11/xkb/rules/
+sudo cp ./xkb/thy /usr/share/X11/xkb/symbols/
+sudo cp ./xkb/evdev.xml /usr/share/X11/xkb/rules/
 
 mkdir -p ~/Pictures
-cp Wallpaper.jpg ~/Pictures
+cp ./Wallpaper.jpg ~/Pictures
 
 mkdir -p ~/.local/share/applications
-cp apps/*.desktop ~/.local/share/applications
+cp ./apps/*.desktop ~/.local/share/applications
 
 mkdir -p ~/.config/kitty/
-cp cfg/kitty/kitty.conf ~/.config/kitty/
+cp ./cfg/kitty/kitty.conf ~/.config/kitty/
 
-# mkdir -p ~/.config/terminology/colorchemes
-# cp cfg/terminology/thy.eet ~/.config/terminology/colorchemes/thy.eet
+mkdir -p ~/.config/zathura/
+cp ./cfg/zathura/zathurarc ~/.config/zathura/
 
 mkdir -p ~/.icons
-mv material_light_cursors ~/.icons/
+mv ./material_light_cursors ~/.icons/
 
 # Useful commands
 # upower -i /org/freedesktop/UPower/devices/battery_BAT0
