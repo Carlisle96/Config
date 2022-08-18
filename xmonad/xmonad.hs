@@ -1,6 +1,7 @@
 import XMonad
 import Data.Monoid
 import System.Exit
+
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
@@ -13,10 +14,12 @@ import XMonad.Layout.Reflect
 
 import XMonad.Util.EZConfig
 import XMonad.Util.Cursor
+import XMonad.Util.Run
+
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.Script
 import XMonad.Hooks.InsertPosition
-
+import XMonad.Hooks.ManageDocks
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -146,25 +149,15 @@ myTabConfig = def { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=
 
 myLayout = windowNavigation layouts
   where
-    layouts = addTabsBottom shrinkText myTabConfig ( gap Simplest ) ||| doubleTabs ||| noBorders Full
-    doubleTabs = reflectHoriz $ combineTwo (TwoPane 0.03 0.5)
+    layouts = avoidStruts monoTab ||| avoidStruts dualTab ||| fullScr
+    monoTab = addTabsBottom shrinkText myTabConfig ( gap Simplest )
+    fullScr = noBorders Full
+    dualTab = reflectHoriz $ combineTwo (TwoPane 0.03 0.5)
                             ( addTabsBottom shrinkText myTabConfig ( gapl Simplest ) )
                             ( addTabsBottom shrinkText myTabConfig ( gapr Simplest ) )
-     -- default tiling algorithm partitions the screen into two panes
-    gapl = spacingRaw False (Border 8 8 2 8) True (Border 8 8 8 8) True
-    gapr = spacingRaw False (Border 8 8 8 8) True (Border 8 8 8 2) True
+    gapl = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 2 8) True
+    gapr = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 2) True
     gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
-    --gaps = spacingRaw False (Border 4 4 4 4) True (Border 4 4 4 4) True
-
-    tiled = gapr $ Tall nmaster delta ratio
-     -- The default number of windows in the master pane
-    nmaster = 1
-
-     -- Default proportion of screen occupied by master pane
-    ratio   = 1/2
-
-     -- Percent of screen to increment by when resizing panes
-    delta   = 3/100
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -224,7 +217,9 @@ myStartupHook = spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 -- main = xmonad $ ewmhFullscreen $ ewmh $ defaults
-main = xmonad $ ewmh $ defaults
+main = do
+    xmproc <- spawnPipe "xmobar"
+    xmonad $ ewmh $ defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will

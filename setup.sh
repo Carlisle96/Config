@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install materia-gtk-theme	hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh nnn kitty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install xmobar materia-gtk-theme hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh nnn kitty vis rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
@@ -56,6 +56,7 @@ mkdir -p ~/.local/share/fonts/
 mv ./fonts/* ~/.local/share/fonts/
 
 cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
+cp ./home/xmobarrc ~/.xmobarrc 
 
 sudo cp ./xkb/thy /usr/share/X11/xkb/symbols/
 sudo cp ./xkb/evdev.xml /usr/share/X11/xkb/rules/
