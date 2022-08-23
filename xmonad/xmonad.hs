@@ -1,5 +1,6 @@
 import XMonad
 import Data.Monoid
+import Data.Ratio
 import System.Exit
 
 import XMonad.Layout.Gaps
@@ -20,6 +21,7 @@ import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.Script
 import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 
 import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
@@ -141,20 +143,20 @@ myTabConfig = def { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=
               , activeColor = "#7652B8"
               , activeTextColor = "#E9EAEB"
               , activeBorderColor = "#18191A"
-              , inactiveColor = "#27292D"
-              , inactiveTextColor = "#E9EAEB"
+              , inactiveColor = "#7D7F84"
+              , inactiveTextColor = "#18191A"
               , inactiveBorderColor = "#18191A"
 --            , normalBorderColor  = "#18191A"
               , decoHeight = 24 }
 
 myLayout = windowNavigation layouts
   where
-    layouts = avoidStruts monoTab ||| avoidStruts dualTab ||| fullScr
-    monoTab = addTabsBottom shrinkText myTabConfig ( gap Simplest )
+    layouts = monoTab ||| dualTab ||| fullScr
+    monoTab = addTabs shrinkText myTabConfig ( gap Simplest )
     fullScr = noBorders Full
     dualTab = reflectHoriz $ combineTwo (TwoPane 0.03 0.5)
-                            ( addTabsBottom shrinkText myTabConfig ( gapl Simplest ) )
-                            ( addTabsBottom shrinkText myTabConfig ( gapr Simplest ) )
+                            ( addTabs shrinkText myTabConfig ( gapl Simplest ) )
+                            ( addTabs shrinkText myTabConfig ( gapr Simplest ) )
     gapl = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 2 8) True
     gapr = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 2) True
     gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
@@ -176,11 +178,11 @@ myLayout = windowNavigation layouts
 --
 
 -- insertPosition Master Newer <> myManageHook
+floatingCenter = doRectFloat ( W.RationalRect (1 % 5) (1 % 5) (3 % 5) (3 % 5) )
+
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+    [ resource  =? "desktop_window" --> doIgnore 
+    , className =? "filepicker" --> floatingCenter ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -217,9 +219,7 @@ myStartupHook = spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 -- main = xmonad $ ewmhFullscreen $ ewmh $ defaults
-main = do
-    xmproc <- spawnPipe "xmobar"
-    xmonad $ ewmh $ defaults
+main = xmonad $ ewmh $ defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
