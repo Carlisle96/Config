@@ -38,7 +38,7 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-alias nnn='nnn -P p'
+alias nnn='nnn-nerd-static -P p'
 
 PATH=$PATH:~/.local/bin
 
@@ -48,3 +48,6 @@ export TERMINAL=kitty
 
 export EDITOR=vi
 export VISUAL=vi
+
+export GTK_USE_PORTAL=1
+export XDG_CURRENT_DESKTOP=xmonad
