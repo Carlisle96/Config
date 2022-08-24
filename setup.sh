@@ -19,6 +19,9 @@ cp ./cfg/sublime/* ~/.config/sublime-text/Packages/User/
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 sudo dnf -y install google-chrome-stable_current_x86_64.rpm
 
+# Binaries
+cp -r ./bin ~/.local/
+
 # Watson
 pip install td-watson
 
@@ -35,13 +38,15 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/power
 # nnn
 xdg-mime default org.pwmt.zathura.desktop application/pdf
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
-git clone https://github.com/mwh/dragon.git
-cd dragon
-make
-cp dragon ~/.local/bin/
-cd ..
 cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
-rm -r ./dragon
+
+# fff filepicker
+sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /etc/systemd/system/
+sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /usr/local/lib/systemd/user/
+sudo cp ./cfg/filechooser/termfilechooser.portal /usr/share/xdg-desktop-portal/portals/
+sudo cp ./cfg/filechooser/termfilechooser.portal /usr/local/share/xdg-desktop-portal/portals/
+cp ./cfg/filechooser/config ~/.config/xdg-desktop-portal-termfilechooser/
+cp ./cfg/filechooser/fff.sh ~/.config/xdg-desktop-portal-termfilechooser/
 
 # Signal
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
