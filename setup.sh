@@ -82,11 +82,10 @@ cp ./cfg/zathura/zathurarc ~/.config/zathura/
 mkdir -p ~/.icons
 mv ./material_light_cursors ~/.icons/
 
-# Useful commands
-# upower -i /org/freedesktop/UPower/devices/battery_BAT0
+cp ./cfg/hexchat/colors.conf ~/.config/hexchat
 
 # Manual Install
-echo "Install complete"
+echo " --- Install complete ---"
 echo "run lxappreance for manual install now"
 
 # Todo

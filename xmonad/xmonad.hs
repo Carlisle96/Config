@@ -1,3 +1,5 @@
+{-# LANGUAGE NoMonomorphismRestriction #-}
+
 import XMonad
 import Data.Monoid
 import Data.Ratio
@@ -46,14 +48,18 @@ myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
 myNormalBorderColor  = "#18191A"
 myFocusedBorderColor = "#7652B8"
 
+rofi = "rofi -show drun -theme ~/.config/polybar/scripts/rofi/launcher.rasi"
+screenshot = "maim -s -u -o -b 3 | xclip -selection clipboard -t image/png -i"
+superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=~/.webapps/superhuman %U"
 ------------------------------------------------------------------------
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
-    [ ((modm, xK_t), spawn $ XMonad.terminal conf)
-    , ((modm,               xK_space     ), spawn "rofi -show drun")
-    , ((modm, xK_b), spawn "google-chrome")
-    , ((modm, xK_p), spawn "maim -s -u -o -b 3 | xclip -selection clipboard -t image/png -i")
-    , ((modm, xK_e), spawn "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=~/.webapps/superhuman %U")
+    [ (( modm, xK_t ), spawn $ XMonad.terminal conf)
+    , (( modm, xK_space ), spawn rofi )
+    , (( modm, xK_b ), spawn "google-chrome")
+    , (( modm, xK_p ), spawn screenshot )
+    , (( modm, xK_e ), spawn superhuman)
+    , (( modm, xK_f ), spawn "kitty --class=nnn sh -c \"nnn -P p\"" )
 
     , ((modm , xK_q     ), kill)
     , ((modm,               xK_Return ), sendMessage NextLayout)
@@ -139,27 +145,26 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 ------------------------------------------------------------------------
 -- Layouts:
 
-myTabConfig = def { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=true"
-              , activeColor = "#7652B8"
-              , activeTextColor = "#E9EAEB"
-              , activeBorderColor = "#18191A"
-              , inactiveColor = "#7D7F84"
-              , inactiveTextColor = "#18191A"
-              , inactiveBorderColor = "#18191A"
---            , normalBorderColor  = "#18191A"
-              , decoHeight = 24 }
+tabConfig = def 
+    { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=true"
+    , activeColor = "#7652B8"
+    , activeTextColor = "#E9EAEB"
+    , activeBorderColor = "#18191A"
+    , inactiveColor = "#27292d"
+    , inactiveTextColor = "#E9EAEB"
+    , inactiveBorderColor = "#18191A"
+    , decoHeight = 24 }
 
-myLayout = windowNavigation layouts
+gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
+tabGap = addTabs shrinkText tabConfig . gap
+
+myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
+    ( dualTab ||| monoTab )) 
+    ||| fullScr 
   where
-    layouts = monoTab ||| dualTab ||| fullScr
-    monoTab = addTabs shrinkText myTabConfig ( gap Simplest )
+    dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
+    monoTab = tabGap Simplest
     fullScr = noBorders Full
-    dualTab = reflectHoriz $ combineTwo (TwoPane 0.03 0.5)
-                            ( addTabs shrinkText myTabConfig ( gapl Simplest ) )
-                            ( addTabs shrinkText myTabConfig ( gapr Simplest ) )
-    gapl = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 2 8) True
-    gapr = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 2) True
-    gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -182,7 +187,9 @@ floatingCenter = doRectFloat ( W.RationalRect (1 % 5) (1 % 5) (3 % 5) (3 % 5) )
 
 myManageHook = composeAll
     [ resource  =? "desktop_window" --> doIgnore 
-    , className =? "filepicker" --> floatingCenter ]
+    , className =? "filepicker" --> floatingCenter
+    , className =? "KeePassXC" --> floatingCenter
+    , className =? "nnn" --> floatingCenter ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -211,7 +218,9 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
+myStartupHook = do
+    spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
+    spawn "polybar"
 -- myStartupHook = return ()
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -219,7 +228,7 @@ myStartupHook = spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 -- main = xmonad $ ewmhFullscreen $ ewmh $ defaults
-main = xmonad $ ewmh $ defaults
+main = xmonad $ ewmh $ docks $ defaults
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will

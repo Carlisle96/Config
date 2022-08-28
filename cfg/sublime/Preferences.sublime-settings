@@ -12,4 +12,5 @@
 	"font_face": "Hasklig",
 	"font_size": 11,
 	"dictionary": "Dictionaries/de_DE.dic",
+	"overlay_scroll_bars": "enabled"
 }
