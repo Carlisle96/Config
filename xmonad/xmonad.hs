@@ -1,9 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 
 import XMonad
-import Data.Monoid
 import Data.Ratio
-import System.Exit
 
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
@@ -13,45 +11,109 @@ import XMonad.Layout.Combo
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
-import XMonad.Layout.Reflect
-
-import XMonad.Util.EZConfig
-import XMonad.Util.Cursor
-import XMonad.Util.Run
 
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.Script
-import XMonad.Hooks.InsertPosition
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 
-import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
+import qualified XMonad.StackSet as W
 
-myTerminal      = "kitty"
+------------------------------------------------------------------------
+main = xmonad $ ewmh $ docks $ defaults
 
--- Whether focus follows the mouse pointer.
-myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+defaults = def 
+    { terminal           = "kitty"
+    , focusFollowsMouse  = True
+    , borderWidth        = 4
+    , modMask            = mod4Mask
+    , normalBorderColor  = "#18191A"
+    , focusedBorderColor = "#7652B8"
+    , keys               = myKeys
+    , mouseBindings      = myMouseBindings
+    , layoutHook         = myLayout
+    , manageHook         = myManageHook
+    , handleEventHook    = myEventHook
+    , logHook            = myLogHook
+    , startupHook        = autostart }
 
--- Whether clicking on a window to focus also passes the click to the window
-myClickJustFocuses :: Bool
-myClickJustFocuses = False
+tabConfig = def 
+    { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=true"
+    , activeColor = "#7652B8"
+    , activeTextColor = "#E9EAEB"
+    , activeBorderColor = "#18191A"
+    , inactiveColor = "#27292d"
+    , inactiveTextColor = "#E9EAEB"
+    , inactiveBorderColor = "#18191A"
+    , decoHeight = 24 }
 
-myBorderWidth   = 4
+autostart = do
+    spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
+    spawn "polybar"
 
-myModMask       = mod4Mask
+------------------------------------------------------------------------
+-- Layouts:
 
--- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
+tabGap = addTabs shrinkText tabConfig . gap
 
-myNormalBorderColor  = "#18191A"
-myFocusedBorderColor = "#7652B8"
+myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
+    ( dualTab ||| monoTab )) 
+    ||| fullScr 
+  where
+    dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
+    monoTab = tabGap Simplest
+    fullScr = noBorders Full
+
+------------------------------------------------------------------------
+-- Window rules:
+
+-- Execute arbitrary actions and WindowSet manipulations when managing
+-- a new window. You can use this to, for example, always float a
+-- particular program, or have a client always appear on a particular
+-- workspace.
+--
+-- To find the property name associated with a program, use
+-- > xprop | grep WM_CLASS
+-- and click on the client you're interested in.
+--
+-- To match on the WM_NAME, you can use 'title' in the same way that
+-- 'className' and 'resource' are used below.
+
+floatingCenter = doRectFloat ( W.RationalRect (1 % 5) (1 % 6) (3 % 5) (2 % 3) )
+
+myManageHook = composeAll
+    [ resource  =? "desktop_window" --> doIgnore 
+    , className =? "filepicker" --> floatingCenter
+    , className =? "KeePassXC" --> floatingCenter
+    , className =? "nnn" --> floatingCenter ]
+
+------------------------------------------------------------------------
+-- Event handling
+
+-- * EwmhDesktops users should change this to ewmhDesktopsEventHook
+--
+-- Defines a custom handler function for X Events. The function should
+-- return (All True) if the default handler is to be run afterwards. To
+-- combine event hooks use mappend or mconcat from Data.Monoid.
+--
+myEventHook = mempty
+
+------------------------------------------------------------------------
+-- Status bars and logging
+
+-- Perform an arbitrary action on each internal state change or X event.
+-- See the 'XMonad.Hooks.DynamicLog' extension for examples.
+--
+myLogHook = return ()
+
+------------------------------------------------------------------------
+-- Key bindings:
 
 rofi = "rofi -show drun -theme ~/.config/polybar/scripts/rofi/launcher.rasi"
 screenshot = "maim -s -u -o -b 3 | xclip -selection clipboard -t image/png -i"
 superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=~/.webapps/superhuman %U"
-------------------------------------------------------------------------
+
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
     [ (( modm, xK_t ), spawn $ XMonad.terminal conf)
@@ -141,121 +203,3 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- you may also bind events to the mouse scroll wheel (button4 and button5)
     ]
-
-------------------------------------------------------------------------
--- Layouts:
-
-tabConfig = def 
-    { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=true"
-    , activeColor = "#7652B8"
-    , activeTextColor = "#E9EAEB"
-    , activeBorderColor = "#18191A"
-    , inactiveColor = "#27292d"
-    , inactiveTextColor = "#E9EAEB"
-    , inactiveBorderColor = "#18191A"
-    , decoHeight = 24 }
-
-gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
-tabGap = addTabs shrinkText tabConfig . gap
-
-myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
-    ( dualTab ||| monoTab )) 
-    ||| fullScr 
-  where
-    dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
-    monoTab = tabGap Simplest
-    fullScr = noBorders Full
-
-------------------------------------------------------------------------
--- Window rules:
-
--- Execute arbitrary actions and WindowSet manipulations when managing
--- a new window. You can use this to, for example, always float a
--- particular program, or have a client always appear on a particular
--- workspace.
---
--- To find the property name associated with a program, use
--- > xprop | grep WM_CLASS
--- and click on the client you're interested in.
---
--- To match on the WM_NAME, you can use 'title' in the same way that
--- 'className' and 'resource' are used below.
---
-
--- insertPosition Master Newer <> myManageHook
-floatingCenter = doRectFloat ( W.RationalRect (1 % 5) (1 % 5) (3 % 5) (3 % 5) )
-
-myManageHook = composeAll
-    [ resource  =? "desktop_window" --> doIgnore 
-    , className =? "filepicker" --> floatingCenter
-    , className =? "KeePassXC" --> floatingCenter
-    , className =? "nnn" --> floatingCenter ]
-
-------------------------------------------------------------------------
--- Event handling
-
--- * EwmhDesktops users should change this to ewmhDesktopsEventHook
---
--- Defines a custom handler function for X Events. The function should
--- return (All True) if the default handler is to be run afterwards. To
--- combine event hooks use mappend or mconcat from Data.Monoid.
---
-myEventHook = mempty
-
-------------------------------------------------------------------------
--- Status bars and logging
-
--- Perform an arbitrary action on each internal state change or X event.
--- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
-myLogHook = return ()
-
-------------------------------------------------------------------------
--- Startup hook
-
--- Perform an arbitrary action each time xmonad starts or is restarted
--- with mod-q.  Used by, e.g., XMonad.Layout.PerWorkspace to initialize
--- per-workspace layout choices.
---
--- By default, do nothing.
-myStartupHook = do
-    spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
-    spawn "polybar"
--- myStartupHook = return ()
-------------------------------------------------------------------------
--- Now run xmonad with all the defaults we set up.
-
--- Run xmonad with the settings you specify. No need to modify this.
---
--- main = xmonad $ ewmhFullscreen $ ewmh $ defaults
-main = xmonad $ ewmh $ docks $ defaults
-
--- A structure containing your configuration settings, overriding
--- fields in the default config. Any you don't override, will
--- use the defaults defined in xmonad/XMonad/Config.hs
---
--- No need to modify this.
---
-defaults = def {
-      -- simple stuff
-        terminal           = myTerminal,
-        focusFollowsMouse  = myFocusFollowsMouse,
-        clickJustFocuses   = myClickJustFocuses,
-        borderWidth        = myBorderWidth,
-        modMask            = myModMask,
-        workspaces         = myWorkspaces,
-        normalBorderColor  = myNormalBorderColor,
-        focusedBorderColor = myFocusedBorderColor,
-
-      -- key bindings
-        keys               = myKeys,
-        mouseBindings      = myMouseBindings,
-
-      -- hooks, layouts
-        layoutHook         = myLayout,
-        manageHook         = myManageHook,
-        handleEventHook    = myEventHook,
-        logHook            = myLogHook,
-        startupHook        = myStartupHook
-    }
-
