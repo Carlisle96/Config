@@ -84,6 +84,8 @@ mv ./material_light_cursors ~/.icons/
 
 cp ./cfg/hexchat/colors.conf ~/.config/hexchat
 
+cp -r ./cfg/polybar ~/.config/
+
 # Manual Install
 echo " --- Install complete ---"
 echo "run lxappreance for manual install now"

@@ -15,3 +15,5 @@ cp /usr/share/xdg-desktop-portal/portals/termfilechooser.portal ./cfg//filechoos
 cp ~/.local/bin/xdg-desktop-portal-termfilechooser ./cfg/filechooser/
 cp ~/.config/xdg-desktop-portal-termfilechooser/config ./cfg/filechooser/
 cp ~/.config/xdg-desktop-portal-termfilechooser/fff.sh ./cfg/filechooser/
+
+cp -r ~/.config/polybar/* ./cfg/polybar/
