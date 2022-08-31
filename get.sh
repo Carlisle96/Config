@@ -17,3 +17,5 @@ cp ~/.config/xdg-desktop-portal-termfilechooser/config ./cfg/filechooser/
 cp ~/.config/xdg-desktop-portal-termfilechooser/fff.sh ./cfg/filechooser/
 
 cp -r ~/.config/polybar/* ./cfg/polybar/
+
+cp ~/.config/rofi/* ./cfg/rofi/

@@ -1,0 +1,19 @@
+# Config for rofi-wifi-menu
+
+# position values:
+# 1 2 3
+# 8 0 4
+# 7 6 5
+POSITION=5
+
+#y-offset
+YOFF=-46
+
+#x-offset
+XOFF=-16
+
+#fields to be displayed
+FIELDS=BARS,SSID,RATE,SECURITY
+
+#font
+FONT="Hasklig 12"
