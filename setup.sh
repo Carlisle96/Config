@@ -36,17 +36,22 @@ sudo updatedb
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 
 # nnn
-xdg-mime default org.pwmt.zathura.desktop application/pdf
+# xdg-mime default org.pwmt.zathura.desktop application/pdf
+# xdg-mime default org.gnome.Evince-previewer.desktop application/pdf
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
 
 # fff filepicker
-sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /etc/systemd/system/
-sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /usr/local/lib/systemd/user/
-sudo cp ./cfg/filechooser/termfilechooser.portal /usr/share/xdg-desktop-portal/portals/
-sudo cp ./cfg/filechooser/termfilechooser.portal /usr/local/share/xdg-desktop-portal/portals/
-cp ./cfg/filechooser/config ~/.config/xdg-desktop-portal-termfilechooser/
-cp ./cfg/filechooser/fff.sh ~/.config/xdg-desktop-portal-termfilechooser/
+# sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /etc/systemd/system/
+# sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /usr/local/lib/systemd/user/
+# sudo cp ./cfg/filechooser/termfilechooser.portal /usr/share/xdg-desktop-portal/portals/
+# sudo cp ./cfg/filechooser/termfilechooser.portal /usr/local/share/xdg-desktop-portal/portals/
+# cp ./cfg/filechooser/config ~/.config/xdg-desktop-portal-termfilechooser/
+# cp ./cfg/filechooser/fff.sh ~/.config/xdg-desktop-portal-termfilechooser/
+
+# or this
+sudo dnf -y install xdg-desktop-portal-gtk
+
 
 # Signal
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

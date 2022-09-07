@@ -83,10 +83,10 @@ myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts
 floatingCenter = doRectFloat ( W.RationalRect (1 % 5) (1 % 6) (3 % 5) (2 % 3) )
 
 myManageHook = composeAll
-    [ resource  =? "desktop_window" --> doIgnore 
-    , className =? "filepicker" --> floatingCenter
+    [ className =? "filepicker" --> floatingCenter
     , className =? "KeePassXC" --> floatingCenter
-    , className =? "nnn" --> floatingCenter ]
+    , className =? "nnn" --> floatingCenter 
+    , className =? "Xdg-desktop-portal-gtk" --> floatingCenter ]
 
 ------------------------------------------------------------------------
 -- Event handling
