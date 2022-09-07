@@ -8,7 +8,7 @@
  */
 
 configuration {
-	font:							"Hasklig 10";
+	font:							"Hasklug Nerd Font 12";
     show-icons:                     true;
 	icon-theme: 					"Papirus";
     display-drun: 					"";
@@ -28,25 +28,17 @@ window {
 	border:							0px 0px 2px 0px;
 	border-color:					@ac;
     border-radius:                  0px;
-	width:							400px;
-    location:                       center;
-    x-offset:                       0;
-    y-offset:                       0;
+	width:							600px;
+    location:                       southeast;
+    x-offset:                       -16;
+    y-offset:                       -48;
 }
 
 prompt {
-    enabled: 						true;
-    padding:                        0px 0px 0px 5px;
+    enabled: 						false;
+    padding:                        0px 0px 0px 2px;
 	background-color: 				@al;
 	text-color: 					@bar;
-}
-
-textbox-prompt-colon {
-	background-color: 				@al;
-	text-color: 					@bar;
-	expand: false;
-	str: "";
-	font:							"feather 12";
 }
 
 entry {
@@ -61,7 +53,7 @@ entry {
 }
 
 inputbar {
-	children: 						[ textbox-prompt-colon, prompt ];
+	children: 						[ prompt ];
     background-color:               @ac;
     text-color:                     @bar;
     expand:                         false;
@@ -69,7 +61,7 @@ inputbar {
     border-radius:                  0px;
 	border-color:					@ac;
     margin:                         0px;
-    padding:                        12px;
+    padding:                        1px;
 }
 
 listview {

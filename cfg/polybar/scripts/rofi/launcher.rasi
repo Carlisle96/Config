@@ -8,7 +8,7 @@
  */
 
 configuration {
-	font:							"Hasklig 10";
+	font:							"Hasklug Nerd Font 12";
     show-icons:                     true;
 	icon-theme: 					"";
     display-drun: 					"";
@@ -39,7 +39,7 @@ prompt {
 	padding: 						0px;
 	background-color: 				@al;
 	text-color: 					@bar;
-	font:							"Hasklig 12";
+	font:							"Hasklug Nerd Font 12";
 }
 
 entry {
