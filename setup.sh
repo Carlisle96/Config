@@ -63,6 +63,9 @@ cp ./home/profile ~/.profile
 cp ./home/startup.sh ~/.xmonad/hooks/
 cp ./home/zshrc ~/.zshrc
 
+mkdir -p ~/.themes
+cp -r ./themes/* ~/.themes/
+
 mkdir -p ~/.local/share/fonts/
 mv ./fonts/* ~/.local/share/fonts/
 
