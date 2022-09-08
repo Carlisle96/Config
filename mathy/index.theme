@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=mathy-dark-compact
+Comment=A Material Design theme
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=mathy-dark-compact
+MetacityTheme=mathy-dark-compact
+IconTheme=Adwaita
+CursorTheme=Adwaita
+CursorSize=24
