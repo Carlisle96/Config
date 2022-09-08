@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install pdftk simple-scan materia-gtk-theme hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install pdftk simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp
@@ -18,6 +18,7 @@ cp ./cfg/sublime/* ~/.config/sublime-text/Packages/User/
 # Chrome
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 sudo dnf -y install google-chrome-stable_current_x86_64.rpm
+rm google-chrome-stable_current_x86_64.rpm
 
 # Binaries
 cp -r ./bin ~/.local/
@@ -38,6 +39,7 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/power
 # nnn
 # xdg-mime default org.pwmt.zathura.desktop application/pdf
 # xdg-mime default org.gnome.Evince-previewer.desktop application/pdf
+mkdir -p ~/.config/nnn/plugins
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
 
@@ -51,7 +53,6 @@ cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
 
 # or this
 sudo dnf -y install xdg-desktop-portal-gtk
-
 
 # Signal
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
@@ -67,7 +68,7 @@ mkdir -p ~/.themes
 cp -r ./themes/* ~/.themes/
 
 mkdir -p ~/.local/share/fonts/
-mv ./fonts/* ~/.local/share/fonts/
+cp -r ./fonts/* ~/.local/share/fonts/
 
 cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 cp ./home/xmobarrc ~/.xmobarrc 
@@ -88,7 +89,7 @@ mkdir -p ~/.config/zathura/
 cp ./cfg/zathura/zathurarc ~/.config/zathura/
 
 mkdir -p ~/.icons
-mv ./material_light_cursors ~/.icons/
+cp -r ./material_light_cursors ~/.icons/
 
 cp ./cfg/hexchat/colors.conf ~/.config/hexchat
 
