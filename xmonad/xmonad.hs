@@ -17,8 +17,11 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WindowSwallowing
 
+import Graphics.X11.ExtraTypes.XF86
+
 import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
+
 
 ------------------------------------------------------------------------
 main = xmonad $ ewmh $ docks $ defaults
@@ -51,6 +54,7 @@ tabConfig = def
 autostart = do
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
     spawn "polybar"
+    -- spawn "xcompmgr -n -c -C"
 
 ------------------------------------------------------------------------
 -- Layouts:
@@ -82,12 +86,14 @@ myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts
 -- 'className' and 'resource' are used below.
 
 floatingCenter = doRectFloat ( W.RationalRect (1 % 5) (1 % 6) (3 % 5) (2 % 3) )
+floatingCalc = doRectFloat ( W.RationalRect (41 % 48) (1 % 27) (2 % 16) (3 % 9) )
 
 myManageHook = composeAll
     [ className =? "filepicker" --> floatingCenter
     , className =? "KeePassXC" --> floatingCenter
     , className =? "nnn" --> floatingCenter 
-    , className =? "Xdg-desktop-portal-gtk" --> floatingCenter ]
+    , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
+    , className =? "Mate-calc" --> floatingCalc ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -111,22 +117,25 @@ myLogHook = return ()
 ------------------------------------------------------------------------
 -- Key bindings:
 
-rofi = "rofi -show drun -theme ~/.config/polybar/scripts/rofi/launcher.rasi"
+rofi = "rofi -show drun -theme ~/.config/rofi/thyLauncher.rasi"
 screenshot = "maim -s -u -o -b 3 | xclip -selection clipboard -t image/png -i"
 superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=~/.webapps/superhuman %U"
 
-myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
+myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
 
     [ (( modm, xK_t ), spawn $ XMonad.terminal conf)
     , (( modm, xK_space ), spawn rofi )
     , (( modm, xK_b ), spawn "google-chrome")
     , (( modm, xK_p ), spawn screenshot )
-    , (( modm, xK_e ), spawn superhuman)
-    , (( modm, xK_f ), spawn "kitty --class=nnn sh -c \"nnn -P p\"" )
+    , (( modm, xK_e ), spawn superhuman )
+    , (( modm, xK_c ), spawn "mate-calc")
+    -- , (( modm, xK_f ), spawn "kitty --class=nnn sh -c \"nnn -P p\"" )
+    , (( modm, xK_f ), spawn "nemo" )
 
     , ((modm , xK_q     ), kill)
     , ((modm,               xK_Return ), sendMessage NextLayout)
-
+    , ((0, xF86XK_MonBrightnessUp) , spawn "light -A 5")
+    , ((0, xF86XK_MonBrightnessDown) , spawn "light -U 5") 
     -- Resize viewed windows to the correct size
     , ((modm,               xK_n     ), refresh)
     -- Move focus to the next window

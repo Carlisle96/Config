@@ -2,10 +2,10 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install pdftk simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install pdftk gtk-murrine-engine mate-calc simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
-sudo dnf -y install tlp
+sudo dnf -y install tlp light
 hostnamectl set-hostname carthy
 
 # Sublime Text
@@ -53,6 +53,7 @@ cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
 
 # or this
 sudo dnf -y install xdg-desktop-portal-gtk
+gsettings set org.gtk.Settings.FileChooser startup-mode cwd
 
 # Signal
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
