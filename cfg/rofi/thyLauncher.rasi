@@ -29,7 +29,7 @@ configuration {
 
 /*****----- Main Window -----*****/
 window {
-    transparency:                "real";
+    transparency:                "screenshot";
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;

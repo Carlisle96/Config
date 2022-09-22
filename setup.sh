@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install pdftk gtk-murrine-engine mate-calc simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install pdftk evince gtk-murrine-engine mate-calc simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp light
@@ -37,8 +37,7 @@ sudo updatedb
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 
 # nnn
-# xdg-mime default org.pwmt.zathura.desktop application/pdf
-# xdg-mime default org.gnome.Evince-previewer.desktop application/pdf
+# TODO: nnn ( ready compiled )
 mkdir -p ~/.config/nnn/plugins
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/

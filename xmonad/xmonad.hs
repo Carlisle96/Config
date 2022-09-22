@@ -36,25 +36,29 @@ defaults = def
     , keys               = myKeys
     , mouseBindings      = myMouseBindings
     , layoutHook         = myLayout
+    , workspaces         = ["1","2","3","4","5","6"]
     , manageHook         = myManageHook
     , handleEventHook    = myEventHook
     , logHook            = myLogHook
     , startupHook        = autostart }
 
 tabConfig = def 
-    { fontName = "xft:Hasklig:pixelsize=14:antialias=true:hinting=true"
+    { fontName = "xft:M PLUS 1:pixelsize=14:antialias=true:hinting=true"
     , activeColor = "#7652B8"
     , activeTextColor = "#E9EAEB"
-    , activeBorderColor = "#18191A"
-    , inactiveColor = "#27292d"
+    , activeBorderColor = "#27292d"
+    , inactiveColor = "#18191A"
     , inactiveTextColor = "#E9EAEB"
-    , inactiveBorderColor = "#18191A"
+    , inactiveBorderColor = "#27292d"
+    , urgentColor = "#B85261"
+    , urgentTextColor = "#E9EAEB"
+    , urgentBorderColor = "#27292d"
     , decoHeight = 24 }
 
 autostart = do
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
     spawn "polybar"
-    -- spawn "xcompmgr -n -c -C"
+    -- spawn "picom"
 
 ------------------------------------------------------------------------
 -- Layouts:
@@ -63,7 +67,7 @@ gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
 tabGap = addTabs shrinkText tabConfig . gap
 
 myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
-    ( dualTab ||| monoTab )) 
+    ( monoTab ||| dualTab )) 
     ||| fullScr 
   where
     dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
@@ -85,13 +89,14 @@ myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 
-floatingCenter = doRectFloat ( W.RationalRect (1 % 5) (1 % 6) (3 % 5) (2 % 3) )
-floatingCalc = doRectFloat ( W.RationalRect (41 % 48) (1 % 27) (2 % 16) (3 % 9) )
+floatingCenter = doRectFloat (W.RationalRect   (1 % 5)  (1 % 6) (3 % 5) (2 % 3))
+floatingCalc   = doRectFloat (W.RationalRect (41 % 48) (1 % 27) (1 % 8) (1 % 3))
+floatingNNN    = doRectFloat (W.RationalRect   (1 % 8) (1 % 12) (3 % 4) (5 % 6))
 
 myManageHook = composeAll
     [ className =? "filepicker" --> floatingCenter
     , className =? "KeePassXC" --> floatingCenter
-    , className =? "nnn" --> floatingCenter 
+    , className =? "nnn" --> floatingNNN
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "Mate-calc" --> floatingCalc ]
 
@@ -117,9 +122,10 @@ myLogHook = return ()
 ------------------------------------------------------------------------
 -- Key bindings:
 
-rofi = "rofi -show drun -theme ~/.config/rofi/thyLauncher.rasi"
+rofi = "rofi -show drun"
 screenshot = "maim -s -u -o -b 3 | xclip -selection clipboard -t image/png -i"
-superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=~/.webapps/superhuman %U"
+superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U"
+nnn = "kitty --class=nnn sh -c \"nnn -P p\""
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
 
@@ -129,7 +135,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , (( modm, xK_p ), spawn screenshot )
     , (( modm, xK_e ), spawn superhuman )
     , (( modm, xK_c ), spawn "mate-calc")
-    -- , (( modm, xK_f ), spawn "kitty --class=nnn sh -c \"nnn -P p\"" )
+    , (( modm, xK_v ), spawn nnn )
     , (( modm, xK_f ), spawn "nemo" )
 
     , ((modm , xK_q     ), kill)
@@ -172,7 +178,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Quit xmonad
     -- , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
 
-    , ((modm .|. shiftMask, xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; killall picom; xmonad --recompile; xmonad --restart")
 
     ]
     ++
@@ -182,17 +188,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-[1..9], Move client to workspace N
     --
     [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_6]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
+    
 
     --
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
-    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    -- ++
+    -- [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
+    --     | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+    --     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
 
 ------------------------------------------------------------------------
