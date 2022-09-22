@@ -30,13 +30,13 @@ USE_BUTTONS=YES
 /*****----- Main Window -----*****/
 window {
     /* properties for window widget */
-    transparency:                "real";
+    transparency:                "screenshot";
     location:                    southwest;
     anchor:                      southwest;
     fullscreen:                  false;
     width:                       80px;
-    x-offset:                    -12px;
-    y-offset:                    -30px;
+    x-offset:                    8px;
+    y-offset:                    -54px;
 
     /* properties for all widgets */
     enabled:                     true;
@@ -46,7 +46,7 @@ window {
     border-radius:               0px;
     border-color:                @selected;
     cursor:                      "default";
-    background-color:            @background;
+    background-color:            transparent;
 }
 
 /*****----- Main Box -----*****/

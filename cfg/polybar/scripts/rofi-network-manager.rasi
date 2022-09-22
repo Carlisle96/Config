@@ -1,0 +1,6 @@
+font: "Hasklug Nerd Font 12";
+foreground:#f8f8f2;
+background:#0A1229;
+accent:#00BCD4;
+foreground-selection:@foreground;
+background-selection:#e34039;

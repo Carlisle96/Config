@@ -1,0 +1,7 @@
+Script started on 2022-09-14 19:11:38+02:00 [TERM="xterm-kitty" TTY="/dev/pts/0" COLUMNS="91" LINES="47"]
+]0;thyriaen@carthy:~/.config/polybar[?2004h[thyriaen@carthy polybar]$ ^C[?2004l[?2004h[?2004l
+]0;thyriaen@carthy:~/.config/polybar[?2004h[thyriaen@carthy polybar]$ sudo shutdown -r now[K^C[?2004l[?2004h[?2004l
+]0;thyriaen@carthy:~/.config/polybar[?2004h[thyriaen@carthy polybar]$ [?2004l
+exit
+
+Script done on 2022-09-14 19:11:42+02:00 [COMMAND_EXIT_CODE="130"]
