@@ -71,7 +71,6 @@ mkdir -p ~/.local/share/fonts/
 cp -r ./fonts/* ~/.local/share/fonts/
 
 cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
-cp ./home/xmobarrc ~/.xmobarrc 
 
 sudo cp ./xkb/thy /usr/share/X11/xkb/symbols/
 sudo cp ./xkb/evdev.xml /usr/share/X11/xkb/rules/
@@ -91,7 +90,8 @@ cp ./cfg/zathura/zathurarc ~/.config/zathura/
 mkdir -p ~/.icons
 cp -r ./material_light_cursors ~/.icons/
 
-cp ./cfg/hexchat/colors.conf ~/.config/hexchat
+mkdir -p ~/.config/hexchat/
+cp ./cfg/hexchat/colors.conf ~/.config/hexchat/colors.conf
 
 cp -r ./cfg/polybar ~/.config/
 
