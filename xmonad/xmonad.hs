@@ -17,6 +17,8 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WindowSwallowing
 
+import XMonad.Util.NamedScratchpad
+
 import Graphics.X11.ExtraTypes.XF86
 
 import qualified Data.Map        as M
@@ -56,10 +58,11 @@ tabConfig = def
     , decoHeight = 24 }
 
 autostart = do
+    spawn "xinput --set-prop 'pointer:Logitech G900' 165 1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 3.000000"
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
     spawn "polybar"
     -- spawn "picom"
-
+    
 ------------------------------------------------------------------------
 -- Layouts:
 
@@ -89,16 +92,36 @@ myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 
-floatingCenter = doRectFloat (W.RationalRect   (1 % 5)  (1 % 6) (3 % 5) (2 % 3))
-floatingCalc   = doRectFloat (W.RationalRect (41 % 48) (1 % 27) (1 % 8) (1 % 3))
-floatingNNN    = doRectFloat (W.RationalRect   (1 % 8) (1 % 12) (3 % 4) (5 % 6))
+-- Laptop
+-- floatingCenter = doRectFloat (W.RationalRect   (1 % 5)  (1 % 6) (3 % 5) (2 % 3))
+-- floatingCalc   = doRectFloat (W.RationalRect (41 % 48) (1 % 27) (1 % 8) (1 % 3))
+-- floatingNNN    = doRectFloat (W.RationalRect   (1 % 8) (1 % 12) (3 % 4) (5 % 6))
+-- 
+-- myManageHook = composeAll
+--     [ className =? "filepicker" --> floatingCenter
+--     , className =? "KeePassXC" --> floatingCenter
+--     , className =? "nnn" --> floatingNNN
+--     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
+--     , className =? "Mate-calc" --> floatingCalc ]
+
+-- Desktop
+floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
+floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) )
+floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
+floatingNemo    = doRectFloat ( W.RationalRect  (1 % 32) (1 % 18) (13 % 32) (8 % 18) )
+
+floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
 
 myManageHook = composeAll
-    [ className =? "filepicker" --> floatingCenter
-    , className =? "KeePassXC" --> floatingCenter
-    , className =? "nnn" --> floatingNNN
+    [ namedScratchpadManageHook scratchpads
+    , className =? "filepicker" --> floatingCenter
+    , className =? "KeePassXC" --> floatingKPass
+    -- , className =? "nnn" --> floatingNNN 
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
-    , className =? "Mate-calc" --> floatingCalc ]
+    , className =? "Mate-calc" --> floatingCalc 
+    , className =? "Nemo" --> floatingNemo ]
+
+
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -122,8 +145,15 @@ myLogHook = return ()
 ------------------------------------------------------------------------
 -- Key bindings:
 
+scratchpads =
+    [ NS "nnn" "kitty --class=nnn sh -c \"nnn -P p\"" 
+        (className =? "nnn") 
+        ( customFloating $ floatingNNN )
+    -- , 
+    ]
+
 rofi = "rofi -show drun"
-screenshot = "maim -s -u -o -b 3 | xclip -selection clipboard -t image/png -i"
+screenshot = "maim -s -u -o -b 3 | tee ~/Pictures/screenshots/$(date +%s).png | xclip -selection clipboard -t image/png -i"
 superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U"
 nnn = "kitty --class=nnn sh -c \"nnn -P p\""
 
@@ -135,8 +165,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , (( modm, xK_p ), spawn screenshot )
     , (( modm, xK_e ), spawn superhuman )
     , (( modm, xK_c ), spawn "mate-calc")
-    , (( modm, xK_v ), spawn nnn )
+    -- , (( modm, xK_v ), spawn nnn )
     , (( modm, xK_f ), spawn "nemo" )
+    , (( modm, xK_v ), namedScratchpadAction scratchpads "nnn" )
 
     , ((modm , xK_q     ), kill)
     , ((modm,               xK_Return ), sendMessage NextLayout)
