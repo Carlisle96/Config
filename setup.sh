@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install pdftk evince gtk-murrine-engine mate-calc simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install slick-greeter pdftk evince gtk-murrine-engine mate-calc simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp light
@@ -66,6 +66,7 @@ cp ./home/zshrc ~/.zshrc
 
 mkdir -p ~/.themes
 cp -r ./themes/* ~/.themes/
+sudo cp -r ~/.themes/mathy /usr/share/themes/
 
 mkdir -p ~/.local/share/fonts/
 cp -r ./fonts/* ~/.local/share/fonts/
@@ -75,8 +76,9 @@ cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 sudo cp ./xkb/thy /usr/share/X11/xkb/symbols/
 sudo cp ./xkb/evdev.xml /usr/share/X11/xkb/rules/
 
-mkdir -p ~/Pictures
-cp ./Wallpaper.jpg ~/Pictures
+mkdir -p ~/Pictures/Wallpapers
+cp ./Wallpaper.jpg ~/Pictures/Wallpapers/
+sudo cp ~/Pictures/Wallpapers/Wallpaper.jpg /usr/share/backgrounds/
 
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
@@ -89,6 +91,7 @@ cp ./cfg/zathura/zathurarc ~/.config/zathura/
 
 mkdir -p ~/.icons
 cp -r ./material_light_cursors ~/.icons/
+sudo cp -r ./material_light_cursors /usr/share/icons/
 
 mkdir -p ~/.config/hexchat/
 cp ./cfg/hexchat/colors.conf ~/.config/hexchat/colors.conf
@@ -98,6 +101,7 @@ cp -r ./cfg/polybar ~/.config/
 # Manual Install
 echo " --- Install complete ---"
 echo "run lxappreance for manual install now"
+echo "run sudo lightdm-settings for manual install now"
 
 # Todo
 # set zsh as default shell
