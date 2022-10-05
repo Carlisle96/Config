@@ -17,6 +17,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WindowSwallowing
 
+import XMonad.Actions.SpawnOn
 import XMonad.Util.NamedScratchpad
 
 import Graphics.X11.ExtraTypes.XF86
@@ -61,6 +62,7 @@ autostart = do
     spawn "xinput --set-prop 'pointer:Logitech G900' 165 1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 3.000000"
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
     spawn "polybar"
+    spawnOn "6" signal
     -- spawn "picom"
     
 ------------------------------------------------------------------------
@@ -105,14 +107,7 @@ myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts
 --     , className =? "Mate-calc" --> floatingCalc ]
 
 -- Desktop
-floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
-floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) )
-floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
-floatingNemo    = doRectFloat ( W.RationalRect  (1 % 32) (1 % 18) (13 % 32) (8 % 18) )
-
-floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
-
-myManageHook = composeAll
+myManageHook = manageSpawn <+>  composeAll
     [ namedScratchpadManageHook scratchpads
     , className =? "filepicker" --> floatingCenter
     , className =? "KeePassXC" --> floatingKPass
@@ -120,7 +115,11 @@ myManageHook = composeAll
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "Mate-calc" --> floatingCalc 
     , className =? "Nemo" --> floatingNemo ]
-
+  where 
+    floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
+    floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) )
+    floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
+    floatingNemo    = doRectFloat ( W.RationalRect  (1 % 32) (1 % 18) (13 % 32) (8 % 18) )
 
 
 ------------------------------------------------------------------------
@@ -151,11 +150,15 @@ scratchpads =
         ( customFloating $ floatingNNN )
     -- , 
     ]
+  where        
+    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
+
 
 rofi = "rofi -show drun"
 screenshot = "maim -s -u -o -b 3 | tee ~/Pictures/screenshots/$(date +%s).png | xclip -selection clipboard -t image/png -i"
 superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U"
 nnn = "kitty --class=nnn sh -c \"nnn -P p\""
+signal = "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --use-tray-icon @@u %U @@"
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
 
