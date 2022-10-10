@@ -11,6 +11,7 @@ import XMonad.Layout.Combo
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
+import XMonad.Layout.StateFull
 
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
@@ -25,8 +26,8 @@ import Graphics.X11.ExtraTypes.XF86
 import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
 
-
 ------------------------------------------------------------------------
+-- General Setup
 main = xmonad $ ewmh $ docks $ defaults
 
 defaults = def 
@@ -58,55 +59,22 @@ tabConfig = def
     , urgentBorderColor = "#27292d"
     , decoHeight = 24 }
 
-autostart = do
-    spawn "xinput --set-prop 'pointer:Logitech G900' 165 1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 3.000000"
-    spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
-    spawn "polybar"
-    spawnOn "6" signal
-    -- spawn "picom"
-    
 ------------------------------------------------------------------------
--- Layouts:
+-- Layouts
 
 gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
 tabGap = addTabs shrinkText tabConfig . gap
 
-myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
-    ( monoTab ||| dualTab )) 
-    ||| fullScr 
+myLayout = focusTracking $ ( configurableNavigation noNavigateBorders $ avoidStruts 
+    ( monoTab ||| dualTab )) ||| fullScr 
   where
     dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
     monoTab = tabGap Simplest
     fullScr = noBorders Full
 
 ------------------------------------------------------------------------
--- Window rules:
+-- Window rules
 
--- Execute arbitrary actions and WindowSet manipulations when managing
--- a new window. You can use this to, for example, always float a
--- particular program, or have a client always appear on a particular
--- workspace.
---
--- To find the property name associated with a program, use
--- > xprop | grep WM_CLASS
--- and click on the client you're interested in.
---
--- To match on the WM_NAME, you can use 'title' in the same way that
--- 'className' and 'resource' are used below.
-
--- Laptop
--- floatingCenter = doRectFloat (W.RationalRect   (1 % 5)  (1 % 6) (3 % 5) (2 % 3))
--- floatingCalc   = doRectFloat (W.RationalRect (41 % 48) (1 % 27) (1 % 8) (1 % 3))
--- floatingNNN    = doRectFloat (W.RationalRect   (1 % 8) (1 % 12) (3 % 4) (5 % 6))
--- 
--- myManageHook = composeAll
---     [ className =? "filepicker" --> floatingCenter
---     , className =? "KeePassXC" --> floatingCenter
---     , className =? "nnn" --> floatingNNN
---     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
---     , className =? "Mate-calc" --> floatingCalc ]
-
--- Desktop
 myManageHook = manageSpawn <+>  composeAll
     [ namedScratchpadManageHook scratchpads
     , className =? "filepicker" --> floatingCenter
@@ -114,51 +82,66 @@ myManageHook = manageSpawn <+>  composeAll
     -- , className =? "nnn" --> floatingNNN 
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "Mate-calc" --> floatingCalc 
-    , className =? "Nemo" --> floatingNemo ]
+    , className =? "Nemo" --> floatingNemo
+    , className =? "Signal" --> doShift "6"
+    , className =? "Hexchat" --> doShift "6" 
+    , className =? "superhuman" --> doShift "2"
+    , className =? "kitty" --> doShift "1"
+    , className =? "Sublime_text" --> doShift "1"
+    , className =? "Google-chrome" --> doShift "3" 
+    , className =? "datev" --> doShift "4"
+    , className =? "Dragon" --> floatingDragon ]
   where 
     floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
     floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) )
     floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
     floatingNemo    = doRectFloat ( W.RationalRect  (1 % 32) (1 % 18) (13 % 32) (8 % 18) )
-
+    floatingDragon  = doRectFloat ( W.RationalRect  (3 % 64) (23 % 48) (1 % 32) (1 % 24) )
 
 ------------------------------------------------------------------------
 -- Event handling
-
--- * EwmhDesktops users should change this to ewmhDesktopsEventHook
---
 -- Defines a custom handler function for X Events. The function should
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
---
+
 myEventHook = swallowEventHook ( className =? "kitty" ) ( return True )
 
 ------------------------------------------------------------------------
 -- Status bars and logging
-
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
+
 myLogHook = return ()
 
 ------------------------------------------------------------------------
--- Key bindings:
+-- Applications
 
-scratchpads =
-    [ NS "nnn" "kitty --class=nnn sh -c \"nnn -P p\"" 
-        (className =? "nnn") 
-        ( customFloating $ floatingNNN )
-    -- , 
-    ]
-  where        
-    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
+autostart = do
+    spawn "xinput --set-prop 'pointer:Logitech G900' 165 1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 3.000000"
+    spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
+    spawn "polybar"
+    spawn "synology-drive start"
+    spawn "keepassxc %f"
+    spawnOn "6" signal
+    -- spawn "picom"
 
+------------------------------------------------------------------------
+-- Key bindings
 
 rofi = "rofi -show drun"
 screenshot = "maim -s -u -o -b 3 | tee ~/Pictures/screenshots/$(date +%s).png | xclip -selection clipboard -t image/png -i"
 superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U"
 nnn = "kitty --class=nnn sh -c \"nnn -P p\""
-signal = "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --use-tray-icon @@u %U @@"
+signal = "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --start-in-tray --use-tray-icon @@u %U @@"
+
+scratchpads =
+    [ NS "nnn" "kitty --class=nnn sh -c \"nnn -P p\"" 
+        ( className =? "nnn" ) 
+        ( customFloating $ floatingNNN )
+    -- , 
+    ]
+  where        
+    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
 
@@ -176,8 +159,6 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_Return ), sendMessage NextLayout)
     , ((0, xF86XK_MonBrightnessUp) , spawn "light -A 5")
     , ((0, xF86XK_MonBrightnessDown) , spawn "light -U 5") 
-    -- Resize viewed windows to the correct size
-    , ((modm,               xK_n     ), refresh)
     -- Move focus to the next window
     , ((modm,               xK_Tab   ), windows W.focusDown)
     -- Move focus to the next window
@@ -235,10 +216,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --     | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
     --     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
-
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
---
+
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
     -- mod-button1, Set the window to floating mode and move by dragging
