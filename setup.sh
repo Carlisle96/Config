@@ -35,6 +35,7 @@ sudo updatedb
 
 # Terminal
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
+gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 
 # nnn
 # TODO: nnn ( ready compiled )
