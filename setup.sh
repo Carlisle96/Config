@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install slick-greeter pdftk evince gtk-murrine-engine mate-calc simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
+sudo dnf --refresh -y install calcurse slick-greeter pdftk evince gtk-murrine-engine mate-calc simple-scan nemo polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh git zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra
 
 # Laptop Only section
 sudo dnf -y install tlp light
@@ -25,6 +25,9 @@ cp -r ./bin ~/.local/
 
 # Watson
 pip install td-watson
+
+# caldav
+pip3 install --user oauth2client
 
 # Configs
 systemctl --user enable syncthing.service
