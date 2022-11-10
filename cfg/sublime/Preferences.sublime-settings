@@ -10,8 +10,9 @@
 	"dark_theme": "Default.sublime-theme",
 	"light_theme": "Default Dark.sublime-theme",
 	"font_face": "Hasklug Nerd Font",
-	"font_size": 14,
+	"font_size": 12,
 	"dictionary": "Dictionaries/de_DE.dic",
 	"overlay_scroll_bars": "enabled",
 	"rulers": [80],
+	"update_check": false,
 }
