@@ -23,6 +23,11 @@ rm google-chrome-stable_current_x86_64.rpm
 # Binaries
 cp -r ./bin ~/.local/
 
+# Clipboard manager
+# wget https://github.com/erebe/greenclip/releases/download/v4.2/greenclip
+# chmod +x greenclip 
+# mv greenclip ~/.local/bin/
+
 # Watson
 pip install td-watson
 
