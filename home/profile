@@ -38,16 +38,19 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-alias nnn='nnn -P p'
+alias nnn='nnn -d -P p'
 
 PATH=$PATH:~/.local/bin
 
 export NNN_FIFO=/tmp/nnn.fifo
 export NNN_PLUG='p:preview-tui;d:drag'
+
 export TERMINAL=kitty
+export SHELL=/usr/bin/zsh
 
 export EDITOR=vi
 export VISUAL=vi
 
 export GTK_USE_PORTAL=1
 export XDG_CURRENT_DESKTOP=xmonad
+

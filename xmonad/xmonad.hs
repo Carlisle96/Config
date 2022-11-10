@@ -12,17 +12,20 @@ import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
 import XMonad.Layout.StateFull
+import XMonad.Layout.IndependentScreens
 
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WindowSwallowing
+-- import XMonad.Hooks.BorderPerWindow (defineBorderWidth, actionQueue)
 
 import XMonad.Actions.SpawnOn
 import XMonad.Util.NamedScratchpad
 
 import Graphics.X11.ExtraTypes.XF86
 
+import Data.Maybe
 import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
 
@@ -40,7 +43,7 @@ defaults = def
     , keys               = myKeys
     , mouseBindings      = myMouseBindings
     , layoutHook         = myLayout
-    , workspaces         = ["1","2","3","4","5","6"]
+    , workspaces         = withScreens 2 ["1","2","3","4","5","6"]
     , manageHook         = myManageHook
     , handleEventHook    = myEventHook
     , logHook            = myLogHook
@@ -75,28 +78,30 @@ myLayout = focusTracking $ ( configurableNavigation noNavigateBorders $ avoidStr
 ------------------------------------------------------------------------
 -- Window rules
 
-myManageHook = manageSpawn <+>  composeAll
+doShiftWithScreens = doF . onCurrentScreen W.shift
+
+myManageHook = manageSpawn <+> composeAll
     [ namedScratchpadManageHook scratchpads
+    -- , isDialog  =? doCenterFloat
     , className =? "filepicker" --> floatingCenter
     , className =? "KeePassXC" --> floatingKPass
-    -- , className =? "nnn" --> floatingNNN 
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "Mate-calc" --> floatingCalc 
-    , className =? "Nemo" --> floatingNemo
-    , className =? "Signal" --> doShift "6"
-    , className =? "Hexchat" --> doShift "6" 
-    , className =? "superhuman" --> doShift "2"
-    , className =? "kitty" --> doShift "1"
-    , className =? "Sublime_text" --> doShift "1"
-    , className =? "Google-chrome" --> doShift "3" 
-    , className =? "datev" --> doShift "4"
-    , className =? "Dragon" --> floatingDragon ]
+    , className =? "Signal" --> doShift "1_6"
+    , className =? "Hexchat" --> doShiftWithScreens "6" 
+    , className =? "superhuman" --> doShiftWithScreens "2"
+    , className =? "kitty" --> doShiftWithScreens "1"
+    , className =? "Sublime_text" --> doShiftWithScreens "1"
+    , className =? "Google-chrome" --> doShiftWithScreens "3" 
+    , className =? "datev" --> doShiftWithScreens "4"
+    , className =? "Dragon" --> floatingDragon 
+    -- , className =? "FullScreenGame" --> defineBorderWidth 0
+    ]
   where 
     floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
     floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) )
     floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
-    floatingNemo    = doRectFloat ( W.RationalRect  (1 % 32) (1 % 18) (13 % 32) (8 % 18) )
-    floatingDragon  = doRectFloat ( W.RationalRect  (3 % 64) (23 % 48) (1 % 32) (1 % 24) )
+    floatingDragon  = doRectFloat ( W.RationalRect  (59 % 64) (23 % 48) (1 % 32) (1 % 24) )
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -117,13 +122,12 @@ myLogHook = return ()
 -- Applications
 
 autostart = do
-    spawn "xinput --set-prop 'pointer:Logitech G900' 165 1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 3.000000"
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
-    spawn "polybar"
+    spawn "polybar main"
+    spawn "polybar second"
     spawn "synology-drive start"
     spawn "keepassxc %f"
-    spawnOn "6" signal
-    -- spawn "picom"
+    spawn signal
 
 ------------------------------------------------------------------------
 -- Key bindings
@@ -131,11 +135,10 @@ autostart = do
 rofi = "rofi -show drun"
 screenshot = "maim -s -u -o -b 3 | tee ~/Pictures/screenshots/$(date +%s).png | xclip -selection clipboard -t image/png -i"
 superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U"
-nnn = "kitty --class=nnn sh -c \"nnn -P p\""
-signal = "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --start-in-tray --use-tray-icon @@u %U @@"
+signal = "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --use-tray-icon @@u %U @@"
 
 scratchpads =
-    [ NS "nnn" "kitty --class=nnn sh -c \"nnn -P p\"" 
+    [ NS "nnn" "kitty --class=nnn sh -c \"nnn -d -P p\"" 
         ( className =? "nnn" ) 
         ( customFloating $ floatingNNN )
     -- , 
@@ -150,71 +153,45 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , (( modm, xK_b ), spawn "google-chrome")
     , (( modm, xK_p ), spawn screenshot )
     , (( modm, xK_e ), spawn superhuman )
+    -- , (( modm, xK_v ), spawn "xterm" )
     , (( modm, xK_c ), spawn "mate-calc")
-    -- , (( modm, xK_v ), spawn nnn )
-    , (( modm, xK_f ), spawn "nemo" )
-    , (( modm, xK_v ), namedScratchpadAction scratchpads "nnn" )
+    -- , (( modm, xK_f ), spawn "nemo" )
+    , (( modm, xK_f ), namedScratchpadAction scratchpads "nnn" )
 
     , ((modm , xK_q     ), kill)
     , ((modm,               xK_Return ), sendMessage NextLayout)
-    , ((0, xF86XK_MonBrightnessUp) , spawn "light -A 5")
+    , ((0, xF86XK_MonBrightnessUp) ,   spawn "light -A 5")
     , ((0, xF86XK_MonBrightnessDown) , spawn "light -U 5") 
     -- Move focus to the next window
     , ((modm,               xK_Tab   ), windows W.focusDown)
-    -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
-    -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
-    -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
-    -- Swap the focused window and the master window
-    -- , ((modm,               xK_Return), windows W.swapMaster)
-    -- Swap the focused window with the next window
-    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
-    -- Swap the focused window with the previous window
-    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
-    -- Shrink the master area
+    , ((modm .|. shiftMask, xK_Tab   ), windows W.focusUp  )
+
+
+    , ((modm,               xK_j     ), sendMessage (Move L))
+    , ((modm,               xK_k     ), sendMessage (Move R))
+
+
     , ((modm,               xK_h     ), sendMessage Shrink)
-    -- Expand the master area
     , ((modm,               xK_l     ), sendMessage Expand)
+
     -- Push window back into tiling
     , ((modm,               xK_g     ), withFocused $ windows . W.sink)
-    -- Increment the number of windows in the master area
-    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
-    -- Deincrement the number of windows in the master area
-    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
 
-    -- Toggle the status bar gap
-    -- Use this binding with avoidStruts from Hooks.ManageDocks.
-    -- See also the statusBar function from Hooks.DynamicLog.
-    --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
-
-    -- Quit xmonad
-    -- , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
-
-    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; killall picom; xmonad --recompile; xmonad --restart")
+    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; xmonad --recompile; xmonad --restart")
 
     ]
     ++
 
-    --
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
-    --
-    [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_6]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+    [((m .|. modm, k), windows $ onCurrentScreen f i)
+        | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_6]
+        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
     
-
-    --
-    -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
-    -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
-    --
-    -- ++
-    -- [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    --     | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-    --     , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+    -- mod-{w,r}, Move client to screen 1 or 2
+    ++
+    [((modm, key), screenWorkspace sc >>= flip whenJust (windows . W.shift))
+        | (key, sc) <- [(xK_w, 0), (xK_r, 1)]]
 
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
