@@ -2,7 +2,7 @@
 sudo dnf -y upgrade
 sudo dnf -y remove i3 awesome ratpoison openbox lightdm xdg-desktop-portal-gtk
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install dnf-plugins-core xdg-desktop-portal-wlr pdftk evince gtk-murrine-engine mate-calc simple-scan polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra lxdm
+sudo dnf --refresh -y install fedora-workstation-repositories dnf-plugins-core xdg-desktop-portal-wlr pdftk evince gtk-murrine-engine mate-calc simple-scan polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra lxdm
 
 # Laptop Only section
 sudo dnf -y install tlp light
@@ -18,10 +18,9 @@ sudo dnf -y install sublime-text
 mkdir -p ~/.config/sublime-text/Packages/User/
 cp ./cfg/sublime/* ~/.config/sublime-text/Packages/User/
 
-# Browser
-sudo dnf config-manager --add-repo https://brave-browser-rpm-release.s3.brave.com/x86_64/
-sudo rpm --import https://brave-browser-rpm-release.s3.brave.com/brave-core.asc
-sudo dnf -y install brave-browser
+# Chrome
+sudo dnf config-manager --set-enabled google-chrome
+sudo dnf install google-chrome-stable
 
 # Binaries
 cp -r ./bin ~/.local/
