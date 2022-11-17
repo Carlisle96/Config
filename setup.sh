@@ -1,15 +1,17 @@
 # Install basics
 sudo dnf -y upgrade
-sudo dnf -y remove i3 awesome ratpoison openbox lightdm xdg-desktop-portal-gtk
+sudo dnf -y remove i3 awesome ratpoison openbox xdg-desktop-portal-gtk
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install fedora-workstation-repositories dnf-plugins-core xdg-desktop-portal-wlr pdftk evince gtk-murrine-engine mate-calc simple-scan polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra lxdm
+sudo dnf --refresh -y install fedora-workstation-repositories dnf-plugins-core xdg-desktop-portal-wlr pdftk evince gtk-murrine-engine mate-calc simple-scan polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra 
+
+# sudo dnf -y remove lightdm
+# sudo dnf -y install lxdm
+# systemctl enable lxdm
 
 # Laptop Only section
 sudo dnf -y install tlp light
 hostnamectl set-hostname carthy
 systemctl enable tlp.service
-
-systemctl enable lxdm
 
 # Sublime Text
 sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
