@@ -1,8 +1,16 @@
+
+PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite 
+neofetch pdftk python3-pip xsetroot maim xclip 
+ImageMagick zathura zathura-pdf-mupdf poppler-utils
+polybar feh kitty rofi zsh zsh-syntax-highlighting fzf dunst xdg-desktop-portal-wlr
+evince mate-calc simple-scan hexchat keepassxc syncthing synology-drive-noextra
+gtk-murrine-engine gtk3-devel lxappearance
+"
 # Install basics
 sudo dnf -y upgrade
-sudo dnf -y remove i3 awesome ratpoison openbox xdg-desktop-portal-gtk
 sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf --refresh -y install fedora-workstation-repositories dnf-plugins-core xdg-desktop-portal-wlr pdftk evince gtk-murrine-engine mate-calc simple-scan polybar hexchat gtk3-devel ImageMagick zathura zathura-pdf-mupdf keepassxc python3-pip redhat-rpm-config feh kitty rofi zsh zsh-syntax-highlighting fzf syncthing dunst sqlite poppler-utils xsetroot xclip maim lxappearance synology-drive-noextra 
+sudo dnf --refresh -y install $PACKAGES
+sudo dnf -y remove xmobar i3 awesome ratpoison openbox xdg-desktop-portal-gtk
 
 # sudo dnf -y remove lightdm
 # sudo dnf -y install lxdm
@@ -115,8 +123,17 @@ git config --global user.name "Carlisle Nightingale"
 echo " --- Install complete ---"
 echo "run lxappreance for manual install now"
 
+rm ~/.bash*
+
+
+# RealTodo
+# zsh / p10k configs
+# keepass configs
+# icon setup
+# polybar setup
+# sublime - hide menu - hide minimap
+
 # Todo
-# set zsh as default shell
 # install fzf keybindings
 # pip command line completen guide tailordev.github.io/Watson/
 
