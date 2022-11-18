@@ -52,7 +52,6 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/power
 gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 
 # nnn
-cp ./bin/nnn ~/.local/bin
 mkdir -p ~/.config/nnn/plugins
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
@@ -80,17 +79,19 @@ flatpak install flathub org.signal.Signal
 mkdir -p ~/.xmonad/hooks/
 cp ./home/profile ~/.profile
 cp ./home/startup.sh ~/.xmonad/hooks/
+cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 cp ./home/zshrc ~/.zshrc
+cp ./home/p10k.zsh ~/.p10k.zsh
 
 mkdir -p ~/.themes
 cp -r ./themes/* ~/.themes/
 sudo cp -r ~/.themes/mathy /usr/share/themes/
 
 mkdir -p ~/.local/share/fonts/
-cp -r ./fonts/* ~/.local/share/fonts/
+# cp -r ./fonts/* ~/.local/share/fonts/
+sudo cp -r ./fonts/* /usr/share/fonts/
 
-cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
-
+# Keyboard
 sudo cp ./xkb/thy /usr/share/X11/xkb/symbols/
 sudo cp ./xkb/evdev.xml /usr/share/X11/xkb/rules/
 
@@ -100,20 +101,19 @@ cp ./Wallpaper.jpeg ~/Pictures/Wallpapers/
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
 
-mkdir -p ~/.config/kitty/
-cp ./cfg/kitty/kitty.conf ~/.config/kitty/
+# mkdir -p ~/.icons
+# cp -r ./material_light_cursors ~/.icons/
 
-mkdir -p ~/.config/zathura/
-cp ./cfg/zathura/zathurarc ~/.config/zathura/
+sudo cp -r ./icons/* /usr/share/icons/
 
-mkdir -p ~/.icons
-cp -r ./material_light_cursors ~/.icons/
-sudo cp -r ./material_light_cursors /usr/share/icons/
-
-mkdir -p ~/.config/hexchat/
-cp ./cfg/hexchat/colors.conf ~/.config/hexchat/colors.conf
-
+cp -r ./cfg/zathura/ ~/.config/
+cp -r ./cfg/kitty ~/.config/
+cp -r ./cfg/hexchat ~/.config/
 cp -r ./cfg/polybar ~/.config/
+cp -r ./cfg/rofi ~/.config/
+cp -r ./cfg/dunst ~/.config/ 
+cp -r ./cfg/keepassxc ~/.config/
+
 
 ssh-keygen
 git config --global user.email "thyriaen@googlemail.com"
@@ -127,16 +127,11 @@ rm ~/.bash*
 
 
 # RealTodo
-# zsh / p10k configs
-# keepass configs
-# icon setup
-# polybar setup
-# sublime - hide menu - hide minimap
 
 # Todo
 # install fzf keybindings
 # pip command line completen guide tailordev.github.io/Watson/
-
+# sublime - hide menu - hide minimap
 # lxdm greeter setup
 
 
