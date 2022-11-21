@@ -4,17 +4,13 @@ neofetch pdftk python3-pip xsetroot maim xclip
 ImageMagick zathura zathura-pdf-mupdf poppler-utils
 polybar feh kitty rofi zsh zsh-syntax-highlighting fzf dunst xdg-desktop-portal-wlr
 evince mate-calc simple-scan hexchat keepassxc syncthing synology-drive-noextra
-gtk-murrine-engine gtk3-devel lxappearance
+gtk-murrine-engine gtk3-devel
 "
 # Install basics
 sudo dnf -y upgrade
 sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf --refresh -y install $PACKAGES
 sudo dnf -y remove xmobar i3 awesome ratpoison openbox xdg-desktop-portal-gtk
-
-# sudo dnf -y remove lightdm
-# sudo dnf -y install lxdm
-# systemctl enable lxdm
 
 # Laptop Only section
 sudo dnf -y install tlp light
@@ -32,15 +28,13 @@ cp ./cfg/sublime/* ~/.config/sublime-text/Packages/User/
 sudo dnf -y config-manager --set-enabled google-chrome
 sudo dnf -y install google-chrome-stable
 
-# Binaries
-cp -r ./bin/* ~/.local/bin/
+
 
 # Watson
 pip install td-watson
 
 # Configs
 sudo systemctl --user enable syncthing.service
-sudo systemctl --user start syncthing.service
 # sudo grub2-editenv - set menu_auto_hide=1
 # sudo grub2-mkconfig
 
@@ -84,8 +78,8 @@ cp ./home/zshrc ~/.zshrc
 cp ./home/p10k.zsh ~/.p10k.zsh
 sudo cp ./home/lightdm-gtk-greeter.conf /etc/lightdm/
 
-mkdir -p ~/.themes
-cp -r ./themes/* ~/.themes/
+# mkdir -p ~/.themes 
+# cp -r ./themes/* ~/.themes/
 sudo cp -r ~/.themes/mathy /usr/share/themes/
 
 mkdir -p ~/.local/share/fonts/
@@ -103,7 +97,6 @@ sudo cp ./Wallpaper.jpeg /usr/share/backgrounds/
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
 
-
 sudo cp -r ./icons/* /usr/share/icons/
 
 cp -r ./cfg/gtk-3.0/ ~/.config/
@@ -114,6 +107,9 @@ cp -r ./cfg/polybar ~/.config/
 cp -r ./cfg/rofi ~/.config/
 cp -r ./cfg/dunst ~/.config/ 
 cp -r ./cfg/keepassxc ~/.config/
+
+# Binaries
+sudo cp -r ./bin/* /bin/
 
 ssh-keygen
 git config --global user.email "thyriaen@googlemail.com"

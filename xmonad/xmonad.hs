@@ -123,8 +123,9 @@ myLogHook = return ()
 
 autostart = do
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
-    spawn "polybar main"
-    spawn "polybar second"
+    -- spawn "polybar main"
+    -- spawn "polybar second"
+    spawn "polybar laptop"
     spawn "synology-drive start"
     spawn "keepassxc %f"
     spawn signal
