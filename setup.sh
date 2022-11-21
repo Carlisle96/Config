@@ -19,7 +19,7 @@ sudo dnf -y remove xmobar i3 awesome ratpoison openbox xdg-desktop-portal-gtk
 # Laptop Only section
 sudo dnf -y install tlp light
 hostnamectl set-hostname carthy
-systemctl enable tlp.service
+sudo systemctl enable tlp.service
 
 # Sublime Text
 sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
@@ -29,18 +29,18 @@ mkdir -p ~/.config/sublime-text/Packages/User/
 cp ./cfg/sublime/* ~/.config/sublime-text/Packages/User/
 
 # Chrome
-sudo dnf config-manager --set-enabled google-chrome
-sudo dnf install google-chrome-stable
+sudo dnf -y config-manager --set-enabled google-chrome
+sudo dnf -y install google-chrome-stable
 
 # Binaries
-cp -r ./bin ~/.local/
+cp -r ./bin/* ~/.local/bin/
 
 # Watson
 pip install td-watson
 
 # Configs
-systemctl --user enable syncthing.service
-systemctl --user start syncthing.service
+sudo systemctl --user enable syncthing.service
+sudo systemctl --user start syncthing.service
 # sudo grub2-editenv - set menu_auto_hide=1
 # sudo grub2-mkconfig
 
@@ -82,13 +82,13 @@ cp ./home/startup.sh ~/.xmonad/hooks/
 cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 cp ./home/zshrc ~/.zshrc
 cp ./home/p10k.zsh ~/.p10k.zsh
+sudo cp ./home/lightdm-gtk-greeter.conf /etc/lightdm/
 
 mkdir -p ~/.themes
 cp -r ./themes/* ~/.themes/
 sudo cp -r ~/.themes/mathy /usr/share/themes/
 
 mkdir -p ~/.local/share/fonts/
-# cp -r ./fonts/* ~/.local/share/fonts/
 sudo cp -r ./fonts/* /usr/share/fonts/
 
 # Keyboard
@@ -97,15 +97,16 @@ sudo cp ./xkb/evdev.xml /usr/share/X11/xkb/rules/
 
 mkdir -p ~/Pictures/Wallpapers
 cp ./Wallpaper.jpeg ~/Pictures/Wallpapers/
+sudo mkdir -p /usr/share/backgrounds/
+sudo cp ./Wallpaper.jpeg /usr/share/backgrounds/
 
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
 
-# mkdir -p ~/.icons
-# cp -r ./material_light_cursors ~/.icons/
 
 sudo cp -r ./icons/* /usr/share/icons/
 
+cp -r ./cfg/gtk-3.0/ ~/.config/
 cp -r ./cfg/zathura/ ~/.config/
 cp -r ./cfg/kitty ~/.config/
 cp -r ./cfg/hexchat ~/.config/
@@ -114,14 +115,9 @@ cp -r ./cfg/rofi ~/.config/
 cp -r ./cfg/dunst ~/.config/ 
 cp -r ./cfg/keepassxc ~/.config/
 
-
 ssh-keygen
 git config --global user.email "thyriaen@googlemail.com"
 git config --global user.name "Carlisle Nightingale"
-
-# Manual Install
-echo " --- Install complete ---"
-echo "run lxappreance for manual install now"
 
 rm ~/.bash*
 
