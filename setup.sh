@@ -1,6 +1,6 @@
 
 PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite 
-neofetch pdftk python3-pip xsetroot maim xclip 
+neofetch pdftk python3-pip xsetroot maim xclip redshift
 ImageMagick zathura zathura-pdf-mupdf poppler-utils
 polybar feh kitty rofi zsh zsh-syntax-highlighting fzf dunst xdg-desktop-portal-wlr
 evince mate-calc simple-scan hexchat keepassxc syncthing synology-drive-noextra
@@ -35,8 +35,8 @@ pip install td-watson
 
 # Configs
 sudo systemctl --user enable syncthing.service
-# sudo grub2-editenv - set menu_auto_hide=1
-# sudo grub2-mkconfig
+sudo grub2-editenv - set menu_auto_hide=1
+sudo grub2-mkconfig
 
 # Find utils
 sudo updatedb
@@ -45,10 +45,7 @@ sudo updatedb
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 
-# nnn
-mkdir -p ~/.config/nnn/plugins
-curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
-cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
+
 
 # fff filepicker
 sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /etc/systemd/system/
@@ -71,6 +68,7 @@ flatpak install flathub org.signal.Signal
 
 # Putting files at locations
 mkdir -p ~/.xmonad/hooks/
+cp ./home/gtkrc-2.0 ~/.gtkrc-2.0
 cp ./home/profile ~/.profile
 cp ./home/startup.sh ~/.xmonad/hooks/
 cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
@@ -110,6 +108,11 @@ cp -r ./cfg/keepassxc ~/.config/
 
 # Binaries
 sudo cp -r ./bin/* /bin/
+
+# nnn
+mkdir -p ~/.config/nnn/plugins
+curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
 
 ssh-keygen
 git config --global user.email "thyriaen@googlemail.com"
