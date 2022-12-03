@@ -5,17 +5,34 @@ ImageMagick zathura zathura-pdf-mupdf poppler-utils
 polybar feh kitty rofi zsh zsh-syntax-highlighting fzf dunst xdg-desktop-portal-wlr
 evince mate-calc simple-scan hexchat keepassxc syncthing synology-drive-noextra
 gtk-murrine-engine gtk3-devel
+sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg
 "
+
 # Install basics
 sudo dnf -y upgrade
 sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf --refresh -y install $PACKAGES
-sudo dnf -y remove xmobar i3 awesome ratpoison openbox xdg-desktop-portal-gtk
+# xdg-desktop-portal-gtk
 
-# Laptop Only section
-sudo dnf -y install tlp light
-hostnamectl set-hostname carthy
-sudo systemctl enable tlp.service
+
+read -r -p "Install laptop version? [y/N]: " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	# Laptop Only section
+	sudo dnf -y install tlp light
+	hostnamectl set-hostname carthy
+	sudo systemctl enable tlp.service
+else
+	hostnamectl set-hostname thyrium
+fi
+
+
+
+sudo systemctl disable lightdm
+sudo systemctl enable sddm
+
+sudo dnf -y remove xmobar i3 awesome ratpoison openbox lightdm
+
 
 # Sublime Text
 sudo dnf -y config-manager --add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
@@ -27,8 +44,6 @@ cp ./cfg/sublime/* ~/.config/sublime-text/Packages/User/
 # Chrome
 sudo dnf -y config-manager --set-enabled google-chrome
 sudo dnf -y install google-chrome-stable
-
-
 
 # Watson
 pip install td-watson
@@ -67,6 +82,9 @@ flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flat
 flatpak install flathub org.signal.Signal
 
 # Putting files at locations
+sudo cp ./sddm.conf /etc/
+sudo mkdir -p /usr/share/sddm/themes/
+sudo cp -r ./sugar-candy /usr/share/sddm/themes/
 mkdir -p ~/.xmonad/hooks/
 cp ./home/gtkrc-2.0 ~/.gtkrc-2.0
 cp ./home/profile ~/.profile
@@ -74,7 +92,6 @@ cp ./home/startup.sh ~/.xmonad/hooks/
 cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 cp ./home/zshrc ~/.zshrc
 cp ./home/p10k.zsh ~/.p10k.zsh
-sudo cp ./home/lightdm-gtk-greeter.conf /etc/lightdm/
 
 # mkdir -p ~/.themes 
 # cp -r ./themes/* ~/.themes/
@@ -87,6 +104,7 @@ sudo cp -r ./fonts/* /usr/share/fonts/
 sudo cp ./xkb/thy /usr/share/X11/xkb/symbols/
 sudo cp ./xkb/evdev.xml /usr/share/X11/xkb/rules/
 
+# todo laptop wallpaper
 mkdir -p ~/Pictures/Wallpapers
 cp ./Wallpaper.jpeg ~/Pictures/Wallpapers/
 sudo mkdir -p /usr/share/backgrounds/
