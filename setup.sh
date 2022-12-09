@@ -1,7 +1,7 @@
 
-PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite 
+PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite flatpak
 neofetch pdftk python3-pip xsetroot maim xclip redshift
-ImageMagick zathura zathura-pdf-mupdf poppler-utils
+ImageMagick zathura zathura-pdf-mupdf poppler-utils gnome-disk-utility mediawriter
 polybar feh kitty rofi zsh zsh-syntax-highlighting fzf dunst xdg-desktop-portal-wlr
 evince mate-calc simple-scan hexchat keepassxc syncthing synology-drive-noextra
 gtk-murrine-engine gtk3-devel
@@ -49,7 +49,7 @@ sudo dnf -y install google-chrome-stable
 pip install td-watson
 
 # Configs
-sudo systemctl --user enable syncthing.service
+systemctl --user enable syncthing.service
 sudo grub2-editenv - set menu_auto_hide=1
 sudo grub2-mkconfig
 
@@ -79,7 +79,11 @@ cp ./cfg/filechooser/fff.sh ~/.config/xdg-desktop-portal-termfilechooser/
 
 # Signal
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub org.signal.Signal
+sudo flatpak override --filesystem=$HOME/.themes
+sudo flatpak override --filesystem=$HOME/.icons
+sudo flatpak override --env=GTK_THEME=mathy
+sudo flatpak override --env=ICON_THEME=Newaita-reborn-deep-purple-dark
+sudo flatpak install flathub org.signal.Signal
 
 # Putting files at locations
 sudo cp ./sddm.conf /etc/
@@ -93,9 +97,9 @@ cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
 cp ./home/zshrc ~/.zshrc
 cp ./home/p10k.zsh ~/.p10k.zsh
 
-# mkdir -p ~/.themes 
-# cp -r ./themes/* ~/.themes/
-sudo cp -r ~/.themes/mathy /usr/share/themes/
+mkdir -p ~/.themes 
+cp -r ./themes/mathy ~/.themes/
+sudo cp -r ./themes/mathy /usr/share/themes/
 
 mkdir -p ~/.local/share/fonts/
 sudo cp -r ./fonts/* /usr/share/fonts/
@@ -113,7 +117,10 @@ sudo cp ./Wallpaper.jpeg /usr/share/backgrounds/
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
 
+mkdir -p ~/.icons
 sudo cp -r ./icons/* /usr/share/icons/
+cp -r ./icons/* /usr/share/icons/
+
 
 cp -r ./cfg/gtk-3.0/ ~/.config/
 cp -r ./cfg/zathura/ ~/.config/
