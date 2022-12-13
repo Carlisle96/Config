@@ -126,8 +126,9 @@ autostart = do
     -- spawn "polybar main"
     -- spawn "polybar second"
     spawn "polybar laptop"
-    spawn "synology-drive start"
+    -- spawn "synology-drive start"
     spawn "keepassxc %f"
+    spawn "redshift -l 48.3:14.3 -t 6500:2500"
     spawn signal
 
 ------------------------------------------------------------------------
@@ -178,7 +179,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Push window back into tiling
     , ((modm,               xK_g     ), withFocused $ windows . W.sink)
 
-    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; xmonad --recompile; xmonad --restart")
+    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; killall redshift; xmonad --recompile; xmonad --restart")
 
     ]
     ++
