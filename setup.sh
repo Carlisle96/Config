@@ -121,9 +121,9 @@ mkdir -p ~/.icons
 sudo cp -r ./icons/* /usr/share/icons/
 cp -r ./icons/* /usr/share/icons/
 
-
-cp -r ./cfg/gtk-3.0/ ~/.config/
-cp -r ./cfg/zathura/ ~/.config/
+cp -r ./cfg/default ~/.config/
+cp -r ./cfg/gtk-3.0 ~/.config/
+cp -r ./cfg/zathura ~/.config/
 cp -r ./cfg/kitty ~/.config/
 cp -r ./cfg/hexchat ~/.config/
 cp -r ./cfg/polybar ~/.config/
