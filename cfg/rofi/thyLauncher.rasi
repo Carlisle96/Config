@@ -1,7 +1,4 @@
 /**
- *
- * Author : Aditya Shakya (adi1090x)
- * Github : @adi1090x
  * 
  * Rofi Theme File
  * Rofi Version: 1.7.3
@@ -11,20 +8,20 @@
 configuration {
 	modi:                       "drun";
     show-icons:                 true;
-    display-drun:               "";
+    display-drun:               " ";
 	drun-display-format:        "{name}";
 }
 
 /*****----- Global Properties -----*****/
 * {
-    background:     #18191AFF;
-    background-alt: #27292DFF;
-    foreground:     #E9EAEBFF;
-    selected:       #7652B8FF;
-    active:         #94B852FF;
-    urgent:         #B85261FF;
+    background:         #18191AFF;
+    background-alt:     #27292DFF;
+    foreground:         #E9EAEBFF;
+    selected:           #7652B8FF;
+    active:             #94B852FF;
+    urgent:             #B85261FF;
     
-    font: "Hasklug Nerd Font 10";
+    font: "M PLUS 1 10.5";
 }
 
 /*****----- Main Window -----*****/
@@ -33,8 +30,8 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       600px;
-    height:                      35%;
+    width:                       588px;
+    height:                      508px;
     x-offset:                    0px;
     y-offset:                    0px;
 
@@ -42,7 +39,7 @@ window {
     margin:                      0px;
     padding:                     0px;
     border:                      0px solid;
-    border-radius:               0px;
+    border-radius:               48px;
     border-color:                @selected;
     background-color:            @background;
     cursor:                      "default";
@@ -51,11 +48,11 @@ window {
 /*****----- Main Box -----*****/
 mainbox {
     enabled:                     true;
-    spacing:                     20px;
+    spacing:                     24px;
     margin:                      0px;
-    padding:                     40px 20px;
-    border:                      2px 0px 2px 0px solid;
-    border-radius:               0px 0px 0px 0px;
+    padding:                     24px;
+    border:                      0px 0px 2px 0px solid;
+    border-radius:               48px;
     border-color:                @selected;
     background-color:            transparent;
     children:                    [ "inputbar", "listview" ];
@@ -64,21 +61,22 @@ mainbox {
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     16px;
     margin:                      0px;
-    padding:                     12px 16px;
+    padding:                     16px;
     border:                      0px 0px 2px 0px;
-    border-radius:               100%;
+    border-radius:               24px;
     border-color:                @selected;
     background-color:            @background-alt;
     text-color:                  @foreground;
-    children:                    [ "prompt", "entry" ];
+    children:                    [ "prompt", "textbox-prompt-colon", "entry" ];
 }
 
 prompt {
     enabled:                     true;
     background-color:            inherit;
     text-color:                  inherit;
+    font:                        "Hasklug Nerd Font 12";
 }
 textbox-prompt-colon {
     enabled:                     true;
@@ -86,13 +84,14 @@ textbox-prompt-colon {
     str:                         "::";
     background-color:            inherit;
     text-color:                  inherit;
+    font:                        "Hasklug Nerd Font 12";
 }
 entry {
     enabled:                     true;
     background-color:            inherit;
     text-color:                  inherit;
     cursor:                      text;
-    placeholder:                 "Search Apps";
+    placeholder:                 "Search Applications";
     placeholder-color:           inherit;
 }
 
@@ -100,7 +99,7 @@ entry {
 listview {
     enabled:                     true;
     columns:                     3;
-    lines:                       10;
+    lines:                       3;
     cycle:                       true;
     dynamic:                     true;
     scrollbar:                   false;
@@ -109,7 +108,7 @@ listview {
     fixed-height:                true;
     fixed-columns:               true;
     
-    spacing:                     5px;
+    spacing:                     24px;
     margin:                      0px;
     padding:                     0px;
     border:                      0px solid;
@@ -119,19 +118,13 @@ listview {
     text-color:                  @foreground;
     cursor:                      "default";
 }
-scrollbar {
-    handle-width:                5px ;
-    handle-color:                @selected;
-    border-radius:               0px;
-    background-color:            @background-alt;
-}
 
 /*****----- Elements -----*****/
 element {
     enabled:                     true;
-    spacing:                     10px;
+    spacing:                     8px;
     margin:                      0px;
-    padding:                     10px;
+    padding:                     8px;
     border:                      0px solid;
     border-radius:               0px;
     border-color:                @selected;
@@ -146,7 +139,7 @@ element normal.normal {
 }
 element selected.normal {
     border:                      0px 0px 2px 0px;
-    border-radius:               12px;
+    border-radius:               24px;
     border-color:                @selected;
     background-color:            @background-alt;
     text-color:                  @foreground;
