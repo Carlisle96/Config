@@ -126,13 +126,14 @@ myLogHook = return ()
 -- Applications
 
 autostart = do
+    spawn "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
+    -- io $ threadDelay 1000000
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
     spawn "polybar left"
     spawn "polybar middle"
     spawn "polybar right"
     spawn "polybar second"
     -- spawn "polybar laptop"
-    spawn "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
     spawn "redshift -l 48.4:14.4 -t 6500:3000"
     spawn "synology-drive start"
     spawn "keepassxc %f"
