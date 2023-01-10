@@ -27,6 +27,8 @@ else
 fi
 
 
+# TODO for non-Laptop -- different background in sddm // different config
+
 
 sudo systemctl disable lightdm
 sudo systemctl enable sddm
