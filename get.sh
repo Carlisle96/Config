@@ -19,3 +19,5 @@ cp ~/.config/sublime-text/Packages/User/Package\ Control.sublime-settings ./cfg/
 cp -r ~/.config/polybar/* ./cfg/polybar/
 
 cp -r ~/.config/rofi/* ./cfg/rofi/
+
+cp -r ~/.config/picom/* ./cfg/picom/

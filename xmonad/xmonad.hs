@@ -11,7 +11,6 @@ import XMonad.Layout.Combo
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
-import XMonad.Layout.StateFull
 import XMonad.Layout.IndependentScreens
 
 import XMonad.Hooks.EwmhDesktops
@@ -62,13 +61,18 @@ tabConfig = def
     , urgentBorderColor = "#27292d"
     , decoHeight = 24 }
 
+-- Solid> it's probably more complicated for scratchpads, since once you summon them once they just get moved to another workspace and the manageHook isn't executed after that
+-- Solid> but for normal windows you can just do something like "appName =? "my-query" --> doShift . fromJust =<< liftX (screenWorkspace 0)"
+
+
+
 ------------------------------------------------------------------------
 -- Layouts
 
 gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
 tabGap = addTabs shrinkText tabConfig . gap
 
-myLayout = focusTracking $ ( configurableNavigation noNavigateBorders $ avoidStruts 
+myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
     ( monoTab ||| dualTab )) ||| fullScr 
   where
     dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
@@ -93,7 +97,7 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "kitty" --> doShiftWithScreens "1"
     , className =? "Sublime_text" --> doShiftWithScreens "1"
     , className =? "Google-chrome" --> doShiftWithScreens "3" 
-    , className =? "datev" --> doShiftWithScreens "4"
+    , className =? "datev" --> doShiftWithScreens "3"
     , className =? "Dragon" --> floatingDragon 
     -- , className =? "FullScreenGame" --> defineBorderWidth 0
     ]
@@ -123,12 +127,15 @@ myLogHook = return ()
 
 autostart = do
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
-    -- spawn "polybar main"
-    -- spawn "polybar second"
-    spawn "polybar laptop"
-    -- spawn "synology-drive start"
+    spawn "polybar left"
+    spawn "polybar middle"
+    spawn "polybar right"
+    spawn "polybar second"
+    -- spawn "polybar laptop"
+    spawn "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
+    spawn "redshift -l 48.4:14.4 -t 6500:3000"
+    spawn "synology-drive start"
     spawn "keepassxc %f"
-    spawn "redshift -l 48.3:14.3 -t 6500:2500"
     spawn signal
 
 ------------------------------------------------------------------------
@@ -179,7 +186,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Push window back into tiling
     , ((modm,               xK_g     ), withFocused $ windows . W.sink)
 
-    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; killall redshift; xmonad --recompile; xmonad --restart")
+    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; killall picom; killall redshift; xmonad --recompile; xmonad --restart")
 
     ]
     ++

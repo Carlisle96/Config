@@ -5,7 +5,7 @@ ImageMagick zathura zathura-pdf-mupdf poppler-utils gnome-disk-utility mediawrit
 polybar feh kitty rofi zsh zsh-syntax-highlighting fzf dunst xdg-desktop-portal-wlr
 evince mate-calc simple-scan hexchat keepassxc syncthing synology-drive-noextra
 gtk-murrine-engine gtk3-devel
-sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg
+sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
 "
 
 # Install basics
@@ -130,6 +130,7 @@ cp -r ./cfg/polybar ~/.config/
 cp -r ./cfg/rofi ~/.config/
 cp -r ./cfg/dunst ~/.config/ 
 cp -r ./cfg/keepassxc ~/.config/
+cp -r ./cfg/picom ~/.config/
 
 # Binaries
 sudo cp -r ./bin/* /bin/
@@ -138,6 +139,8 @@ sudo cp -r ./bin/* /bin/
 mkdir -p ~/.config/nnn/plugins
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 cp ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/
+
+xdg-mime default sublime_text.desktop text/x-tex
 
 ssh-keygen
 git config --global user.email "thyriaen@googlemail.com"
