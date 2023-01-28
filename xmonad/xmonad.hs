@@ -91,13 +91,13 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "KeePassXC" --> floatingKPass
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "Mate-calc" --> floatingCalc 
-    , className =? "Signal" --> doShift "1_6"
-    , className =? "Hexchat" --> doShiftWithScreens "6" 
-    , className =? "superhuman" --> doShiftWithScreens "2"
-    , className =? "kitty" --> doShiftWithScreens "1"
-    , className =? "Sublime_text" --> doShiftWithScreens "1"
-    , className =? "Google-chrome" --> doShiftWithScreens "3" 
-    , className =? "datev" --> doShiftWithScreens "3"
+    -- , className =? "Signal" --> doShift "1_6"
+    -- , className =? "Hexchat" --> doShiftWithScreens "6" 
+    -- , className =? "superhuman" --> doShiftWithScreens "2"
+    -- , className =? "kitty" --> doShiftWithScreens "1"
+    -- , className =? "Sublime_text" --> doShiftWithScreens "1"
+    -- , className =? "Google-chrome" --> doShiftWithScreens "3" 
+    -- , className =? "datev" --> doShiftWithScreens "3"
     , className =? "Dragon" --> floatingDragon 
     -- , className =? "FullScreenGame" --> defineBorderWidth 0
     ]
@@ -126,14 +126,13 @@ myLogHook = return ()
 -- Applications
 
 autostart = do
-    spawn "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
-    -- io $ threadDelay 1000000
     spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
     spawn "polybar left"
     spawn "polybar middle"
     spawn "polybar right"
     spawn "polybar second"
     -- spawn "polybar laptop"
+    spawn "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
     spawn "redshift -l 48.4:14.4 -t 6500:3000"
     spawn "synology-drive start"
     spawn "keepassxc %f"
