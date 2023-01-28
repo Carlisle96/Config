@@ -91,11 +91,11 @@ sudo flatpak install flathub org.signal.Signal
 sudo cp ./sddm.conf /etc/
 sudo mkdir -p /usr/share/sddm/themes/
 sudo cp -r ./sugar-candy /usr/share/sddm/themes/
-mkdir -p ~/.xmonad/hooks/
+mkdir -p ~/.config/xmonad/hooks/
 cp ./home/gtkrc-2.0 ~/.gtkrc-2.0
 cp ./home/profile ~/.profile
-cp ./home/startup.sh ~/.xmonad/hooks/
-cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
+cp ./home/startup.sh ~/.config/xmonad/hooks/
+cp ./cfg/xmonad/xmonad.hs ~/.config/xmonad/xmonad.hs
 cp ./home/zshrc ~/.zshrc
 cp ./home/p10k.zsh ~/.p10k.zsh
 
