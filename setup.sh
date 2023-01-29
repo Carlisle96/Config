@@ -1,3 +1,27 @@
+### ------------------------------------- Basics ------------------------------------ ###
+
+PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite flatpak
+neofetch pdftk python3-pip xsetroot xclip redshift
+zathura zathura-pdf-mupdf mediawriter
+polybar kitty rofi zsh zsh-syntax-highlighting fzf
+evince simple-scan hexchat keepassxc syncthing 
+gtk-murrine-engine gtk3-devel 
+sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom"
+
+# Install basics
+sudo dnf -y upgrade
+sudo dnf --refresh -y install $PACKAGES
+
+read -r -p "Install laptop version? [y/N]: " response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+then
+	# Laptop Only section
+	sudo dnf -y install tlp light
+	hostnamectl set-hostname carthy
+	sudo systemctl enable tlp.service
+else
+	hostnamectl set-hostname thyrium
+fi
 
 ### ------------------------------------ Flatpak ------------------------------------ ###
 
@@ -37,6 +61,10 @@ sudo dnf -y install ./rpms/*
 # Grub
 sudo grub2-editenv - set menu_auto_hide=1
 sudo grub2-mkconfig
+
+# SDDM
+sudo systemctl disable lightdm
+sudo systemctl enable sddm
 
 # Terminal
 gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
@@ -86,6 +114,11 @@ cp ./apps/*.desktop ~/.local/share/applications
 
 
 ### -------------------------------------- Todo ------------------------------------- ###
+
+# instlaled packages: 
+# xdg-desktop-portal-wlr mate-calc
+# Already installed: maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
+# xdg-desktop-portal-gtk
 
 # mkdir -p ~/.themes 
 # cp -r ./themes/mathy ~/.themes/
