@@ -13,9 +13,6 @@ sudo flatpak override --env=ICON_THEME=Newaita-reborn-deep-purple-dark
 sudo dnf -y config-manager --set-enabled google-chrome
 sudo dnf -y install google-chrome-stable
 
-# nnn
-curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
-
 # Signal
 sudo flatpak install flathub org.signal.Signal
 
@@ -63,6 +60,9 @@ git config --global user.name "Carlisle Nightingale"
 # SSH
 ssh-keygen
 
+# nnn
+curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
 # SDDM
@@ -78,7 +78,7 @@ sudo cp -r ./usrshare/* /usr/share/
 cp -r ./cfg/* ~/.config/
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 
-cp -r ./home/* ~/
+cp -r ./home/.* ~/
 
 # Applications 
 mkdir -p ~/.local/share/applications
