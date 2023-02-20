@@ -28,7 +28,7 @@ xkb_symbols "basic" {
     key <AD07> {    [   u,      U,  udiaeresis, Udiaeresis  ]   };
     key <AD08> {    [   i,      I                           ]   };
     key <AD09> {    [   o,      O,  odiaeresis, Odiaeresis  ]   };
-    key <AD10> {    [   p,      P                           ]   };
+    key <AD10> {    [   p,      P,  section                 ]   };
     key <AD11> {    [ parenleft,    bracketleft               ]   };
     key <AD12> {    [ parenright,   bracketright              ]   };
 
