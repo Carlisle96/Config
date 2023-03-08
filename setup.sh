@@ -88,9 +88,6 @@ git config --global user.name "Carlisle Nightingale"
 # SSH
 ssh-keygen
 
-# nnn
-curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
-
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
 # SDDM
@@ -105,6 +102,7 @@ sudo cp -r ./usrshare/* /usr/share/
 # Configs
 cp -r ./cfg/* ~/.config/
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
+curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 
 cp -r ./home/.* ~/
 
