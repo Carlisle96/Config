@@ -1,6 +1,6 @@
 ### ------------------------------------- Basics ------------------------------------ ###
 
-PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite flatpak
+PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite flatpak xmonad
 neofetch pdftk python3-pip xsetroot xclip redshift
 zathura zathura-pdf-mupdf mediawriter
 polybar kitty rofi zsh zsh-syntax-highlighting fzf
