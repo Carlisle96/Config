@@ -11,16 +11,17 @@ import XMonad.Layout.Combo
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
-import XMonad.Layout.IndependentScreens
+-- import XMonad.Layout.IndependentScreens
+import XMonad.Layout.CenteredIfSingle
 
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WindowSwallowing
--- import XMonad.Hooks.BorderPerWindow (defineBorderWidth, actionQueue)
 
 import XMonad.Actions.SpawnOn
 import XMonad.Util.NamedScratchpad
+import XMonad.Util.SpawnOnce
 
 import Graphics.X11.ExtraTypes.XF86
 
@@ -42,7 +43,7 @@ defaults = def
     , keys               = myKeys
     , mouseBindings      = myMouseBindings
     , layoutHook         = myLayout
-    , workspaces         = withScreens 2 ["1","2","3","4","5","6"]
+    , workspaces         = ["1","2","3","4","5","6"]
     , manageHook         = myManageHook
     , handleEventHook    = myEventHook
     , logHook            = myLogHook
@@ -72,17 +73,15 @@ tabConfig = def
 gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
 tabGap = addTabs shrinkText tabConfig . gap
 
-myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
-    ( monoTab ||| dualTab )) ||| fullScr 
+myLayout = centeredIfSingle 0.75 0.9
+    ( configurableNavigation noNavigateBorders $ avoidStruts dualTab ) 
+    ||| fullScr 
   where
     dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
-    monoTab = tabGap Simplest
     fullScr = noBorders Full
 
 ------------------------------------------------------------------------
 -- Window rules
-
-doShiftWithScreens = doF . onCurrentScreen W.shift
 
 myManageHook = manageSpawn <+> composeAll
     [ namedScratchpadManageHook scratchpads
@@ -91,13 +90,13 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "KeePassXC" --> floatingKPass
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "Mate-calc" --> floatingCalc 
-    -- , className =? "Signal" --> doShift "1_6"
-    -- , className =? "Hexchat" --> doShiftWithScreens "6" 
-    -- , className =? "superhuman" --> doShiftWithScreens "2"
-    -- , className =? "kitty" --> doShiftWithScreens "1"
-    -- , className =? "Sublime_text" --> doShiftWithScreens "1"
-    -- , className =? "Google-chrome" --> doShiftWithScreens "3" 
-    -- , className =? "datev" --> doShiftWithScreens "3"
+    , className =? "Signal" --> doShift "6"
+    , className =? "Hexchat" --> doShift "6" 
+    , className =? "superhuman" --> doShift "2"
+    , className =? "kitty" --> doShift "1"
+    -- , className =? "Sublime_text" --> doShift "1"
+    , className =? "Google-chrome" --> doShift "3" 
+    , className =? "datev" --> doShift "4"
     , className =? "Dragon" --> floatingDragon 
     -- , className =? "FullScreenGame" --> defineBorderWidth 0
     ]
@@ -105,7 +104,8 @@ myManageHook = manageSpawn <+> composeAll
     floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
     floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) )
     floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
-    floatingDragon  = doRectFloat ( W.RationalRect  (59 % 64) (23 % 48) (1 % 32) (1 % 24) )
+    floatingDragon  = doRectFloat ( W.RationalRect  (15 % 16) (23 % 48) (1 % 48) (1 % 24) )
+    -- x, y, w, h
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -126,17 +126,15 @@ myLogHook = return ()
 -- Applications
 
 autostart = do
-    spawn "/home/thyriaen/.xmonad/hooks/startup.sh"
-    spawn "polybar left"
-    spawn "polybar middle"
-    spawn "polybar right"
-    spawn "polybar second"
-    -- spawn "polybar laptop"
-    spawn "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
-    spawn "redshift -l 48.4:14.4 -t 6500:3000"
-    spawn "synology-drive start"
-    spawn "keepassxc %f"
-    spawn signal
+    spawnOnce "/home/thyriaen/.config/xmonad/hooks/startup.sh"
+    spawnOnce "polybar left"
+    spawnOnce "polybar middle"
+    spawnOnce "polybar right"
+    spawnOnce "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
+    spawnOnce "redshift -m vidmode -l 48.4:14.4 -t 6500:3000"
+    spawnOnce "synology-drive start"
+    spawnOnce "keepassxc %f"
+    spawnOnce signal
 
 ------------------------------------------------------------------------
 -- Key bindings
@@ -153,7 +151,7 @@ scratchpads =
     -- , 
     ]
   where        
-    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
+    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (1 % 2) (5 % 6)
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
 
@@ -175,10 +173,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((modm,               xK_Tab   ), windows W.focusDown)
     , ((modm .|. shiftMask, xK_Tab   ), windows W.focusUp  )
 
-
-    , ((modm,               xK_j     ), sendMessage (Move L))
-    , ((modm,               xK_k     ), sendMessage (Move R))
-
+    , ((modm,               xK_s     ), sendMessage (Move L))
+    , ((modm,               xK_d     ), sendMessage (Move R))
 
     , ((modm,               xK_h     ), sendMessage Shrink)
     , ((modm,               xK_l     ), sendMessage Expand)
@@ -186,21 +182,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Push window back into tiling
     , ((modm,               xK_g     ), withFocused $ windows . W.sink)
 
-    , ((modm .|. shiftMask, xK_q     ), spawn "killall polybar; killall picom; killall redshift; xmonad --recompile; xmonad --restart")
+    , ((modm .|. shiftMask, xK_q     ), spawn "monad --recompile; xmonad --restart")
 
     ]
     ++
 
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
-    [((m .|. modm, k), windows $ onCurrentScreen f i)
-        | (i, k) <- zip (workspaces' conf) [xK_1 .. xK_6]
+    [((m .|. modm, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_6]
         , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-    
-    -- mod-{w,r}, Move client to screen 1 or 2
-    ++
-    [((modm, key), screenWorkspace sc >>= flip whenJust (windows . W.shift))
-        | (key, sc) <- [(xK_w, 0), (xK_r, 1)]]
+
 
 ------------------------------------------------------------------------
 -- Mouse bindings: default actions bound to mouse events
