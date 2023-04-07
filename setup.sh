@@ -6,7 +6,9 @@ zathura zathura-pdf-mupdf mediawriter
 polybar kitty rofi zsh zsh-syntax-highlighting fzf
 evince simple-scan hexchat keepassxc syncthing 
 gtk-murrine-engine gtk3-devel 
-sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom"
+sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
+mate-calc maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
+xdg-desktop-portal-gtk"
 
 # Install basics
 sudo dnf -y upgrade
@@ -112,11 +114,6 @@ cp ./apps/*.desktop ~/.local/share/applications
 
 
 ### -------------------------------------- Todo ------------------------------------- ###
-
-# instlaled packages: 
-# xdg-desktop-portal-wlr mate-calc
-# Already installed: maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
-# xdg-desktop-portal-gtk
 
 # mkdir -p ~/.themes 
 # cp -r ./themes/mathy ~/.themes/
