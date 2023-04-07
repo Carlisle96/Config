@@ -73,8 +73,7 @@ tabConfig = def
 gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
 tabGap = addTabs shrinkText tabConfig . gap
 
-myLayout = centeredIfSingle 0.75 0.9
-    ( configurableNavigation noNavigateBorders $ avoidStruts dualTab ) 
+myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts dualTab ) 
     ||| fullScr 
   where
     dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
@@ -102,7 +101,8 @@ myManageHook = manageSpawn <+> composeAll
     ]
   where 
     floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
-    floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) )
+    -- floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) ) DESKTOP
+    floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) )
     floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
     floatingDragon  = doRectFloat ( W.RationalRect  (15 % 16) (23 % 48) (1 % 48) (1 % 24) )
     -- x, y, w, h
@@ -151,7 +151,8 @@ scratchpads =
     -- , 
     ]
   where        
-    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (1 % 2) (5 % 6)
+    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
+    -- floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (1 % 2) (5 % 6) -- DESKTOP
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
 
