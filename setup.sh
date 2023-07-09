@@ -5,10 +5,13 @@ neofetch pdftk python3-pip xsetroot xclip redshift
 zathura zathura-pdf-mupdf mediawriter nemo
 polybar kitty rofi zsh zsh-syntax-highlighting fzf
 evince simple-scan hexchat keepassxc syncthing 
-gtk-murrine-engine gtk3-devel texlive-medium
+gtk-murrine-engine gtk3-devel
 sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
 mate-calc maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
-xdg-desktop-portal-gtk"
+xdg-desktop-portal-gtk
+libreoffice-calc libreoffice-gtk3"
+
+# Todo Texlive + texlive-datetime2 texlive-datetime2-german texlive-textpos texlive-spreadtab
 
 # Install basics
 sudo dnf -y upgrade
@@ -41,6 +44,7 @@ sudo dnf -y install google-chrome-stable
 
 # Signal
 sudo flatpak install flathub org.signal.Signal
+sudo flatpak override org.signal.Signal --filesystem=host
 
 # Watson
 pip install td-watson
@@ -90,6 +94,14 @@ git config --global user.name "Carlisle Nightingale"
 # SSH
 ssh-keygen
 
+# Eww -- just copy the binary  											TODO
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+cd eww
+git clone https://github.com/elkowar/eww
+sudo dnf -y install cargo
+cd ..
+
+
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
 # SDDM
@@ -100,6 +112,11 @@ sudo cp -r ./bin/* /bin/
 
 # Global Configs
 sudo cp -r ./usrshare/* /usr/share/
+
+mkdir -p ~/.themes
+mkdir -p ~/.icons
+cp -r ./usrshare/icons/* ~/.icons/
+cp -r ./usrshare/themes/* ~/.themes/
 
 # Configs
 cp -r ./cfg/* ~/.config/
@@ -114,10 +131,6 @@ cp ./apps/*.desktop ~/.local/share/applications
 
 
 ### -------------------------------------- Todo ------------------------------------- ###
-
-# mkdir -p ~/.themes 
-# cp -r ./themes/mathy ~/.themes/
-# need ?
 
 # fff filepicker
 # sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /etc/systemd/system/

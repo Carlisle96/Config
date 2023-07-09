@@ -70,14 +70,28 @@ tabConfig = def
 ------------------------------------------------------------------------
 -- Layouts
 
-gap = spacingRaw False (Border 8 8 8 8 ) True (Border 8 8 8 8) True
-tabGap = addTabs shrinkText tabConfig . gap
+-- gap = spacingWithEdge 8
+-- tabGap = addTabs shrinkText tabConfig . gap
 
-myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts dualTab ) 
-    ||| fullScr 
-  where
-    dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) Simplest Simplest
-    fullScr = noBorders Full
+-- myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
+--    ( testTab ||| dualTab )) ||| fullScr
+--  where
+--    dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) testTab testTab
+--    monoTab = tabGap Simplest
+--    fullScr = noBorders Full
+--    testTab = spacingRaw False (Border 16 16 16 16 ) True (Border 8 8 8 8) True ( addTabs shrinkText tabConfig $ 
+--        Simplest )
+
+
+leftTab = spacingRaw False (Border 8 16 8 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
+righTab = spacingRaw False (Border 8 16 16 8) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
+
+myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
+        ( centeredIfSingle 0.8 0.9 dualTab )) ||| fullScr
+    where
+        dualTab = combineTwo (TwoPane 0.03 0.5) leftTab righTab
+        -- monoTab = spacingRaw False (Border 8 16 16 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
+        fullScr = noBorders Simplest
 
 ------------------------------------------------------------------------
 -- Window rules
@@ -88,15 +102,17 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "filepicker" --> floatingCenter
     , className =? "KeePassXC" --> floatingKPass
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
+    , className =? "DesktopEditors" --> floatingCenter
     , className =? "Mate-calc" --> floatingCalc 
     , className =? "Signal" --> doShift "6"
     , className =? "Hexchat" --> doShift "6" 
     , className =? "superhuman" --> doShift "2"
     , className =? "kitty" --> doShift "1"
     -- , className =? "Sublime_text" --> doShift "1"
-    , className =? "Google-chrome" --> doShift "3" 
+    , className =? "Google-chrome" --> doShift "5" 
     , className =? "datev" --> doShift "4"
     , className =? "Dragon" --> floatingDragon 
+    , className =? "Spotify" --> doShift "6"
     -- , className =? "FullScreenGame" --> defineBorderWidth 0
     ]
   where 
@@ -104,7 +120,9 @@ myManageHook = manageSpawn <+> composeAll
     -- floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) ) DESKTOP
     floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) )
     floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
-    floatingDragon  = doRectFloat ( W.RationalRect  (15 % 16) (23 % 48) (1 % 48) (1 % 24) )
+    floatingDragon  = doRectFloat ( W.RationalRect  (29 % 32) (23 % 48) (1 % 24) (1 % 18) )
+    -- floatingDragon  = doRectFloat ( W.RationalRect  (15 % 16) (23 % 48) (1 % 48) (1 % 24) ) DESKTOP
+
     -- x, y, w, h
 
 ------------------------------------------------------------------------
@@ -130,7 +148,9 @@ autostart = do
     spawnOnce "polybar left"
     spawnOnce "polybar middle"
     spawnOnce "polybar right"
-    spawnOnce "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
+    -- Cannot remember for which windows this was needed: 
+    -- spawnOnce "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
+    spawnOnce "picom"
     spawnOnce "redshift -m vidmode -l 48.4:14.4 -t 6500:3000"
     spawnOnce "synology-drive start"
     spawnOnce "keepassxc %f"
