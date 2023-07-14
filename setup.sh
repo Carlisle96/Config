@@ -6,7 +6,7 @@ zathura zathura-pdf-mupdf mediawriter nemo
 polybar kitty rofi zsh zsh-syntax-highlighting fzf
 evince simple-scan hexchat keepassxc syncthing 
 gtk-murrine-engine gtk3-devel
-sddm qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
+sddm sddm-x11 qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
 mate-calc maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
 xdg-desktop-portal-gtk
 libreoffice-calc libreoffice-gtk3"
@@ -94,14 +94,6 @@ git config --global user.name "Carlisle Nightingale"
 # SSH
 ssh-keygen
 
-# Eww -- just copy the binary  											TODO
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-cd eww
-git clone https://github.com/elkowar/eww
-sudo dnf -y install cargo
-cd ..
-
-
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
 # SDDM
@@ -154,3 +146,4 @@ cp ./apps/*.desktop ~/.local/share/applications
 
 # Copy new Icons over to mathy theme
 
+#Todo fstab
