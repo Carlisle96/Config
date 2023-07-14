@@ -53,10 +53,10 @@ tabConfig = def
     { fontName = "xft:M PLUS 1:pixelsize=14:antialias=true:hinting=true"
     , activeColor = "#7652B8"
     , activeTextColor = "#E9EAEB"
-    , activeBorderColor = "#27292d"
+    , activeBorderColor = "#7652B8"
     , inactiveColor = "#18191A"
     , inactiveTextColor = "#E9EAEB"
-    , inactiveBorderColor = "#27292d"
+    , inactiveBorderColor = "#18191A"
     , urgentColor = "#B85261"
     , urgentTextColor = "#E9EAEB"
     , urgentBorderColor = "#27292d"
@@ -83,11 +83,11 @@ tabConfig = def
 --        Simplest )
 
 
-leftTab = spacingRaw False (Border 8 16 8 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
-righTab = spacingRaw False (Border 8 16 16 8) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
+leftTab = spacingRaw False (Border 24 32 16 32) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
+righTab = spacingRaw False (Border 24 32 32 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
 
 myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
-        ( centeredIfSingle 0.8 0.9 dualTab )) ||| fullScr
+        ( centeredIfSingle 0.75 0.954 dualTab )) ||| fullScr
     where
         dualTab = combineTwo (TwoPane 0.03 0.5) leftTab righTab
         -- monoTab = spacingRaw False (Border 8 16 16 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
@@ -117,11 +117,11 @@ myManageHook = manageSpawn <+> composeAll
     ]
   where 
     floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
-    -- floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) ) DESKTOP
-    floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) )
+    floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) ) --DESKTOP
+    -- floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) )
     floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
-    floatingDragon  = doRectFloat ( W.RationalRect  (29 % 32) (23 % 48) (1 % 24) (1 % 18) )
-    -- floatingDragon  = doRectFloat ( W.RationalRect  (15 % 16) (23 % 48) (1 % 48) (1 % 24) ) DESKTOP
+    -- floatingDragon  = doRectFloat ( W.RationalRect  (30 % 32) (23 % 48) (1 % 24) (1 % 18) )
+    floatingDragon  = doRectFloat ( W.RationalRect  (15 % 16) (23 % 48) (1 % 48) (1 % 24) ) --DESKTOP
 
     -- x, y, w, h
 
@@ -145,9 +145,9 @@ myLogHook = return ()
 
 autostart = do
     spawnOnce "/home/thyriaen/.config/xmonad/hooks/startup.sh"
-    spawnOnce "polybar left"
-    spawnOnce "polybar middle"
-    spawnOnce "polybar right"
+    spawn "polybar left"
+    spawn "polybar middle"
+    spawn "polybar right"
     -- Cannot remember for which windows this was needed: 
     -- spawnOnce "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
     spawnOnce "picom"
@@ -155,6 +155,7 @@ autostart = do
     spawnOnce "synology-drive start"
     spawnOnce "keepassxc %f"
     spawnOnce signal
+    --spawn "tint2 -c /home/thyriaen/.config/tint2/launchy.tint2rc"
 
 ------------------------------------------------------------------------
 -- Key bindings
@@ -171,8 +172,8 @@ scratchpads =
     -- , 
     ]
   where        
-    floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
-    -- floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (1 % 2) (5 % 6) -- DESKTOP
+    -- floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
+    floatingNNN     = W.RationalRect (1 % 4) (1 % 12) (1 % 2) (5 % 6) -- DESKTOP
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
 
