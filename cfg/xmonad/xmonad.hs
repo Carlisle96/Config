@@ -31,8 +31,10 @@ import qualified XMonad.StackSet as W
 
 ------------------------------------------------------------------------
 -- General Setup
-main = xmonad $ ewmh $ docks $ defaults
-
+main = xmonad . addEwmhWorkspaceSort (pure myFilter) . ewmh $ docks $ defaults
+    where
+        myFilter = filterOutWs [scratchpadWorkspaceTag]
+        
 defaults = def 
     { terminal           = "kitty"
     , focusFollowsMouse  = True
@@ -43,7 +45,8 @@ defaults = def
     , keys               = myKeys
     , mouseBindings      = myMouseBindings
     , layoutHook         = myLayout
-    , workspaces         = ["1","2","3","4","5","6"]
+    -- , workspaces         = ["1","2","3","4","5","6"]
+    , workspaces         = ["\61728", "\60188", "\60043", "\61508", "\64158", "\61670"]
     , manageHook         = myManageHook
     , handleEventHook    = myEventHook
     , logHook            = myLogHook
