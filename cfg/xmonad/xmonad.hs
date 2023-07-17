@@ -21,6 +21,7 @@ import XMonad.Hooks.WindowSwallowing
 
 import XMonad.Actions.SpawnOn
 import XMonad.Util.NamedScratchpad
+import XMonad.Util.WorkspaceCompare
 import XMonad.Util.SpawnOnce
 
 import Graphics.X11.ExtraTypes.XF86
@@ -34,7 +35,9 @@ import qualified XMonad.StackSet as W
 main = xmonad . addEwmhWorkspaceSort (pure myFilter) . ewmh $ docks $ defaults
     where
         myFilter = filterOutWs [scratchpadWorkspaceTag]
-        
+
+myWorkspaces = ["\61728", "\60188", "\60043", "\61508", "\64158", "\61670"]
+
 defaults = def 
     { terminal           = "kitty"
     , focusFollowsMouse  = True
@@ -45,8 +48,7 @@ defaults = def
     , keys               = myKeys
     , mouseBindings      = myMouseBindings
     , layoutHook         = myLayout
-    -- , workspaces         = ["1","2","3","4","5","6"]
-    , workspaces         = ["\61728", "\60188", "\60043", "\61508", "\64158", "\61670"]
+    , workspaces         = myWorkspaces
     , manageHook         = myManageHook
     , handleEventHook    = myEventHook
     , logHook            = myLogHook
@@ -99,6 +101,8 @@ myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts
 ------------------------------------------------------------------------
 -- Window rules
 
+myDoShift x = doShift ( myWorkspaces !! ( x - 1 ) ) 
+
 myManageHook = manageSpawn <+> composeAll
     [ namedScratchpadManageHook scratchpads
     -- , isDialog  =? doCenterFloat
@@ -107,15 +111,15 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "DesktopEditors" --> floatingCenter
     , className =? "Mate-calc" --> floatingCalc 
-    , className =? "Signal" --> doShift "6"
-    , className =? "Hexchat" --> doShift "6" 
-    , className =? "superhuman" --> doShift "2"
-    , className =? "kitty" --> doShift "1"
+    , className =? "Signal" --> myDoShift 6
+    , className =? "Hexchat" --> myDoShift 6
+    , className =? "superhuman" --> myDoShift 2
+    , className =? "kitty" --> myDoShift 1
     -- , className =? "Sublime_text" --> doShift "1"
-    , className =? "Google-chrome" --> doShift "5" 
-    , className =? "datev" --> doShift "4"
+    , className =? "Google-chrome" --> myDoShift 5
+    , className =? "datev" --> myDoShift 4
     , className =? "Dragon" --> floatingDragon 
-    , className =? "Spotify" --> doShift "6"
+    , className =? "Spotify" --> myDoShift 6
     -- , className =? "FullScreenGame" --> defineBorderWidth 0
     ]
   where 
@@ -158,7 +162,7 @@ autostart = do
     spawnOnce "synology-drive start"
     spawnOnce "keepassxc %f"
     spawnOnce signal
-    --spawn "tint2 -c /home/thyriaen/.config/tint2/launchy.tint2rc"
+    -- spawn "tint2 -c /home/thyriaen/.config/tint2/workspaces.tint2rc"
 
 ------------------------------------------------------------------------
 -- Key bindings

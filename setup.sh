@@ -83,6 +83,7 @@ sudo updatedb
 
 # Default Applications
 xdg-mime default sublime_text.desktop text/x-tex
+xdg-mime default sublime_text.desktop text/csv
 
 # Syncthing
 systemctl --user enable syncthing.service
