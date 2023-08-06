@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Darlehensliste
 Comment=Globale Darlehensliste
-Exec=google-chrome --new-window --class=darlehen --app=https://pemba.direct.quickconnect.to:5001/oo/r/600758219851215141#tid=1 --user-data-dir=/home/thyriaen/.webapps/darlehen %U
+Exec=google-chrome --new-window --class=darlehen --app=https://pemba.me/#file_id=735650326721377980 --user-data-dir=/home/thyriaen/.webapps/darlehen %U
 Terminal=false
 Icon=wps-office-etmain
 Type=Application

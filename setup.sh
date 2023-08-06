@@ -9,13 +9,17 @@ gtk-murrine-engine gtk3-devel
 sddm sddm-x11 qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
 mate-calc maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
 xdg-desktop-portal-gtk
-libreoffice-calc libreoffice-gtk3"
+libreoffice-calc libreoffice-gtk3 mpv"
 
-# Todo Texlive + texlive-datetime2 texlive-datetime2-german texlive-textpos texlive-spreadtab
+LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
+texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
+texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
+texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak 
+texlive-collection-fontsrecommended texlive-skaknew"
 
 # Install basics
 sudo dnf -y upgrade
-sudo dnf --refresh -y install $PACKAGES
+sudo dnf --refresh -y install $PACKAGES $LATEX
 
 read -r -p "Install laptop version? [y/N]: " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
@@ -102,6 +106,7 @@ sudo cp ./sddm.conf /etc/
 
 # Binaries
 sudo cp -r ./bin/* /bin/
+cp -r ./localbin/* ~/.local/bin/
 
 # Global Configs
 sudo cp -r ./usrshare/* /usr/share/

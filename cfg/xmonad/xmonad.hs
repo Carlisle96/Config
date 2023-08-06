@@ -75,19 +75,6 @@ tabConfig = def
 ------------------------------------------------------------------------
 -- Layouts
 
--- gap = spacingWithEdge 8
--- tabGap = addTabs shrinkText tabConfig . gap
-
--- myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
---    ( testTab ||| dualTab )) ||| fullScr
---  where
---    dualTab = tabGap $ combineTwo (TwoPane 0.03 0.5) testTab testTab
---    monoTab = tabGap Simplest
---    fullScr = noBorders Full
---    testTab = spacingRaw False (Border 16 16 16 16 ) True (Border 8 8 8 8) True ( addTabs shrinkText tabConfig $ 
---        Simplest )
-
-
 leftTab = spacingRaw False (Border 24 32 16 32) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
 righTab = spacingRaw False (Border 24 32 32 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
 
@@ -95,7 +82,6 @@ myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts
         ( centeredIfSingle 0.75 0.954 dualTab )) ||| fullScr
     where
         dualTab = combineTwo (TwoPane 0.03 0.5) leftTab righTab
-        -- monoTab = spacingRaw False (Border 8 16 16 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
         fullScr = noBorders Simplest
 
 ------------------------------------------------------------------------
@@ -111,11 +97,12 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "DesktopEditors" --> floatingCenter
     , className =? "Mate-calc" --> floatingCalc 
+    , className =? "Pavucontrol" --> floatingCenter
     , className =? "Signal" --> myDoShift 6
     , className =? "Hexchat" --> myDoShift 6
     , className =? "superhuman" --> myDoShift 2
     , className =? "kitty" --> myDoShift 1
-    -- , className =? "Sublime_text" --> doShift "1"
+    , className =? "Sublime_text" --> myDoShift 1
     , className =? "Google-chrome" --> myDoShift 5
     , className =? "datev" --> myDoShift 4
     , className =? "Dragon" --> floatingDragon 
@@ -152,9 +139,7 @@ myLogHook = return ()
 
 autostart = do
     spawnOnce "/home/thyriaen/.config/xmonad/hooks/startup.sh"
-    spawn "polybar left"
-    spawn "polybar middle"
-    spawn "polybar right"
+    spawnOnce "/home/thyriaen/.config/xmonad/hooks/tint.sh"
     -- Cannot remember for which windows this was needed: 
     -- spawnOnce "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
     spawnOnce "picom"
@@ -162,7 +147,6 @@ autostart = do
     spawnOnce "synology-drive start"
     spawnOnce "keepassxc %f"
     spawnOnce signal
-    -- spawn "tint2 -c /home/thyriaen/.config/tint2/workspaces.tint2rc"
 
 ------------------------------------------------------------------------
 -- Key bindings
