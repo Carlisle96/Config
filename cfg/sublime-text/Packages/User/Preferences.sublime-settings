@@ -15,4 +15,6 @@
 	"overlay_scroll_bars": "enabled",
 	"rulers": [90],
 	"update_check": false,
+	"remember_workspace": false,
+	"font_options": ["dlig"],
 }
