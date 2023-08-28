@@ -3,7 +3,7 @@
 PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite flatpak xmonad
 neofetch pdftk python3-pip xsetroot xclip redshift
 zathura zathura-pdf-mupdf mediawriter nemo
-polybar kitty rofi zsh zsh-syntax-highlighting fzf
+polybar kitty rofi zsh zsh-syntax-highlighting fzf bat
 evince simple-scan hexchat keepassxc syncthing 
 gtk-murrine-engine gtk3-devel
 sddm sddm-x11 qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
