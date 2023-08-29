@@ -1,7 +1,5 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
-
 import XMonad
-import Data.Ratio
 
 import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
@@ -11,7 +9,6 @@ import XMonad.Layout.Combo
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
--- import XMonad.Layout.IndependentScreens
 import XMonad.Layout.CenteredIfSingle
 
 import XMonad.Hooks.EwmhDesktops
@@ -19,13 +16,14 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.WindowSwallowing
 
-import XMonad.Actions.SpawnOn
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.WorkspaceCompare
 import XMonad.Util.SpawnOnce
 
-import Graphics.X11.ExtraTypes.XF86
+import XMonad.Actions.SpawnOn
 
+import Graphics.X11.ExtraTypes.XF86
+import Data.Ratio
 import Data.Maybe
 import qualified Data.Map        as M
 import qualified XMonad.StackSet as W
@@ -36,7 +34,7 @@ main = xmonad . addEwmhWorkspaceSort (pure myFilter) . ewmh $ docks $ defaults
     where
         myFilter = filterOutWs [scratchpadWorkspaceTag]
 
-myWorkspaces = ["\61728", "\60188", "\60043", "\61508", "\64158", "\61670"]
+myWorkspaces = ["\61728", "\60188", "\60043", "\61508", "\984479", "\61670"]
 
 defaults = def 
     { terminal           = "kitty"
@@ -67,27 +65,23 @@ tabConfig = def
     , urgentBorderColor = "#27292d"
     , decoHeight = 24 }
 
--- Solid> it's probably more complicated for scratchpads, since once you summon them once they just get moved to another workspace and the manageHook isn't executed after that
--- Solid> but for normal windows you can just do something like "appName =? "my-query" --> doShift . fromJust =<< liftX (screenWorkspace 0)"
-
-
-
 ------------------------------------------------------------------------
 -- Layouts
 
-leftTab = spacingRaw False (Border 24 32 16 32) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
-righTab = spacingRaw False (Border 24 32 32 16) True (Border 8 0 0 0) True $ tabbed shrinkText tabConfig
-
-myLayout = ( configurableNavigation noNavigateBorders $ avoidStruts 
-        ( centeredIfSingle 0.75 0.954 dualTab )) ||| fullScr
+myLayout = ( lessBorders OnlyScreenFloat 
+            $ configurableNavigation noNavigateBorders 
+            $ avoidStruts 
+            $ centeredIfSingle 0.7273 0.9556 dualTab ) -- sidebanks are 456 wide
+        ||| noBorders Simplest
     where
         dualTab = combineTwo (TwoPane 0.03 0.5) leftTab righTab
-        fullScr = noBorders Simplest
+        righTab = spacingRaw False (Border 24 32 32 16) True (Border 8 0 0 0) True 
+            $ tabbed shrinkText tabConfig
+        leftTab = spacingRaw False (Border 24 32 16 32) True (Border 8 0 0 0) True 
+            $ tabbed shrinkText tabConfig
 
 ------------------------------------------------------------------------
 -- Window rules
-
-myDoShift x = doShift ( myWorkspaces !! ( x - 1 ) ) 
 
 myManageHook = manageSpawn <+> composeAll
     [ namedScratchpadManageHook scratchpads
@@ -96,7 +90,7 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "KeePassXC" --> floatingKPass
     , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
     , className =? "DesktopEditors" --> floatingCenter
-    , className =? "Mate-calc" --> floatingCalc 
+    -- , className =? "Mate-calc" --> floatingCalc 
     , className =? "Pavucontrol" --> floatingCenter
     , className =? "Signal" --> myDoShift 6
     , className =? "Hexchat" --> myDoShift 6
@@ -107,17 +101,20 @@ myManageHook = manageSpawn <+> composeAll
     , className =? "datev" --> myDoShift 4
     , className =? "Dragon" --> floatingDragon 
     , className =? "Spotify" --> myDoShift 6
+    , className =? "MediaChips" --> myDoShift 3
+    , className =? "mpv" --> doFullFloat
     -- , className =? "FullScreenGame" --> defineBorderWidth 0
     ]
   where 
-    floatingCenter  = doRectFloat ( W.RationalRect   (1 % 5)  (1 % 6)   (3 % 5)  (2 % 3) )
-    floatingCalc    = doRectFloat ( W.RationalRect (39 % 48) (1 % 27)  (3 % 32) (5 % 18) ) --DESKTOP
-    -- floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) )
-    floatingKPass   = doRectFloat ( W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) )
-    -- floatingDragon  = doRectFloat ( W.RationalRect  (30 % 32) (23 % 48) (1 % 24) (1 % 18) )
-    floatingDragon  = doRectFloat ( W.RationalRect  (15 % 16) (23 % 48) (1 % 48) (1 % 24) ) --DESKTOP
-
+    myDoShift x     = doShift ( myWorkspaces !! ( x - 1 ) ) 
     -- x, y, w, h
+    floatingMain    = doRectFloat $ W.RationalRect ( 5 % 42)    (0)    (16 % 21)    (1)  
+    floatingCenter  = doRectFloat $ W.RationalRect ( 1 %  5) ( 1 %  6) ( 3 %  5) ( 2 %  3) 
+    floatingKPass   = doRectFloat $ W.RationalRect (18 % 32) ( 9 % 18) (13 % 32) ( 8 % 18) 
+    floatingDragon  = doRectFloat $ W.RationalRect (15 % 16) (23 % 48) ( 1 % 48) ( 1 % 24)
+    
+    -- floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) ) -- LAPTOP
+    -- floatingDragon  = doRectFloat ( W.RationalRect  (30 % 32) (23 % 48) (1 % 24) (1 % 18) ) -- LAPTOP
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -160,51 +157,53 @@ scratchpads =
     [ NS "nnn" "kitty --class=nnn sh -c \"nnn -d -P p\"" 
         ( className =? "nnn" ) 
         ( customFloating $ floatingNNN )
-    -- , 
+    , NS "calc" "mate-calc"
+        ( className =? "Mate-calc" )
+        ( customFloating $ floatingCalc ) 
     ]
   where        
-    -- floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
-    floatingNNN     = W.RationalRect (1 % 4) (1 % 12) (1 % 2) (5 % 6) -- DESKTOP
+    -- x, y, w, h
+    floatingNNN     = W.RationalRect ( 1 %  4) ( 1 % 12) ( 1 %   2) ( 5 %  6) 
+    floatingCalc    = W.RationalRect (75 % 86) ( 1 % 90) (53 % 430)( 5 % 18)
+        -- minimal possible width of calc 424 px
+    -- floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6) -- LAPTOP
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
+    [ (( modm              , xK_q )     , kill )
+    , (( modm .|. shiftMask, xK_q )     , spawn "monad --recompile; xmonad --restart" )
+    , (( modm, xK_space )               , spawn rofi )
+    -- Programs
+    , (( modm, xK_t )                   , spawn $ XMonad.terminal conf )
+    , (( modm, xK_b )                   , spawn "google-chrome" )
+    , (( modm, xK_p )                   , spawn screenshot )
+    , (( modm, xK_e )                   , spawn superhuman )
+    -- Scratchpads
+    , (( modm, xK_c )                   , namedScratchpadAction scratchpads "calc" )
+    , (( modm, xK_f )                   , namedScratchpadAction scratchpads "nnn"  )
+    -- Layout
+    , (( modm, xK_Return )              , sendMessage NextLayout )
+    , (( modm, xK_s )                   , sendMessage (Move L)   )
+    , (( modm, xK_d )                   , sendMessage (Move R)   )
+    , (( modm, xK_h )                   , sendMessage Shrink     )
+    , (( modm, xK_l )                   , sendMessage Expand     )
+    -- Focus
+    , (( modm, xK_g )                   , withFocused $ windows . W.sink )
+    , (( modm              , xK_Tab )   , windows W.focusDown )
+    , (( modm .|. shiftMask, xK_Tab )   , windows W.focusUp   )
 
-    [ (( modm, xK_t ), spawn $ XMonad.terminal conf)
-    , (( modm, xK_space ), spawn rofi )
-    , (( modm, xK_b ), spawn "google-chrome")
-    , (( modm, xK_p ), spawn screenshot )
-    , (( modm, xK_e ), spawn superhuman )
-    -- , (( modm, xK_v ), spawn "xterm" )
-    , (( modm, xK_c ), spawn "mate-calc")
-    -- , (( modm, xK_f ), spawn "nemo" )
-    , (( modm, xK_f ), namedScratchpadAction scratchpads "nnn" )
-
-    , ((modm , xK_q     ), kill)
-    , ((modm,               xK_Return ), sendMessage NextLayout)
-    , ((0, xF86XK_MonBrightnessUp) ,   spawn "light -A 5")
-    , ((0, xF86XK_MonBrightnessDown) , spawn "light -U 5") 
-    -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
-    , ((modm .|. shiftMask, xK_Tab   ), windows W.focusUp  )
-
-    , ((modm,               xK_s     ), sendMessage (Move L))
-    , ((modm,               xK_d     ), sendMessage (Move R))
-
-    , ((modm,               xK_h     ), sendMessage Shrink)
-    , ((modm,               xK_l     ), sendMessage Expand)
-
-    -- Push window back into tiling
-    , ((modm,               xK_g     ), withFocused $ windows . W.sink)
-
-    , ((modm .|. shiftMask, xK_q     ), spawn "monad --recompile; xmonad --restart")
-
+    -- Laptop Section
+    , (( 0, xF86XK_MonBrightnessUp )    , spawn "light -A 5")
+    , (( 0, xF86XK_MonBrightnessDown )  , spawn "light -U 5")
     ]
+
     ++
 
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
-    [((m .|. modm, k), windows $ f i)
+    [ (( m .|. modm, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_6]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
+        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
+    ]
 
 
 ------------------------------------------------------------------------

@@ -1,0 +1,14 @@
+
+[Default Applications]
+text/x-tex=sublime_text.desktop
+application/x-synology-drive-doc=synology-drive-open-file.desktop
+application/x-synology-drive-sheet=synology-drive-open-file.desktop
+application/x-synology-drive-slides=synology-drive-open-file.desktop
+text/html=google-chrome.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+text/csv=sublime_text.desktop
+video/MP2T=mpv.desktop
+application/octet-stream=mpv.desktop

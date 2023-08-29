@@ -1,8 +1,6 @@
-cp ./xmonad/xmonad.hs ~/.xmonad/xmonad.hs
-cp ./cfg/dunst/dunstrc ~/.config/dunst/dunstrc
-
-rm -r ~/.config/polybar
-cp -r ./cfg/polybar ~/.config/
-
-rm -r ~/.config/rofi
-cp -r ./cfg/rofi ~/.config/
+cp ~/.xmonad/xmonad.hs ./cfg/xmonad/
+cp ~/.config/dunst/dunstrc ./cfg/dunst/
+cp ~/.config/tint2/* ./cfg/tint2/
+cp ~/.config/xmonad/hooks/tint.sh ./cfg/xmonad/hooks/
+cp ~/.config/mimeapps.list ./cfg/
+cp ~/.config/picom/picom.conf ./cfg/picom/
