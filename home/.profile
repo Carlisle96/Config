@@ -44,6 +44,7 @@ PATH=$PATH:~/.local/bin
 
 export NNN_FIFO=/tmp/nnn.fifo
 export NNN_PLUG='p:preview-tui;d:drag'
+export NNN_BATTHEME='Monokai Extended'
 
 export TERMINAL=kitty
 export SHELL=/usr/bin/zsh
