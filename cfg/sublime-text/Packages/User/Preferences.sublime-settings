@@ -13,7 +13,7 @@
 	"font_size": 13,
 	"dictionary": "Dictionaries/de_DE.dic",
 	"overlay_scroll_bars": "enabled",
-	"rulers": [90],
+	"rulers": [80],
 	"update_check": false,
 	"remember_workspace": false,
 	"font_options": ["dlig"],
