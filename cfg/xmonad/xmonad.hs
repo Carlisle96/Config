@@ -5,6 +5,7 @@ import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
+import XMonad.Layout.TrackFloating
 import XMonad.Layout.Combo
 import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
@@ -30,91 +31,194 @@ import qualified XMonad.StackSet as W
 
 ------------------------------------------------------------------------
 -- General Setup
-main = xmonad . addEwmhWorkspaceSort (pure myFilter) . ewmh $ docks $ defaults
-    where
-        myFilter = filterOutWs [scratchpadWorkspaceTag]
+
+main = xmonad 
+  $ addEwmhWorkspaceSort (pure myFilter) 
+  $ ewmh 
+  $ docks 
+  $ defaults
+  where
+    myFilter = filterOutWs [scratchpadWorkspaceTag]
+
+defaults = def 
+  { terminal           = "kitty"
+  , focusFollowsMouse  = True
+  , borderWidth        = 4
+  , modMask            = mod4Mask
+  , normalBorderColor  = "#18191A"
+  , focusedBorderColor = "#7652B8"
+  , keys               = myKeys
+  , mouseBindings      = myMouseBindings
+  , layoutHook         = myLayout
+  , workspaces         = myWorkspaces
+  , manageHook         = myManageHook
+  , handleEventHook    = myEventHook
+  , logHook            = myLogHook
+  , startupHook        = autostart }
 
 myWorkspaces = ["\61728", "\60188", "\60043", "\61508", "\984479", "\61670"]
 
-defaults = def 
-    { terminal           = "kitty"
-    , focusFollowsMouse  = True
-    , borderWidth        = 4
-    , modMask            = mod4Mask
-    , normalBorderColor  = "#18191A"
-    , focusedBorderColor = "#7652B8"
-    , keys               = myKeys
-    , mouseBindings      = myMouseBindings
-    , layoutHook         = myLayout
-    , workspaces         = myWorkspaces
-    , manageHook         = myManageHook
-    , handleEventHook    = myEventHook
-    , logHook            = myLogHook
-    , startupHook        = autostart }
-
 tabConfig = def 
-    { fontName = "xft:M PLUS 1:pixelsize=14:antialias=true:hinting=true"
-    , activeColor = "#7652B8"
-    , activeTextColor = "#E9EAEB"
-    , activeBorderColor = "#7652B8"
-    , inactiveColor = "#18191A"
-    , inactiveTextColor = "#E9EAEB"
-    , inactiveBorderColor = "#18191A"
-    , urgentColor = "#B85261"
-    , urgentTextColor = "#E9EAEB"
-    , urgentBorderColor = "#27292d"
-    , decoHeight = 24 }
+  { fontName = "xft:M PLUS 1:pixelsize=14:antialias=true:hinting=true"
+  , activeColor = "#7652B8"
+  , activeTextColor = "#E9EAEB"
+  , activeBorderColor = "#7652B8"
+  , inactiveColor = "#18191A"
+  , inactiveTextColor = "#E9EAEB"
+  , inactiveBorderColor = "#18191A"
+  , urgentColor = "#B85261"
+  , urgentTextColor = "#E9EAEB"
+  , urgentBorderColor = "#27292d"
+  , decoHeight = 24 }
+
+autostart = do
+  spawnOnce "/home/thyriaen/.config/xmonad/hooks/startup.sh"
+  spawnOnce "/home/thyriaen/.config/xmonad/hooks/tint.sh"
+  spawnOnce "picom"
+  spawnOnce "redshift -m vidmode -l 48.4:14.4 -t 6500:3000"
+  spawnOnce "synology-drive start"
+  spawnOnce "keepassxc %f"
+  spawnOnce signal
 
 ------------------------------------------------------------------------
 -- Layouts
 
 myLayout = ( lessBorders OnlyScreenFloat 
-            $ configurableNavigation noNavigateBorders 
-            $ avoidStruts 
-            $ centeredIfSingle 0.7273 0.9556 dualTab ) -- sidebanks are 456 wide
-        ||| noBorders Simplest
-    where
-        dualTab = combineTwo (TwoPane 0.03 0.5) leftTab righTab
-        righTab = spacingRaw False (Border 24 32 32 16) True (Border 8 0 0 0) True 
-            $ tabbed shrinkText tabConfig
-        leftTab = spacingRaw False (Border 24 32 16 32) True (Border 8 0 0 0) True 
-            $ tabbed shrinkText tabConfig
+  $ configurableNavigation noNavigateBorders 
+  $ avoidStruts
+  $ trackFloating 
+  -- sidebanks are 456 wide
+  $ centeredIfSingle 0.7273 0.9556 dualTab ||| monoTab ) 
+  ||| noBorders Simplest
+  where
+    monoTab = spacingRaw False (Border 24 32 32 32) True (Border 8 0 0 0) True
+      $ tabbed shrinkText tabConfig
+    dualTab = combineTwo (TwoPane 0.03 0.5) leftTab righTab
+    righTab = spacingRaw False (Border 24 32 32 16) True (Border 8 0 0 0) True 
+      $ tabbed shrinkText tabConfig
+    leftTab = spacingRaw False (Border 24 32 16 32) True (Border 8 0 0 0) True 
+      $ tabbed shrinkText tabConfig
 
 ------------------------------------------------------------------------
 -- Window rules
 
 myManageHook = manageSpawn <+> composeAll
-    [ namedScratchpadManageHook scratchpads
-    -- , isDialog  =? doCenterFloat
-    , className =? "filepicker" --> floatingCenter
-    , className =? "KeePassXC" --> floatingKPass
-    , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
-    , className =? "DesktopEditors" --> floatingCenter
-    -- , className =? "Mate-calc" --> floatingCalc 
-    , className =? "Pavucontrol" --> floatingCenter
-    , className =? "Signal" --> myDoShift 6
-    , className =? "Hexchat" --> myDoShift 6
-    , className =? "superhuman" --> myDoShift 2
-    , className =? "kitty" --> myDoShift 1
-    , className =? "Sublime_text" --> myDoShift 1
-    , className =? "Google-chrome" --> myDoShift 5
-    , className =? "datev" --> myDoShift 4
-    , className =? "Dragon" --> floatingDragon 
-    , className =? "Spotify" --> myDoShift 6
-    , className =? "MediaChips" --> myDoShift 3
-    , className =? "mpv" --> doFullFloat
+  [ namedScratchpadManageHook scratchpads
+  -- , isDialog  =? doCenterFloat
+  , className =? "filepicker" --> floatingCenter
+  , className =? "KeePassXC" --> floatingKPass
+  , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
+  , className =? "DesktopEditors" --> floatingCenter
+  -- , className =? "Mate-calc" --> floatingCalc 
+  , className =? "Pavucontrol" --> floatingCenter
+  , className =? "Signal" --> myDoShift 6
+  , className =? "Hexchat" --> myDoShift 6
+  , className =? "superhuman" --> myDoShift 2
+  , className =? "kitty" --> myDoShift 1
+  , className =? "Sublime_text" --> myDoShift 1
+  , className =? "Google-chrome" --> myDoShift 5
+  , className =? "datev" --> myDoShift 4
+  , className =? "Dragon" --> floatingDragon 
+  , className =? "Spotify" --> myDoShift 6
+  , className =? "MediaChips" --> myDoShift 3
+  , className =? "mpv" --> doFullFloat
     -- , className =? "FullScreenGame" --> defineBorderWidth 0
-    ]
+  ]
   where 
     myDoShift x     = doShift ( myWorkspaces !! ( x - 1 ) ) 
     -- x, y, w, h
-    floatingMain    = doRectFloat $ W.RationalRect ( 5 % 42)    (0)    (16 % 21)    (1)  
-    floatingCenter  = doRectFloat $ W.RationalRect ( 1 %  5) ( 1 %  6) ( 3 %  5) ( 2 %  3) 
-    floatingKPass   = doRectFloat $ W.RationalRect (18 % 32) ( 9 % 18) (13 % 32) ( 8 % 18) 
-    floatingDragon  = doRectFloat $ W.RationalRect (15 % 16) (23 % 48) ( 1 % 48) ( 1 % 24)
-    
+    floatingMain    = doRectFloat 
+      $ W.RationalRect (5 % 42) (0) (16 % 21) (1)  
+    floatingCenter  = doRectFloat 
+      $ W.RationalRect (1 % 5) (1 % 6) (3 % 5) (2 % 3) 
+    floatingKPass   = doRectFloat 
+      $ W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) 
+    floatingDragon  = doRectFloat 
+      $ W.RationalRect (15 % 16) (23 % 48) (1 % 48) (1 % 24)
     -- floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) ) -- LAPTOP
     -- floatingDragon  = doRectFloat ( W.RationalRect  (30 % 32) (23 % 48) (1 % 24) (1 % 18) ) -- LAPTOP
+
+------------------------------------------------------------------------
+-- Key bindings
+
+rofi = "rofi -show drun"
+screenshot = "maim -s -u -o -b 3 \
+  \| tee ~/Pictures/screenshots/$(date +%s).png \
+  \| xclip -selection clipboard -t image/png -i"
+superhuman = "google-chrome \
+  \--new-window \
+  \--class=superhuman \
+  \--app=https://mail.superhuman.com/ \
+  \--user-data-dir=/home/thyriaen/.webapps/superhuman %U"
+signal = "/usr/bin/flatpak run \
+  \--branch=stable --arch=x86_64 \
+  \--command=signal-desktop \
+  \--file-forwarding org.signal.Signal \
+  \--use-tray-icon @@u %U @@"
+
+scratchpads =
+  [ NS "nnn" "kitty --class=nnn sh -c \"nnn -d -P p\"" 
+    ( className =? "nnn" ) 
+    ( customFloating $ floatingNNN )
+  , NS "calc" "mate-calc"
+    ( className =? "Mate-calc" )
+    ( customFloating $ floatingCalc ) 
+  ]
+  where        
+    -- x, y, w, h
+    floatingNNN   = W.RationalRect (1 % 4) (1 % 12) (1 % 2) (5 % 6)
+    -- minimal possible width of calc 424 px 
+    floatingCalc  = W.RationalRect (75 % 86) (1 % 90) (53 % 430)(5 % 18)
+    -- floatingNNN   = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6) -- LAPTOP
+
+myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
+  [ (( modm              , xK_q ) , kill )
+  , (( modm .|. shiftMask, xK_q ) , spawn "monad --recompile; xmonad --restart" )
+  , (( modm, xK_space )           , spawn rofi )
+  -- Programs
+  , (( modm, xK_t )               , spawn $ XMonad.terminal conf )
+  , (( modm, xK_b )               , spawn "google-chrome" )
+  , (( modm, xK_p )               , spawn screenshot )
+  , (( modm, xK_e )               , spawn superhuman )
+  -- Scratchpads
+  , (( modm, xK_c )               , namedScratchpadAction scratchpads "calc" )
+  , (( modm, xK_f )               , namedScratchpadAction scratchpads "nnn"  )
+  -- Layout
+  , (( modm, xK_Return )          , sendMessage NextLayout )
+  , (( modm, xK_s )               , sendMessage (Move L)   )
+  , (( modm, xK_d )               , sendMessage (Move R)   )
+  , (( modm, xK_h )               , sendMessage Shrink     )
+  , (( modm, xK_l )               , sendMessage Expand     )
+  -- Focus
+  , (( modm, xK_g )                   , withFocused $ windows . W.sink )
+  , (( modm              , xK_Tab )   , windows W.focusDown )
+  , (( modm .|. shiftMask, xK_Tab )   , windows W.focusUp   )
+  -- Laptop Section
+  , (( 0, xF86XK_MonBrightnessUp )    , spawn "light -A 5")
+  , (( 0, xF86XK_MonBrightnessDown )  , spawn "light -U 5")
+  ]
+  ++
+  -- mod-[1..9], Switch to workspace N
+  -- mod-shift-[1..9], Move client to workspace N
+  [ (( m .|. modm, k), windows $ f i)
+      | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_6]
+      , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
+  ]
+
+------------------------------------------------------------------------
+-- Mouse bindings: default actions bound to mouse events
+
+myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
+  -- mod-button1, Set the window to floating mode and move by dragging
+  [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
+                                     >> windows W.shiftMaster))
+  -- mod-button2, Raise the window to the top of the stack
+  , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+  -- mod-button3, Set the window to floating mode and resize by dragging
+  , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
+                                     >> windows W.shiftMaster))
+  -- you may also bind events to the mouse scroll wheel (button4 and button5)
+  ]
 
 ------------------------------------------------------------------------
 -- Event handling
@@ -130,97 +234,3 @@ myEventHook = swallowEventHook ( className =? "kitty" ) ( return True )
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 
 myLogHook = return ()
-
-------------------------------------------------------------------------
--- Applications
-
-autostart = do
-    spawnOnce "/home/thyriaen/.config/xmonad/hooks/startup.sh"
-    spawnOnce "/home/thyriaen/.config/xmonad/hooks/tint.sh"
-    -- Cannot remember for which windows this was needed: 
-    -- spawnOnce "picom --shadow-exclude='override_redirect = true && !WM_NAME:s'"
-    spawnOnce "picom"
-    spawnOnce "redshift -m vidmode -l 48.4:14.4 -t 6500:3000"
-    spawnOnce "synology-drive start"
-    spawnOnce "keepassxc %f"
-    spawnOnce signal
-
-------------------------------------------------------------------------
--- Key bindings
-
-rofi = "rofi -show drun"
-screenshot = "maim -s -u -o -b 3 | tee ~/Pictures/screenshots/$(date +%s).png | xclip -selection clipboard -t image/png -i"
-superhuman = "google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U"
-signal = "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=signal-desktop --file-forwarding org.signal.Signal --use-tray-icon @@u %U @@"
-
-scratchpads =
-    [ NS "nnn" "kitty --class=nnn sh -c \"nnn -d -P p\"" 
-        ( className =? "nnn" ) 
-        ( customFloating $ floatingNNN )
-    , NS "calc" "mate-calc"
-        ( className =? "Mate-calc" )
-        ( customFloating $ floatingCalc ) 
-    ]
-  where        
-    -- x, y, w, h
-    floatingNNN     = W.RationalRect ( 1 %  4) ( 1 % 12) ( 1 %   2) ( 5 %  6) 
-    floatingCalc    = W.RationalRect (75 % 86) ( 1 % 90) (53 % 430)( 5 % 18)
-        -- minimal possible width of calc 424 px
-    -- floatingNNN     = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6) -- LAPTOP
-
-myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
-    [ (( modm              , xK_q )     , kill )
-    , (( modm .|. shiftMask, xK_q )     , spawn "monad --recompile; xmonad --restart" )
-    , (( modm, xK_space )               , spawn rofi )
-    -- Programs
-    , (( modm, xK_t )                   , spawn $ XMonad.terminal conf )
-    , (( modm, xK_b )                   , spawn "google-chrome" )
-    , (( modm, xK_p )                   , spawn screenshot )
-    , (( modm, xK_e )                   , spawn superhuman )
-    -- Scratchpads
-    , (( modm, xK_c )                   , namedScratchpadAction scratchpads "calc" )
-    , (( modm, xK_f )                   , namedScratchpadAction scratchpads "nnn"  )
-    -- Layout
-    , (( modm, xK_Return )              , sendMessage NextLayout )
-    , (( modm, xK_s )                   , sendMessage (Move L)   )
-    , (( modm, xK_d )                   , sendMessage (Move R)   )
-    , (( modm, xK_h )                   , sendMessage Shrink     )
-    , (( modm, xK_l )                   , sendMessage Expand     )
-    -- Focus
-    , (( modm, xK_g )                   , withFocused $ windows . W.sink )
-    , (( modm              , xK_Tab )   , windows W.focusDown )
-    , (( modm .|. shiftMask, xK_Tab )   , windows W.focusUp   )
-
-    -- Laptop Section
-    , (( 0, xF86XK_MonBrightnessUp )    , spawn "light -A 5")
-    , (( 0, xF86XK_MonBrightnessDown )  , spawn "light -U 5")
-    ]
-
-    ++
-
-    -- mod-[1..9], Switch to workspace N
-    -- mod-shift-[1..9], Move client to workspace N
-    [ (( m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_6]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
-    ]
-
-
-------------------------------------------------------------------------
--- Mouse bindings: default actions bound to mouse events
-
-myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
-
-    -- mod-button1, Set the window to floating mode and move by dragging
-    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
-                                       >> windows W.shiftMaster))
-
-    -- mod-button2, Raise the window to the top of the stack
-    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
-
-    -- mod-button3, Set the window to floating mode and resize by dragging
-    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
-                                       >> windows W.shiftMaster))
-
-    -- you may also bind events to the mouse scroll wheel (button4 and button5)
-    ]
