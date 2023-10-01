@@ -15,7 +15,8 @@ LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-p
 texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
 texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
 texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak 
-texlive-collection-fontsrecommended texlive-skaknew"
+texlive-collection-fontsrecommended texlive-skaknew texlive-doi texlive-mdframed
+texlive-fontawesome5"
 
 # Install basics
 sudo dnf -y upgrade
