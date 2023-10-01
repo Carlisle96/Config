@@ -1,10 +1,10 @@
 #! /usr/bin/env bash
-inbox="/home/thyriaen/Work/sync/JM-WORK/99 Diverses/Posteingang/"
+inbox="/home/thyriaen/Work/01 Sync/JM-WORK/99 Diverses/Posteingang"
 files=$(find "$inbox" -maxdepth 1 -type f | wc -l)
 if [[ $files -eq 0 ]]; then
-	printf "<span foreground='#94B852'>  %s</span>" "$files"
+	printf "<span fgcolor='#94B852'><span size='16pt'>󰚇 </span>%s</span>" "$files"
 else
-	printf "<span foreground='#B85261'>  %s</span>" "$files"
+	printf "<span fgcolor='#B85261'><span size='16pt'>󱉳 </span>%s</span>" "$files"
 fi
 
 

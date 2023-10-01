@@ -43,7 +43,7 @@ alias nnn='nnn -d -P p'
 PATH=$PATH:~/.local/bin
 
 export NNN_FIFO=/tmp/nnn.fifo
-export NNN_PLUG='p:preview-tui;d:drag'
+export NNN_PLUG='p:preview-tui;d:drag;o:xdgdefault'
 export NNN_BATTHEME='Monokai Extended'
 
 export TERMINAL=kitty
