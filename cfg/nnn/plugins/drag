@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+
+selection=${NNN_SEL:-${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection}
+resp=c
+
+if [ -s "$selection" ]; then
+    sed -z 's|'"$PWD/"'||g' < "$selection" | xargs -0 dragon -i --and-exit -A &
+else
+    if [ -n "$1" ] && [ -e "$1" ]; then
+        dragon -i --and-exit "$1" &
+    fi
+fi
