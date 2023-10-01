@@ -48,8 +48,11 @@ sudo dnf -y config-manager --set-enabled google-chrome
 sudo dnf -y install google-chrome-stable
 
 # Signal
-sudo flatpak install flathub org.signal.Signal
+sudo flatpak install -y flathub org.signal.Signal
 sudo flatpak override org.signal.Signal --filesystem=host
+
+# Spotify
+sudo flatpak install -y flathub com.spotify.Client
 
 # Watson
 pip install td-watson
@@ -63,6 +66,9 @@ sudo dnf -y install sublime-text
 # Synology Drive
 sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf -y install synology-drive-noextra
+
+# Rpm Fusion
+sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
 # Rpms
 sudo dnf -y install ./rpms/*
