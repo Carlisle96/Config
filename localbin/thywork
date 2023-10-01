@@ -3,20 +3,20 @@
 # Read the CSV file and process each line
 while IFS=',' read -r date value
 do
-    # Get today's date
-    today=$(date +%F)
+  # Get today's date
+  today=$(date +%F)
 
-    # Check if the date is in the future or today
-    if [[ "$date" > "$today" || "$date" == "$today" ]]; then
-        # Calculate the number of remaining days
-        remaining_days=$(( ( $(date -d "$date" +%s) - $(date -d "$today" +%s) ) / 86400 +1))
-        
-        # Store the corresponding value in a variable
-        corresponding_value=$value
-        
-        # Exit the loop after finding the first future or today's date entry
-        break
-    fi
+  # Check if the date is in the future or today
+  if [[ "$date" > "$today" || "$date" == "$today" ]]; then
+    # Calculate the number of remaining days
+    remaining_days=$(( ( $(date -d "$date" +%s) - $(date -d "$today" +%s) ) / 86400 +1))
+    
+    # Store the corresponding value in a variable
+    corresponding_value=$value
+    
+    # Exit the loop after finding the first future or today's date entry
+    break
+  fi
 done < ~/.config/work/work.csv
 
 wor="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
@@ -26,8 +26,13 @@ prev=$((tot - wor))
 byday=$(( (corresponding_value * 3600-prev)/remaining_days ))
 work_today=$(( (byday-wor) ))
 
-# Convert seconds to HH:MM format
-formatted_time=$(date -u -d @${work_today} +"%-Hh %Mm")
-
 # Display the formatted time
-echo "$formatted_time"
+if [[ $work_today -ge 0 ]]; then
+  formatted_time=$(date -u -d @${work_today} +"%-H:%M")
+  printf "<span fgcolor='#B85261'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+else
+  formatted_time=$(date -u -d @${work_today#-} +"%-H:%M")
+  printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+fi
+
+
