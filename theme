@@ -6,10 +6,10 @@ colors:
 
   normal:
     black:   '#18191A'
-    red:     '#B85261'
-    green:   '#94B852'
+    red:     '#B85261'  # 184 82 97
+    green:   '#94B852'  # 148 184 82
     yellow:  '#B8A952'
-    blue:    '#7652B8'
+    blue:    '#7652B8'  # 118 82 184
     magenta: '#B85294'
     cyan:    '#5294B8'
     white:   '#E9EAEB'

@@ -10,7 +10,14 @@ x-scheme-handler/about=google-chrome.desktop
 x-scheme-handler/unknown=google-chrome.desktop
 text/csv=sublime_text.desktop
 video/mp2t=mpv.desktop
-application/octet-stream=mpv.desktop
+application/octet-stream=synology-drive-open-file.desktop
+video/MP2T=mpv.desktop
+application/json=sublime_text.desktop
+text/x-shellscript=sublime_text.desktop
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=libreoffice-calc.desktop
+application/msword=libreoffice-writer.desktop
+text/plain=sublime_text.desktop
+application/encrypted=libreoffice-calc.desktop
 
 [Added Associations]
 application/wps-office.potx=wps-office-prometheus.desktop;
