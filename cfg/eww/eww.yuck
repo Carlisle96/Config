@@ -1,0 +1,106 @@
+
+    (defwidget smol_calendar [] 
+      (box :orientation "v" :space-evenly "false"
+        (box :class "number_day" {number_day})
+        (box :class "month" {month})))
+
+    (defwidget time_side [] 
+      (box :orientation "h" :space-evenly "false" :halign "center"
+        (box :class "week-side" {week}) 
+        (box :class "day-side" {day})
+        )
+    )
+    
+    
+    (defwidget search_full [] 
+      (box :orientation "h" :space-evenly "true" 
+        (button :class "search-full" :onclick "~/bin/launcher.sh" "")))
+    (defwidget power_full [] 
+      (box :orientation "h" :space-evenly "true" 
+        (button :class "power-full" :onclick "~/.config/eww/scripts/shutdown.sh" :timeout "60s" "")))
+    (defwidget reboot_full [] 
+      (box :orientation "h" :space-evenly "true" 
+        (button :class "reboot-full" :onclick "~/.config/eww/scripts/reboot.sh" :timeout "60s" "")))
+    (defwidget lock_full [] 
+      (box :orientation "h" :space-evenly "true" 
+        (button :class "lock-full" :onclick "~/.config/eww/scripts/lockscreen.sh" :timeout "60s" "")))
+    (defwidget suspend_full [] 
+      (box :orientation "h" :space-evenly "true" 
+        (button :class "suspend-full" :onclick "~/.config/eww/scripts/suspend.sh" :timeout "60s" "")))
+    (defwidget logout_full [] 
+      (box :orientation "h" :space-evenly "true" 
+        (button :class "logout-full" :onclick "~/.config/eww/scripts/logout.sh" :timeout "60s" "")))
+    (defwidget close_full [] 
+      (box :orientation "h" :space-evenly "true" 
+        (button :class "power-full" :onclick "~/bin/centerkill" "")))
+    
+    (defwidget quote [] 
+      (box :orientation "v" :space-evenly "false" :class "quote-box" 
+        (label :class "quote-main" :halign "start" :text "${quote}${quote-gen}" :wrap "true" :width 25)
+        (label :class "quote-author" :text "- ${author-quote}" :halign "end")))
+    
+    ;; Date vars
+    (defpoll number_day :interval "5h"  "date \"+%d\"")
+    (defpoll month :interval "10h"  "date \"+%b\"")
+    (defpoll day :interval "15h"  "~/.config/eww/scripts/getday")
+    (defpoll week :interval "15h" "~/.config/eww/scripts/getweek" )
+
+    ;; Quote vars
+    (defpoll author-quote :interval "10m"  "cat /home/thyriaen/.config/eww/quotes/author")
+    (defpoll quote :interval "10m"  "cat /home/thyriaen/.config/eww/quotes/quote")
+    (defpoll quote-gen :interval "30m"  "~/.config/eww/scripts/quotes")
+
+    ;; Sidebar stuff
+
+    (defwindow smol_calendar 
+			    :geometry (geometry :x "96px" :y "16px" :width "80px" :height "80px")
+          :stacking "fg"
+			     				(smol_calendar))
+    (defwindow time_side 
+          :geometry (geometry :x "192px" :y "16px" :width "328px" :height "80px")
+                  (time_side))
+    (defwindow quote 
+          :geometry (geometry :x "96px" :y "112px" :width "424px" :height "80px")
+                  (quote))
+
+
+    
+    (defwindow weather_side 
+			    :geometry (geometry :x "95px" :y "45px" :width "215px" :height "80px")
+			     				(weather_side))
+    (defwindow player_side 
+			    :geometry (geometry :x "10px" :y "270px" :width "336px" :height "122px")
+			     				(player_side))
+
+    (defwindow sliders_side 
+			    :geometry (geometry :x "10px" :y "397px" :width "300px" :height "205px")
+			     				(sliders_side))
+    (defwindow sys_side 
+			    :geometry (geometry :x "10px" :y "607px" :width "300px" :height "153px")
+			     				(sys_side))
+
+    ;; Main Stuff
+    (defwindow calendar_full 
+			  :geometry (geometry :x "505px" :y "100px" :width "690px" :height "100px")
+                  (calendar_full))
+
+    (defwindow power_full 
+			    :geometry (geometry :x "1410px" :y "220px" :width "120px" :height "120px")
+			     				(power_full))
+     (defwindow reboot_full 
+			    :geometry (geometry :x "1410px" :y "350px" :width "120px" :height "121px")
+			     				(reboot_full))
+    (defwindow lock_full 
+			    :geometry (geometry :x "1410px" :y "482px" :width "120px" :height "121px")
+			     				(lock_full))
+     (defwindow suspend_full 
+			    :geometry (geometry :x "1410px" :y "614px" :width "120px" :height "122px")
+			     				(suspend_full))
+     (defwindow logout_full 
+			    :geometry (geometry :x "1410px" :y "748px" :width "120px" :height "122px")
+			     				(logout_full))
+     (defwindow close_full 
+			    :geometry (geometry :x "633px" :y "861px" :width "110px" :height "122px")
+			     				(close_full))
+
+   

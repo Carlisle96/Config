@@ -1,7 +1,7 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
 import XMonad
 
-import XMonad.Layout.Gaps
+-- import XMonad.Layout.Gaps
 import XMonad.Layout.Spacing
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Tabbed
@@ -11,6 +11,7 @@ import XMonad.Layout.TwoPane
 import XMonad.Layout.WindowNavigation
 import XMonad.Layout.Simplest
 import XMonad.Layout.CenteredIfSingle
+import XMonad.Layout.Reflect
 
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
@@ -75,7 +76,7 @@ autostart = do
   spawnOnce "/home/thyriaen/.config/xmonad/hooks/startup.sh"
   spawnOnce "/home/thyriaen/.config/xmonad/hooks/tint.sh"
   spawnOnce "picom"
-  spawnOnce "redshift -m vidmode -l 48.4:14.4 -t 6500:3000"
+  spawnOnce "redshift"
   spawnOnce "synology-drive start"
   spawnOnce "keepassxc %f"
   spawnOnce signal
@@ -88,41 +89,45 @@ myLayout = ( lessBorders OnlyScreenFloat
   $ avoidStruts
   $ trackFloating 
   -- sidebanks are 456 wide
-  $ centeredIfSingle 0.7273 0.9556 dualTab ||| monoTab ) 
-  ||| noBorders Simplest
+  $ spacingRaw False (Border 8 16 16 16) True (Border 8 0 0 0) True
+  $ reflectHoriz
+  $ centeredIfSingle (153 / 208) 1 dualTab ) 
+    ||| noBorders Full
   where
-    monoTab = spacingRaw False (Border 24 32 32 32) True (Border 8 0 0 0) True
-      $ tabbed shrinkText tabConfig
-    dualTab = combineTwo (TwoPane 0.03 0.5) leftTab righTab
-    righTab = spacingRaw False (Border 24 32 32 16) True (Border 8 0 0 0) True 
-      $ tabbed shrinkText tabConfig
-    leftTab = spacingRaw False (Border 24 32 16 32) True (Border 8 0 0 0) True 
-      $ tabbed shrinkText tabConfig
+    tabWithConfig = tabbed shrinkText tabConfig
+    dualTab =  combineTwo (TwoPane 0.05 0.4) leftTab righTab
+    righTab = spacingRaw False (Border 0 0 0 8) True (Border 0 0 0 0) True 
+      $ tabWithConfig
+    leftTab = spacingRaw False (Border 0 0 8 0) True (Border 0 0 0 0) True 
+      $ tabWithConfig
+
 
 ------------------------------------------------------------------------
 -- Window rules
 
 myManageHook = manageSpawn <+> composeAll
   [ namedScratchpadManageHook scratchpads
-  -- , isDialog  =? doCenterFloat
   , className =? "filepicker" --> floatingCenter
-  , className =? "KeePassXC" --> floatingKPass
   , className =? "Xdg-desktop-portal-gtk" --> floatingCenter 
+  , className =? "KeePassXC" --> floatingKPass
   , className =? "DesktopEditors" --> floatingCenter
-  -- , className =? "Mate-calc" --> floatingCalc 
   , className =? "Pavucontrol" --> floatingCenter
-  , className =? "Signal" --> myDoShift 6
-  , className =? "Hexchat" --> myDoShift 6
-  , className =? "superhuman" --> myDoShift 2
+  , className =? "Dragon" --> floatingDragon 
+
   , className =? "kitty" --> myDoShift 1
   , className =? "Sublime_text" --> myDoShift 1
-  , className =? "Google-chrome" --> myDoShift 5
+  , className =? "superhuman" --> myDoShift 2
+  , className =? "darlehen" --> myDoShift 3
+  , className =? "gdocs" --> myDoShift 3
   , className =? "datev" --> myDoShift 4
-  , className =? "Dragon" --> floatingDragon 
+  , className =? "Google-chrome" --> myDoShift 5
+  , className =? "Signal" --> myDoShift 6
+  , className =? "Hexchat" --> myDoShift 6
   , className =? "Spotify" --> myDoShift 6
-  , className =? "MediaChips" --> myDoShift 3
+
   , className =? "mpv" --> doFullFloat
-    -- , className =? "FullScreenGame" --> defineBorderWidth 0
+  , className =? "MediaChips" --> myDoShift 3
+  , className =? "chessx" --> myDoShift 4
   ]
   where 
     myDoShift x     = doShift ( myWorkspaces !! ( x - 1 ) ) 
@@ -168,7 +173,7 @@ scratchpads =
     -- x, y, w, h
     floatingNNN   = W.RationalRect (1 % 4) (1 % 12) (1 % 2) (5 % 6)
     -- minimal possible width of calc 424 px 
-    floatingCalc  = W.RationalRect (75 % 86) (1 % 90) (53 % 430)(5 % 18)
+    floatingCalc  = W.RationalRect (375 % 430) (1 % 90) (53 % 430)(5 % 18)
     -- floatingNNN   = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6) -- LAPTOP
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
@@ -187,8 +192,8 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   , (( modm, xK_Return )          , sendMessage NextLayout )
   , (( modm, xK_s )               , sendMessage (Move L)   )
   , (( modm, xK_d )               , sendMessage (Move R)   )
-  , (( modm, xK_h )               , sendMessage Shrink     )
-  , (( modm, xK_l )               , sendMessage Expand     )
+  , (( modm, xK_l )               , sendMessage Shrink     )
+  , (( modm, xK_h )               , sendMessage Expand     )
   -- Focus
   , (( modm, xK_g )                   , withFocused $ windows . W.sink )
   , (( modm              , xK_Tab )   , windows W.focusDown )
@@ -196,6 +201,9 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   -- Laptop Section
   , (( 0, xF86XK_MonBrightnessUp )    , spawn "light -A 5")
   , (( 0, xF86XK_MonBrightnessDown )  , spawn "light -U 5")
+  , (( 0, xF86XK_AudioMute)           , spawn "amixer set Master toggle")
+  , (( 0, xF86XK_AudioLowerVolume)    , spawn "amixer set Master 10%-")
+  , (( 0, xF86XK_AudioRaiseVolume)    , spawn "amixer set Master 10%+")
   ]
   ++
   -- mod-[1..9], Switch to workspace N

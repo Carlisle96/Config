@@ -1,0 +1,113 @@
+* {
+  all: unset;
+}
+window {
+  background-color: #18191A;
+	color: #E9EAEB;
+  font-family: 'M PLUS 1';
+}
+
+button {
+  all: unset;
+  background-color: #121212;
+  padding: 10px;
+}
+
+.number_day {
+  padding-top: 0px;
+  font-size: 32px;
+  color: #7652B8;
+}
+.month {
+  font-weight: bold;
+}
+
+.day-side {
+  font-size: 32px;
+  color: #7652B8;
+}
+
+.week-side {
+  font-size: 24px;
+  padding-left: 20px;
+  padding-right: 10px;
+}
+
+
+.shutdown-side ~ button:hover {
+  color: #D35D6E;
+}
+.shutdown-side{
+  color: #D35D6E;
+}
+.shutdown-side:hover{
+  color: #ffd5cd;
+}
+.reboot-side{
+  color: #84afdb;
+}
+.lock-side{
+  color: #ffd5cd;
+}
+.suspend-side{
+  color: #c47eb7;
+}
+.logout-side{
+  color: #90c861;
+}
+
+.calendar_title {
+  margin: 20px 20px 0px 20px;
+  font-size: 16px;
+}
+
+.power-full {
+  font-size: 60px;
+  color: #D35D6E;
+}
+.power-full:hover {
+  color: #ffd5cd;
+}
+.reboot-full {
+  font-size: 60px;
+  color: #84afdb
+}
+.reboot-full:hover {
+  color: #D35D6E
+}
+.lock-full {
+  font-size: 60px;
+  color: #ffd5cd
+}
+.lock-full:hover {
+  color: #D35D6E
+}
+.suspend-full {
+  font-size: 60px;
+  color: #c47eb7
+}
+.suspend-full:hover {
+  color: #D35D6E
+}
+.logout-full {
+  font-size: 60px;
+  color: #90c861
+}
+.logout-full:hover {
+  color: #D35D6E
+}
+
+.quote-main {
+  font-size: 14px;
+  margin-top: 20px;
+  margin-right: 20px;
+  // margin-bottom: 20px;
+  margin-left: 20px;
+  color: #E9EAEB;
+}
+.quote-author {
+  font-size: 14px;
+  margin-right: 18px;
+  margin-bottom: 10px;
+  color: #7652B8;
+}
