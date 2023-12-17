@@ -88,18 +88,19 @@ myLayout = ( lessBorders OnlyScreenFloat
   $ configurableNavigation noNavigateBorders 
   $ avoidStruts
   $ trackFloating 
-  -- sidebanks are 456 wide
   $ spacingRaw False (Border 8 16 16 16) True (Border 8 0 0 0) True
   $ reflectHoriz
+  -- sidebanks are 456 wide
   $ centeredIfSingle (153 / 208) 1 dualTab ) 
     ||| noBorders Full
   where
-    tabWithConfig = tabbed shrinkText tabConfig
     dualTab =  combineTwo (TwoPane 0.05 0.4) leftTab righTab
     righTab = spacingRaw False (Border 0 0 0 8) True (Border 0 0 0 0) True 
-      $ tabWithConfig
+      $ defaultTab
     leftTab = spacingRaw False (Border 0 0 8 0) True (Border 0 0 0 0) True 
-      $ tabWithConfig
+      $ defaultTab
+    defaultTab = tabbed shrinkText tabConfig
+
 
 
 ------------------------------------------------------------------------
@@ -132,16 +133,15 @@ myManageHook = manageSpawn <+> composeAll
   where 
     myDoShift x     = doShift ( myWorkspaces !! ( x - 1 ) ) 
     -- x, y, w, h
-    floatingMain    = doRectFloat 
-      $ W.RationalRect (5 % 42) (0) (16 % 21) (1)  
     floatingCenter  = doRectFloat 
       $ W.RationalRect (1 % 5) (1 % 6) (3 % 5) (2 % 3) 
     floatingKPass   = doRectFloat 
       $ W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) 
-    floatingDragon  = doRectFloat 
+    floatingDragon  = doRectFloat
+    -- Desktop Section: 
       $ W.RationalRect (15 % 16) (23 % 48) (1 % 48) (1 % 24)
-    -- floatingCalc    = doRectFloat ( W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18) ) -- LAPTOP
-    -- floatingDragon  = doRectFloat ( W.RationalRect  (30 % 32) (23 % 48) (1 % 24) (1 % 18) ) -- LAPTOP
+    -- Laptop Section
+    --  $ W.RationalRect (30 % 32) (23 % 48) (1 % 24) (1 % 18)
 
 ------------------------------------------------------------------------
 -- Key bindings
@@ -171,10 +171,13 @@ scratchpads =
   ]
   where        
     -- x, y, w, h
+    -- Desktop Section:
     floatingNNN   = W.RationalRect (1 % 4) (1 % 12) (1 % 2) (5 % 6)
     -- minimal possible width of calc 424 px 
     floatingCalc  = W.RationalRect (375 % 430) (1 % 90) (53 % 430)(5 % 18)
-    -- floatingNNN   = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6) -- LAPTOP
+    -- Laptop Section:
+    -- floatingNNN   = W.RationalRect (1 % 8) (1 % 12) (3 % 4) (5 % 6)
+    -- floatingCalc  = W.RationalRect (79 % 96) (1 % 27)  (5 % 32) (6 % 18)
 
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $ 
   [ (( modm              , xK_q ) , kill )
@@ -182,25 +185,27 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   , (( modm, xK_space )           , spawn rofi )
   -- Programs
   , (( modm, xK_t )               , spawn $ XMonad.terminal conf )
-  , (( modm, xK_b )               , spawn "google-chrome" )
+  , (( modm, xK_b )               , spawn "google-chrome"   )
   , (( modm, xK_p )               , spawn screenshot )
   , (( modm, xK_e )               , spawn superhuman )
   -- Scratchpads
   , (( modm, xK_c )               , namedScratchpadAction scratchpads "calc" )
   , (( modm, xK_f )               , namedScratchpadAction scratchpads "nnn"  )
   -- Layout
-  , (( modm, xK_Return )          , sendMessage NextLayout )
-  , (( modm, xK_s )               , sendMessage (Move L)   )
-  , (( modm, xK_d )               , sendMessage (Move R)   )
-  , (( modm, xK_l )               , sendMessage Shrink     )
-  , (( modm, xK_h )               , sendMessage Expand     )
+  , (( modm, xK_Return )          , sendMessage NextLayout  )
+  , (( modm, xK_s )               , sendMessage (Move L)    )
+  , (( modm, xK_d )               , sendMessage (Move R)    )
+  , (( modm, xK_l )               , sendMessage Shrink      )
+  , (( modm, xK_h )               , sendMessage Expand      )
   -- Focus
   , (( modm, xK_g )                   , withFocused $ windows . W.sink )
-  , (( modm              , xK_Tab )   , windows W.focusDown )
-  , (( modm .|. shiftMask, xK_Tab )   , windows W.focusUp   )
-  -- Laptop Section
-  , (( 0, xF86XK_MonBrightnessUp )    , spawn "light -A 5")
-  , (( 0, xF86XK_MonBrightnessDown )  , spawn "light -U 5")
+  , (( modm              , xK_Tab )   , windows W.focusUp   )
+  , (( modm .|. shiftMask, xK_Tab )   , windows W.focusDown )
+  -- Special keys
+  , (( 0, xF86XK_MonBrightnessUp )    
+    , spawn "light -A 5 && /home/thyriaen/.config/xmonad/hooks/brightness.sh ")
+  , (( 0, xF86XK_MonBrightnessDown )  
+    , spawn "light -U 5 && /home/thyriaen/.config/xmonad/hooks/brightness.sh ")
   , (( 0, xF86XK_AudioMute)           , spawn "amixer set Master toggle")
   , (( 0, xF86XK_AudioLowerVolume)    , spawn "amixer set Master 10%-")
   , (( 0, xF86XK_AudioRaiseVolume)    , spawn "amixer set Master 10%+")
