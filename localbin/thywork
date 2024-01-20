@@ -22,17 +22,27 @@ done < ~/.config/work/work.csv
 wor="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
 tot="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
 
-prev=$((tot - wor))
+prev=$(( tot - wor ))
 byday=$(( (corresponding_value * 3600-prev)/remaining_days ))
-work_today=$(( (byday-wor) ))
+work_today=$(( byday-wor ))
 
-# Display the formatted time
-if [[ $work_today -ge 0 ]]; then
-  formatted_time=$(date -u -d @${work_today} +"%-H:%M")
-  printf "<span fgcolor='#B85261'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+normday=15120
+norm_today=$(( normday-wor ))
+
+if [[ $norm_today -ge 0 ]]; then
+  if [[ $work_today -ge 0 ]]; then
+      printf "<span fgcolor='#B85261'>"
+  else
+      printf "<span fgcolor='#B8A952'>"
+  fi
+  formatted_time=$(date -u -d @${norm_today} +"%-H:%M")
+  printf "<span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
 else
-  formatted_time=$(date -u -d @${work_today#-} +"%-H:%M")
-  printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+  if [[ $work_today -ge 0 ]]; then
+      formatted_time=$(date -u -d @${work_today} +"%-H:%M")
+      printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+  else
+      formatted_time=$(date -u -d @${work_today#-} +"%-H:%M")
+      printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+  fi
 fi
-
-

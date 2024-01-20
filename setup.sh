@@ -54,6 +54,9 @@ sudo flatpak override org.signal.Signal --filesystem=host
 # Spotify
 sudo flatpak install -y flathub com.spotify.Client
 
+# Planner
+sudo flatpak install -y org.gnome.GTG
+
 # Watson
 pip install td-watson
 
