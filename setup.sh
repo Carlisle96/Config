@@ -70,6 +70,11 @@ sudo dnf -y install sublime-text
 sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf -y install synology-drive-noextra
 
+# Estonian Software
+sudo dnf -y copr enable abn/web-eid
+sudo dnf -y install web-eid
+# sudo dnf -y install open-eid (maybe?)
+
 # Rpm Fusion
 sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
