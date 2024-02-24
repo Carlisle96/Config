@@ -1,4 +1,5 @@
 rm ~/.bash*
+rm -r ~/.xmonad
 sudo dnf -y remove i3 awesome ratpoison openbox
 
 fstabstring="
