@@ -121,7 +121,7 @@ myManageHook = manageSpawn <+> composeAll
   , className =? "darlehen" --> myDoShift 3
   , className =? "gdocs" --> myDoShift 3
   , className =? "datev" --> myDoShift 4
-  , className =? "Google-chrome" --> myDoShift 5
+  , className =? "firefox" --> myDoShift 5
   , className =? "Signal" --> myDoShift 6
   , className =? "Hexchat" --> myDoShift 6
   , className =? "Spotify" --> myDoShift 6
@@ -129,6 +129,7 @@ myManageHook = manageSpawn <+> composeAll
   , className =? "mpv" --> doFullFloat
   , className =? "MediaChips" --> myDoShift 3
   , className =? "chessx" --> myDoShift 4
+  , className =? "Skype" --> myDoShift 6
   ]
   where 
     myDoShift x     = doShift ( myWorkspaces !! ( x - 1 ) ) 
@@ -167,12 +168,16 @@ scratchpads =
     ( customFloating $ floatingNNN )
   , NS "calc" "mate-calc"
     ( className =? "Mate-calc" )
-    ( customFloating $ floatingCalc ) 
+    ( customFloating $ floatingCalc )
+  , NS "plan" "flatpak run org.gnome.GTG"
+    ( className =? "Gtg" )
+    ( customFloating $ floatingPlan ) 
   ]
   where        
     -- x, y, w, h
     -- Desktop Section:
     floatingNNN   = W.RationalRect (1 % 4) (1 % 12) (1 % 2) (5 % 6)
+    floatingPlan  = W.RationalRect (3 % 8) (1 % 30) (1 % 4) (2 % 5)
     -- minimal possible width of calc 424 px 
     floatingCalc  = W.RationalRect (375 % 430) (1 % 90) (53 % 430)(5 % 18)
     -- Laptop Section:
@@ -185,12 +190,13 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   , (( modm, xK_space )           , spawn rofi )
   -- Programs
   , (( modm, xK_t )               , spawn $ XMonad.terminal conf )
-  , (( modm, xK_b )               , spawn "google-chrome"   )
+  , (( modm, xK_b )               , spawn "firefox"   )
   , (( modm, xK_p )               , spawn screenshot )
   , (( modm, xK_e )               , spawn superhuman )
   -- Scratchpads
   , (( modm, xK_c )               , namedScratchpadAction scratchpads "calc" )
   , (( modm, xK_f )               , namedScratchpadAction scratchpads "nnn"  )
+  , (( modm, xK_r )               , namedScratchpadAction scratchpads "plan" )
   -- Layout
   , (( modm, xK_Return )          , sendMessage NextLayout  )
   , (( modm, xK_s )               , sendMessage (Move L)    )
@@ -207,12 +213,14 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   , (( 0, xF86XK_MonBrightnessDown )  
     , spawn "light -U 5 && /home/thyriaen/.config/xmonad/hooks/brightness.sh ")
   , (( 0, xF86XK_AudioMute)           , spawn "amixer set Master toggle")
-  , (( 0, xF86XK_AudioLowerVolume)    , spawn "amixer set Master 10%-")
-  , (( 0, xF86XK_AudioRaiseVolume)    , spawn "amixer set Master 10%+")
+  , (( 0, xF86XK_AudioLowerVolume)    
+    , spawn "amixer set Master 10%- && /home/thyriaen/.config/thymonad/volume.sh")
+  , (( 0, xF86XK_AudioRaiseVolume)    
+    , spawn "amixer set Master 10%+ && /home/thyriaen/.config/thymonad/volume.sh")
   ]
   ++
   -- mod-[1..9], Switch to workspace N
-  -- mod-shift-[1..9], Move client to workspace N
+  -- mod-shift-[1..9], Move client to workspace Np
   [ (( m .|. modm, k), windows $ f i)
       | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_6]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]
