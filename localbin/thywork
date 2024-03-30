@@ -26,23 +26,39 @@ prev=$(( tot - wor ))
 byday=$(( (corresponding_value * 3600-prev)/remaining_days ))
 work_today=$(( byday-wor ))
 
-normday=15120
+normday=11520
 norm_today=$(( normday-wor ))
 
+maxday=21600
+max_today=$(( maxday-wor ))
+
 if [[ $norm_today -ge 0 ]]; then
-  if [[ $work_today -ge 0 ]]; then
-      printf "<span fgcolor='#B85261'>"
-  else
-      printf "<span fgcolor='#B8A952'>"
-  fi
   formatted_time=$(date -u -d @${norm_today} +"%-H:%M")
-  printf "<span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+  printf "<span fgcolor='#B85261'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
 else
-  if [[ $work_today -ge 0 ]]; then
-      formatted_time=$(date -u -d @${work_today} +"%-H:%M")
+  if [[ $max_today -ge 0 ]]; then
+      formatted_time=$(date -u -d @${max_today} +"%-H:%M")
       printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
   else
-      formatted_time=$(date -u -d @${work_today#-} +"%-H:%M")
+      formatted_time=$(date -u -d @${max_today#-} +"%-H:%M")
       printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
   fi
 fi
+
+# if [[ $norm_today -ge 0 ]]; then
+#   if [[ $work_today -ge 0 ]]; then
+#       printf "<span fgcolor='#B85261'>"
+#   else
+#       printf "<span fgcolor='#B8A952'>"
+#   fi
+#   formatted_time=$(date -u -d @${norm_today} +"%-H:%M")
+#   printf "<span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+# else
+#   if [[ $work_today -ge 0 ]]; then
+#       formatted_time=$(date -u -d @${work_today} +"%-H:%M")
+#       printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+#   else
+#       formatted_time=$(date -u -d @${work_today#-} +"%-H:%M")
+#       printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+#   fi
+# fi
