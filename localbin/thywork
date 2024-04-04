@@ -3,8 +3,10 @@
 #in minutes
 work_per_day=192
 
-#in hours
-work_per_week=32
+#per week in minutes
+purp=$(( 8 * work_per_day ))
+cyan=$(( purp + work_per_day ))
+gree=$(( cyan + work_per_day ))
 
 worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
 left_today=$(( work_per_day * 60 - worked_today ))
@@ -18,14 +20,26 @@ else
 
   remaining_days=$(( 8-weekday ))
   morning=$(( worked_week - worked_today ))
-  byday=$(( (work_per_week * 3600 - morning) / remaining_days ))
-  todo_today=$(( byday - worked_today ))
 
-  if [[ $todo_today -ge 0 ]]; then
-      formatted_time=$(date -u -d @${todo_today} +"%-H:%M")
+  gree_today=$(( (gree * 60 - morning) / remaining_days - worked_today ))
+  cyan_today=$(( (cyan * 60 - morning) / remaining_days - worked_today ))
+  purp_today=$(( (purp * 60 - morning) / remaining_days - worked_today ))
+
+  if [[ $gree_today -ge 0 ]]; then
+    if [[ $cyan_today -ge 0 ]]; then
+      if [[ $purp_today -ge 0 ]]; then
+        formatted_time=$(date -u -d @${purp_today} +"%-H:%M")
+        printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+      else
+        formatted_time=$(date -u -d @${cyan_today} +"%-H:%M")
+        printf "<span fgcolor='#5294B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+      fi
+    else
+      formatted_time=$(date -u -d @${gree_today} +"%-H:%M")
       printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+    fi
   else
-      formatted_time=$(date -u -d @${todo_today#-} +"%-H:%M")
+      formatted_time=$(date -u -d @${gree_today#-} +"%-H:%M")
       printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
   fi
 fi
