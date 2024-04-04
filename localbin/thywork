@@ -1,64 +1,31 @@
 #!/bin/bash
 
-# Read the CSV file and process each line
-while IFS=',' read -r date value
-do
-  # Get today's date
-  today=$(date +%F)
+#in minutes
+work_per_day=192
 
-  # Check if the date is in the future or today
-  if [[ "$date" > "$today" || "$date" == "$today" ]]; then
-    # Calculate the number of remaining days
-    remaining_days=$(( ( $(date -d "$date" +%s) - $(date -d "$today" +%s) ) / 86400 +1))
-    
-    # Store the corresponding value in a variable
-    corresponding_value=$value
-    
-    # Exit the loop after finding the first future or today's date entry
-    break
-  fi
-done < ~/.config/work/work.csv
+#in hours
+work_per_week=32
 
-wor="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-tot="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+left_today=$(( work_per_day * 60 - worked_today ))
 
-prev=$(( tot - wor ))
-byday=$(( (corresponding_value * 3600-prev)/remaining_days ))
-work_today=$(( byday-wor ))
-
-normday=11520
-norm_today=$(( normday-wor ))
-
-maxday=21600
-max_today=$(( maxday-wor ))
-
-if [[ $norm_today -ge 0 ]]; then
-  formatted_time=$(date -u -d @${norm_today} +"%-H:%M")
+if [[ $left_today -ge 0 ]]; then
+  formatted_time=$(date -u -d @${left_today} +"%-H:%M")
   printf "<span fgcolor='#B85261'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
 else
-  if [[ $max_today -ge 0 ]]; then
-      formatted_time=$(date -u -d @${max_today} +"%-H:%M")
+  worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+  weekday="$(date +%u)"
+
+  remaining_days=$(( 8-weekday ))
+  morning=$(( worked_week - worked_today ))
+  byday=$(( (work_per_week * 3600 - morning) / remaining_days ))
+  todo_today=$(( byday - worked_today ))
+
+  if [[ $todo_today -ge 0 ]]; then
+      formatted_time=$(date -u -d @${todo_today} +"%-H:%M")
       printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
   else
-      formatted_time=$(date -u -d @${max_today#-} +"%-H:%M")
+      formatted_time=$(date -u -d @${todo_today#-} +"%-H:%M")
       printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
   fi
 fi
-
-# if [[ $norm_today -ge 0 ]]; then
-#   if [[ $work_today -ge 0 ]]; then
-#       printf "<span fgcolor='#B85261'>"
-#   else
-#       printf "<span fgcolor='#B8A952'>"
-#   fi
-#   formatted_time=$(date -u -d @${norm_today} +"%-H:%M")
-#   printf "<span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-# else
-#   if [[ $work_today -ge 0 ]]; then
-#       formatted_time=$(date -u -d @${work_today} +"%-H:%M")
-#       printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-#   else
-#       formatted_time=$(date -u -d @${work_today#-} +"%-H:%M")
-#       printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
-#   fi
-# fi
