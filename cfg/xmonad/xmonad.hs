@@ -80,6 +80,7 @@ autostart = do
   spawnOnce "synology-drive start"
   spawnOnce "keepassxc %f"
   spawnOnce signal
+  spawnOnce "flatpak run com.discordapp.Discord"
 
 ------------------------------------------------------------------------
 -- Layouts
@@ -129,7 +130,7 @@ myManageHook = manageSpawn <+> composeAll
   , className =? "mpv" --> doFullFloat
   , className =? "MediaChips" --> myDoShift 3
   , className =? "chessx" --> myDoShift 4
-  , className =? "Skype" --> myDoShift 6
+  , className =? "discord" --> myDoShift 6
   ]
   where 
     myDoShift x     = doShift ( myWorkspaces !! ( x - 1 ) ) 
@@ -190,7 +191,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   , (( modm, xK_space )           , spawn rofi )
   -- Programs
   , (( modm, xK_t )               , spawn $ XMonad.terminal conf )
-  , (( modm, xK_b )               , spawn "firefox"   )
+  , (( modm, xK_b )               , spawn "chrome" )
   , (( modm, xK_p )               , spawn screenshot )
   , (( modm, xK_e )               , spawn superhuman )
   -- Scratchpads
