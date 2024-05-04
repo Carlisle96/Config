@@ -1,45 +1,67 @@
 #!/bin/bash
 
-#in minutes
-work_per_day=192
-
-#per week in minutes
-purp=$(( 8 * work_per_day ))
-cyan=$(( purp + work_per_day ))
-gree=$(( cyan + work_per_day ))
-
+#in minutes * 60 seconds
+work_per_day=$((192 * 60)) 
 worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-left_today=$(( work_per_day * 60 - worked_today ))
 
+left_today=$(( work_per_day - worked_today ))
 if [[ $left_today -ge 0 ]]; then
   formatted_time=$(date -u -d @${left_today} +"%-H:%M")
   printf "<span fgcolor='#B85261'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
 else
   worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+  
   weekday="$(date +%u)"
-
-  remaining_days=$(( 8-weekday ))
-  morning=$(( worked_week - worked_today ))
-
-  gree_today=$(( (gree * 60 - morning) / remaining_days - worked_today ))
-  cyan_today=$(( (cyan * 60 - morning) / remaining_days - worked_today ))
-  purp_today=$(( (purp * 60 - morning) / remaining_days - worked_today ))
-
-  if [[ $gree_today -ge 0 ]]; then
-    if [[ $cyan_today -ge 0 ]]; then
-      if [[ $purp_today -ge 0 ]]; then
-        formatted_time=$(date -u -d @${purp_today} +"%-H:%M")
-        printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-      else
-        formatted_time=$(date -u -d @${cyan_today} +"%-H:%M")
-        printf "<span fgcolor='#5294B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-      fi
-    else
-      formatted_time=$(date -u -d @${gree_today} +"%-H:%M")
-      printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-    fi
+  weekly_left_today=$((work_per_day * weekday - worked_week))
+  if [[ $weekly_left_today -ge 0 ]]; then
+    formatted_time=$(date -u -d @${weekly_left_today} +"%-H:%M")
+    printf "<span fgcolor='#B85294'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
   else
-      formatted_time=$(date -u -d @${gree_today#-} +"%-H:%M")
+    worked_month="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+    
+    monthday="$(date +%-d)"
+    monthly_left_today=$((work_per_day * monthday - worked_month))
+    if [[ $monthly_left_today -ge 0 ]]; then
+      formatted_time=$(date -u -d @${monthly_left_today} +"%-H:%M")
+      printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+    else
+      formatted_time=$(date -u -d @${left_today#-} +"%-H:%M")
       printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+    fi
   fi
 fi
+
+    #    per week in minutes
+    #    purp=$(( 8 * work_per_day ))
+    #    cyan=$(( purp + work_per_day ))
+    #    gree=$(( cyan + work_per_day ))
+    #    remaining_days=$(( 8-weekday ))
+    #    morning=$(( worked_week - worked_today ))
+    #
+    #    gree_today=$(( (gree - morning) / remaining_days - worked_today ))
+    #    cyan_today=$(( (cyan - morning) / remaining_days - worked_today ))
+    #    purp_today=$(( (purp - morning) / remaining_days - worked_today ))
+    #    done_today=$(( 2 * work_per_day - worked_today ))
+    #
+    #    if [[ $done_today -ge 0 ]]; then
+    #      if [[ $gree_today -ge 0 ]]; then
+    #        if [[ $cyan_today -ge 0 ]]; then
+    #          if [[ $purp_today -ge 0 ]]; then
+    #            formatted_time=$(date -u -d @${done_today} +"%-H:%M")
+    #            printf "<span fgcolor='#B85294'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+    #          else
+    #            formatted_time=$(date -u -d @${done_today} +"%-H:%M")
+    #            printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+    #          fi
+    #        else
+    #          formatted_time=$(date -u -d @${done_today} +"%-H:%M")
+    #          printf "<span fgcolor='#5294B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+    #        fi
+    #      else
+    #        formatted_time=$(date -u -d @${done_today} +"%-H:%M")
+    #        printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"      
+    #      fi  
+    #    else
+    #      formatted_time=$(date -u -d @${done_today#-} +"%-H:%M")
+    #      printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+    #    fi
