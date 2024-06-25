@@ -1,7 +1,8 @@
 #!/bin/bash
 
-#in minutes * 60 seconds
-work_per_day=$((192 * 60)) 
+#in minutes * 60 seconds -> 192
+numweek="$(date +%V)"
+work_per_day="$(( 60 * (120 + (numweek-25)*4) ))"
 worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
 
 left_today=$(( work_per_day - worked_today ))
