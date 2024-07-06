@@ -48,6 +48,7 @@ Column {
             width: parent.height
             height: parent.height
             anchors.left: parent.left
+            font.pointSize: 1
 
             property var popkey: config.ForceRightToLeft == "true" ? Qt.Key_Right : Qt.Key_Left
             Keys.onPressed: {
@@ -97,6 +98,9 @@ Column {
                     enabled: false
                     icon.color: root.palette.text
                     icon.source: Qt.resolvedUrl("../Assets/User.svgz")
+                    background: Rectangle {
+                        color: "transparent"
+                    }
             }
 
             background: Rectangle {
