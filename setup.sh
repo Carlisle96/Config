@@ -16,7 +16,7 @@ texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-
 texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
 texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak 
 texlive-collection-fontsrecommended texlive-skaknew texlive-doi texlive-mdframed
-texlive-fontawesome5 texlive-datetime2-english"
+texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 
 # Install basics
 sudo dnf -y upgrade
@@ -163,8 +163,6 @@ cp ./apps/*.desktop ~/.local/share/applications
 # install fzf keybindings
 # pip command line completen guide tailordev.github.io/Watson/
 # sublime - hide menu - hide minimap
-# lxdm greeter setup
-
 # Copy new Icons over to mathy theme
 
 #Todo fstab
