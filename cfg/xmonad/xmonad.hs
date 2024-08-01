@@ -92,7 +92,7 @@ myLayout = ( lessBorders OnlyScreenFloat
   $ spacingRaw False (Border 8 16 16 16) True (Border 8 0 0 0) True
   $ reflectHoriz
   -- sidebanks are 456 wide
-  $ centeredIfSingle (153 / 208) 1 dualTab ) 
+  $ centeredIfSingle (158 / 215) 1 dualTab ) 
     ||| noBorders Full
   where
     dualTab =  combineTwo (TwoPane 0.05 0.4) leftTab righTab
@@ -122,7 +122,7 @@ myManageHook = manageSpawn <+> composeAll
   , className =? "darlehen" --> myDoShift 3
   , className =? "gdocs" --> myDoShift 3
   , className =? "datev" --> myDoShift 4
-  , className =? "firefox" --> myDoShift 5
+  , className =? "Google-chrome" --> myDoShift 5
   , className =? "Signal" --> myDoShift 6
   , className =? "Hexchat" --> myDoShift 6
   , className =? "Spotify" --> myDoShift 6
@@ -131,6 +131,7 @@ myManageHook = manageSpawn <+> composeAll
   , className =? "MediaChips" --> myDoShift 3
   , className =? "chessx" --> myDoShift 4
   , className =? "discord" --> myDoShift 6
+  , className =? "asana" --> myDoShift 6
   ]
   where 
     myDoShift x     = doShift ( myWorkspaces !! ( x - 1 ) ) 
@@ -138,12 +139,14 @@ myManageHook = manageSpawn <+> composeAll
     floatingCenter  = doRectFloat 
       $ W.RationalRect (1 % 5) (1 % 6) (3 % 5) (2 % 3) 
     floatingKPass   = doRectFloat 
-      $ W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) 
+      $ W.RationalRect (273 % 430) (1 % 2) (145 % 430) (13 % 30) 
     floatingDragon  = doRectFloat
     -- Desktop Section: 
       $ W.RationalRect (15 % 16) (23 % 48) (1 % 48) (1 % 24)
     -- Laptop Section
     --  $ W.RationalRect (30 % 32) (23 % 48) (1 % 24) (1 % 18)
+    --floatingKPass   = doRectFloat 
+    --  $ W.RationalRect (18 % 32) (9 % 18) (13 % 32) (8 % 18) 
 
 ------------------------------------------------------------------------
 -- Key bindings
@@ -191,7 +194,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   , (( modm, xK_space )           , spawn rofi )
   -- Programs
   , (( modm, xK_t )               , spawn $ XMonad.terminal conf )
-  , (( modm, xK_b )               , spawn "chrome" )
+  , (( modm, xK_b )               , spawn "google-chrome" )
   , (( modm, xK_p )               , spawn screenshot )
   , (( modm, xK_e )               , spawn superhuman )
   -- Scratchpads
