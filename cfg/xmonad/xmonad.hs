@@ -123,6 +123,7 @@ myManageHook = manageSpawn <+> composeAll
   , className =? "gdocs" --> myDoShift 3
   , className =? "datev" --> myDoShift 4
   , className =? "Google-chrome" --> myDoShift 5
+  , className =? "org.mozilla.firefox" --> myDoShift 5
   , className =? "Signal" --> myDoShift 6
   , className =? "Hexchat" --> myDoShift 6
   , className =? "Spotify" --> myDoShift 6
@@ -194,7 +195,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
   , (( modm, xK_space )           , spawn rofi )
   -- Programs
   , (( modm, xK_t )               , spawn $ XMonad.terminal conf )
-  , (( modm, xK_b )               , spawn "google-chrome" )
+  , (( modm, xK_b )               , spawn "firefox" )
   , (( modm, xK_p )               , spawn screenshot )
   , (( modm, xK_e )               , spawn superhuman )
   -- Scratchpads
