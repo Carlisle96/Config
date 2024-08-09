@@ -6,10 +6,10 @@ zathura zathura-pdf-mupdf mediawriter nemo
 kitty rofi zsh zsh-syntax-highlighting fzf bat
 evince simple-scan hexchat keepassxc syncthing pavucontrol
 gtk-murrine-engine gtk3-devel 
-sddm sddm-x11 qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg picom
-mate-calc maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
+sddm sddm-x11 qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg qt6-qt5compat 
+picom mate-calc maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
 xdg-desktop-portal-gtk
-libreoffice-calc libreoffice-gtk3 mpv"
+libreoffice-calc libreoffice-gtk3 mpv firefox"
 
 LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
 texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
