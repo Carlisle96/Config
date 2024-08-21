@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Datev
 Comment=Datev Unternehmen Online
-Exec=google-chrome --new-window --class=datev --app=https://login.datev.de/wopl/FC/FC --user-data-dir=/home/thyriaen/.webapps/datev %U
+Exec=firefox --new-window https://login.datev.de/wopl/FC/FC
 Terminal=false
 Icon=datev2
 Type=Application
