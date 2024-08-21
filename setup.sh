@@ -1,16 +1,16 @@
 ### ------------------------------------- Basics ------------------------------------ ###
 
-PACKAGES="fedora-workstation-repositories redhat-rpm-config sqlite flatpak xmonad
-neofetch pdftk python3-pip xsetroot xclip redshift
-zathura zathura-pdf-mupdf mediawriter nemo
-kitty rofi zsh zsh-syntax-highlighting fzf bat
-evince simple-scan hexchat keepassxc syncthing pavucontrol
-gtk-murrine-engine gtk3-devel 
-sddm sddm-x11 qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg qt6-qt5compat 
-picom mate-calc maim ImageMagick poppler-utils gnome-disk-utility feh dunst 
-xdg-desktop-portal-gtk
-libreoffice-calc libreoffice-gtk3 mpv firefox"
+PACKAGES="fedora-workstation-repositories redhat-rpm-config flatpak 
+neofetch pdftk python3-pip zathura zathura-pdf-mupdf mediawriter nemo
+kitty zsh zsh-syntax-highlighting fzf bat syncthing
+evince simple-scan hexchat keepassxc pavucontrol mpv firefox
+gtk-murrine-engine gtk3-devel qt6-qt5compat 
+qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg
+mate-calc ImageMagick poppler-utils gnome-disk-utility dunst"
 
+UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
+XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
+HYPRLAND="wofi sddm hyprland hyprpaper"
 LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
 texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
 texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
@@ -20,7 +20,8 @@ texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 
 # Install basics
 sudo dnf -y upgrade
-sudo dnf --refresh -y install $PACKAGES $LATEX
+sudo dnf -y copr enable solopasha/hyprland
+sudo dnf --refresh -y install $PACKAGES $HYPRLAND $LATEX
 
 read -r -p "Install laptop version? [y/N]: " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
@@ -55,7 +56,7 @@ sudo flatpak override org.signal.Signal --filesystem=host
 sudo flatpak install -y flathub com.spotify.Client
 
 # Planner
-sudo flatpak install -y org.gnome.GTG
+# sudo flatpak install -y org.gnome.GTG
 
 # Watson
 pip install td-watson
@@ -73,10 +74,9 @@ sudo dnf -y install synology-drive-noextra
 # Estonian Software
 sudo dnf -y copr enable abn/web-eid
 sudo dnf -y install web-eid
-# sudo dnf -y install open-eid (maybe?)
 
 # Rpm Fusion
-sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+# sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
 # Rpms
 sudo dnf -y install ./rpms/*

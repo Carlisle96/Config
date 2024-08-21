@@ -2,36 +2,44 @@
 
 #in minutes * 60 seconds -> 192
 work_per_day="$((60 * 256))"
+light_work_per_day="$((60 * 128))"
 #numweek="$(date +%V)"
 #work_per_day="$(( 60 * (120 + (numweek-25)*4) ))"
 worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
 
 left_today=$(( work_per_day - worked_today ))
-if [[ $left_today -ge 0 ]]; then
+light_left_today=$(( light_work_per_day - worked_today ))
+
+if [[ $light_left_today -ge 0 ]]; then
   formatted_time=$(date -u -d @${left_today} +"%-H:%M")
   printf "<span fgcolor='#B85261'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-else
-  worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-  
-  weekday="$(date +%u)"
-  weekly_left_today=$((work_per_day * weekday - worked_week))
-  if [[ $weekly_left_today -ge 0 ]]; then
-    formatted_time=$(date -u -d @${weekly_left_today} +"%-H:%M")
+  else
+  if [[ $left_today -ge 0 ]]; then
+    formatted_time=$(date -u -d @${left_today} +"%-H:%M")
     printf "<span fgcolor='#B85294'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
   else
-    worked_month="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-    
-    monthday="$(date +%-d)"
-    monthly_left_today=$((work_per_day * monthday - worked_month))
-    if [[ $monthly_left_today -ge 0 ]]; then
-      formatted_time=$(date -u -d @${monthly_left_today} +"%-H:%M")
+    worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+    weekday="$(date +%u)"
+    weekly_left_today=$((work_per_day * weekday - worked_week))
+    if [[ $weekly_left_today -ge 0 ]]; then
+      formatted_time=$(date -u -d @${weekly_left_today} +"%-H:%M")
       printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
     else
-      formatted_time=$(date -u -d @${left_today#-} +"%-H:%M")
-      printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+      worked_month="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+      
+      monthday="$(date +%-d)"
+      monthly_left_today=$((work_per_day * monthday - worked_month))
+      if [[ $monthly_left_today -ge 0 ]]; then
+        formatted_time=$(date -u -d @${monthly_left_today} +"%-H:%M")
+        printf "<span fgcolor='#5294B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+      else
+        formatted_time=$(date -u -d @${left_today#-} +"%-H:%M")
+        printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+      fi
     fi
   fi
 fi
+
 
     #    per week in minutes
     #    purp=$(( 8 * work_per_day ))
