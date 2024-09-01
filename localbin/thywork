@@ -19,8 +19,8 @@ if [[ $light_left_today -ge 0 ]]; then
     printf "<span fgcolor='#B85294'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
   else
     worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-    weekday="$(date +%u)"
-    weekly_left_today=$((work_per_day * weekday - worked_week))
+    weekday="$(date +%w)"
+    weekly_left_today=$((work_per_day * (weekday+1) - worked_week))
     if [[ $weekly_left_today -ge 0 ]]; then
       formatted_time=$(date -u -d @${weekly_left_today} +"%-H:%M")
       printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
