@@ -10,7 +10,7 @@ mate-calc ImageMagick poppler-utils gnome-disk-utility dunst"
 
 UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
 XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
-HYPRLAND="wofi sddm hyprland hyprpaper"
+HYPRLAND="wofi sddm hyprland hyprpaper wlsunset waybar"
 LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
 texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
 texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
@@ -136,7 +136,7 @@ cp -r ./cfg/* ~/.config/
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 
-cp -r ./home/.* ~/
+cp -r ./home/* ~/
 
 # Applications 
 mkdir -p ~/.local/share/applications
