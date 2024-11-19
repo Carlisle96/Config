@@ -88,8 +88,8 @@ sudo grub2-editenv - set menu_auto_hide=1
 sudo grub2-mkconfig
 
 # SDDM
-sudo systemctl disable lightdm
-sudo systemctl enable sddm
+sudo systemctl enable sddm --force
+sudo systemctl start graphical.target
 
 # Terminal
 gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
