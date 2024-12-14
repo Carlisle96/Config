@@ -9,7 +9,7 @@ sudo flatpak override --env=ICON_THEME=Newaita-reborn-deep-purple-dark
 ### ------------------------------ Installing Packages ------------------------------ ###
 
 # Chrome
-sudo dnf -y config-manager --set-enabled google-chrome
+sudo dnf config-manager setopt google-chrome.enabled=1
 sudo dnf -y install google-chrome-stable
 
 # Signal

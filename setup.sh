@@ -48,7 +48,7 @@ sudo flatpak override --env=ICON_THEME=Newaita-reborn-deep-purple-dark
 ### ------------------------------ Installing Packages ------------------------------ ###
 
 # Chrome
-sudo dnf -y config-manager --set-enabled google-chrome
+sudo dnf config-manager setopt google-chrome.enabled=1
 sudo dnf -y install google-chrome-stable
 
 # Signal
@@ -65,9 +65,9 @@ sudo flatpak install -y flathub com.spotify.Client
 pip install td-watson
 
 # Sublime Text
-sudo dnf -y config-manager \
-	--add-repo https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+sudo dnf config-manager addrepo \
+	--from-repofile=https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 sudo dnf -y install sublime-text
 
 # Synology Drive
