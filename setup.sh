@@ -143,6 +143,8 @@ curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | s
 mkdir -p ~/Pictures/Wallpapers
 cp ./usrshare/backgrounds/wpMoon.png ~/Pictures/Wallpapers/wpMoon.png
 
+cp ./home/* ~/
+
 # Applications 
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
