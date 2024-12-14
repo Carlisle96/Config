@@ -26,11 +26,11 @@ Values of these variables can be changed safely and most likely nothing will bre
   --trans-dur: 0.25s;
   
   /* width of some elements. 1vw is one hundredth of the screen width */
-  --sdbr-wdt: 300px;
+  --sdbr-wdt: 192px;
   
-  --navbar-wdt: 60vw;
+  --navbar-wdt: 40vw;
   
-  --findbar-wdt: 70vw;
+  --findbar-wdt: 30vw;
   
   /* intensity of blur (new tab) */
   --blur-radius: 10px;

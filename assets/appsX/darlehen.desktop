@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Darlehensliste
+Comment=Globale Darlehensliste
+Exec=firefox --new-window https://pemba.me/#file_id=735650326721377980
+Terminal=false
+Icon=wps-office-etmain
+Type=Application
+StartupWMClass=darlehen
+Categories=Network;
