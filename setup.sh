@@ -1,16 +1,18 @@
 ### ------------------------------------- Basics ------------------------------------ ###
 
 PACKAGES="fedora-workstation-repositories redhat-rpm-config flatpak 
-neofetch pdftk python3-pip zathura zathura-pdf-mupdf mediawriter nemo
-kitty zsh zsh-syntax-highlighting fzf bat syncthing
-evince simple-scan hexchat keepassxc pavucontrol mpv firefox
-gtk-murrine-engine gtk3-devel qt6-qt5compat 
-qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg
-mate-calc ImageMagick poppler-utils gnome-disk-utility dunst"
+pdftk python3-pip zathura zathura-pdf-mupdf bat
+kitty zsh zsh-syntax-highlighting fzf fastfetch
+evince simple-scan hexchat keepassxc mate-calc syncthing mediawriter nemo
+gtk-murrine-engine gtk3-devel"  
 
+SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg"
+NONEED="pavucontrol mpv firefox ImageMagick poppler-utils gnome-disk-utility dunst"
 UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
 XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
-HYPRLAND="wofi sddm hyprland hyprpaper"
+
+HYPRLAND="wofi hyprland hyprpaper"
+
 LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
 texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
 texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
@@ -20,7 +22,7 @@ texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 
 # Install basics
 sudo dnf -y upgrade
-sudo dnf -y copr enable solopasha/hyprland
+#sudo dnf -y copr enable solopasha/hyprland
 sudo dnf --refresh -y install $PACKAGES $HYPRLAND $LATEX
 
 read -r -p "Install laptop version? [y/N]: " response
@@ -28,10 +30,13 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
 	# Laptop Only section
 	sudo dnf -y install tlp light
-	hostnamectl set-hostname carthy
+	sudo hostnamectl set-hostname carthy
 	sudo systemctl enable tlp.service
+	rm ./usrshare/backgrounds/wpMoon.png
+	mv ./usrshare/backgrounds/wpMoonLaptop.png ./usrshare/backgrounds/wpMoon.png
 else
 	hostnamectl set-hostname thyrium
+	rm ./usrshare/backgrounds/wpMoonLaptop.png
 fi
 
 ### ------------------------------------ Flatpak ------------------------------------ ###
@@ -79,7 +84,7 @@ sudo dnf -y install web-eid
 # sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
 # Rpms
-sudo dnf -y install ./rpms/*
+# sudo dnf -y install ./rpms/*
 
 ### ------------------------------------ Settings ----------------------------------- ###
 
@@ -88,13 +93,13 @@ sudo grub2-editenv - set menu_auto_hide=1
 sudo grub2-mkconfig
 
 # SDDM
-sudo systemctl enable sddm --force
-sudo systemctl start graphical.target
+# sudo systemctl enable sddm --force
+# sudo systemctl start graphical.target
 
 # Terminal
 gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 
-# Gtk File Chooser ( not FFF ):
+# Gtk File Chooser ( current working directory ):
 gsettings set org.gtk.Settings.FileChooser startup-mode cwd
 
 # Find utils
@@ -117,7 +122,7 @@ ssh-keygen
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
 # SDDM
-sudo cp ./sddm.conf /etc/
+# sudo cp ./sddm.conf /etc/
 
 # Binaries
 sudo cp -r ./bin/* /bin/
@@ -136,7 +141,8 @@ cp -r ./cfg/* ~/.config/
 git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 
-cp -r ./home/.* ~/
+mkdir -p ~/Pictures/Wallpapers
+cp ./usrshare/backgrounds/wpMoon.png ~/Pictures/Wallpapers/wpMoon.png
 
 # Applications 
 mkdir -p ~/.local/share/applications

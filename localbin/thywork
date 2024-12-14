@@ -1,44 +1,62 @@
 #!/bin/bash
 
-#in minutes * 60 seconds -> 192
-work_per_day="$((60 * 256))"
-light_work_per_day="$((60 * 128))"
-#numweek="$(date +%V)"
-#work_per_day="$(( 60 * (120 + (numweek-25)*4) ))"
+# fulltime:         300 min/d - 150 h/m   
+# really nice:      256 min/d - 128 h/m   <-- Target
+# proper income:    192 min/d -  96 h/m   <-- Per Day
+# absolute minimum  128 min/d -  64 h/m   
+
+work_per_day_target="$((120 * 96))"
+work_per_day="$((120 * 64))"
+
+# Function to format and print the time with different colors and icons
+print_time() {
+  local time_left=$1
+  local color=$2
+  local icon=$3
+
+  formatted_time=$(date -u -d @${time_left} +"%-H:%M")
+  printf "<span fgcolor='%s'><span size='16pt'> %s </span>%s</span>" "$color" "$icon" "$formatted_time"
+}
+
 worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-
 left_today=$(( work_per_day - worked_today ))
-light_left_today=$(( light_work_per_day - worked_today ))
+if [[ $left_today -ge 0 ]]; then
+  print_time "$left_today" '#B85261' '󰃖 '
+else
+  worked_month="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+  monthday="$(date +%-d)"
+  monthly_left_today=$(( (work_per_day * monthday - worked_month) )) 
 
-if [[ $light_left_today -ge 0 ]]; then
-  formatted_time=$(date -u -d @${left_today} +"%-H:%M")
-  printf "<span fgcolor='#B85261'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-  else
-  if [[ $left_today -ge 0 ]]; then
-    formatted_time=$(date -u -d @${left_today} +"%-H:%M")
-    printf "<span fgcolor='#B85294'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-  else
-    worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-    weekday="$(date +%w)"
-    weekly_left_today=$((work_per_day * (weekday+1) - worked_week))
-    if [[ $weekly_left_today -ge 0 ]]; then
-      formatted_time=$(date -u -d @${weekly_left_today} +"%-H:%M")
-      printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+  left_today_target=$(( work_per_day_target - worked_today ))
+  if [[ $left_today_target -ge 0 && $monthly_left_today -ge 0 ]]; then
+    print_time "$left_today_target" '#B85294' '󰃖 '
+  else 
+    if [[ $monthly_left_today -ge 0 ]]; then
+      print_time "$monthly_left_today" '#7652B8' '󰃖 '
     else
-      worked_month="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-      
-      monthday="$(date +%-d)"
-      monthly_left_today=$((work_per_day * monthday - worked_month))
-      if [[ $monthly_left_today -ge 0 ]]; then
-        formatted_time=$(date -u -d @${monthly_left_today} +"%-H:%M")
-        printf "<span fgcolor='#5294B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
+      monthly_left_today_target=$(( (work_per_day_target * monthday - worked_month) ))
+      if [[ $monthly_left_today_target -ge 0 ]]; then
+        print_time "$monthly_left_today_target" '#B8A952' '󰃖 '
       else
-        formatted_time=$(date -u -d @${left_today#-} +"%-H:%M")
-        printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
+        print_time "${monthly_left_today#-}" '#94B852' '󰃗 '
       fi
     fi
   fi
 fi
+
+#worked_before_frame="$(watson report -d -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+#lastday_in_month="$(date -d "$(date +'%Y-%m-01') +1 month -1 day" +%d)"
+
+#work_per_frame="$((60 * 48))"
+#numweek="$(date +%V)"
+#work_per_day="$(( 60 * (120 + (numweek-25)*4) ))"
+
+#left_frame=$(( work_per_frame - worked_today + worked_before_frame ))
+
+#frames_left="$(( (work_per_day - worked_before_frame) / work_per_frame))"
+    #worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
+    #weekday="$(date +%u)"
+    #weekly_left_today=$((work_per_day * weekday - worked_week))
 
 
     #    per week in minutes

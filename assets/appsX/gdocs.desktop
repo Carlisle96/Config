@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Buchhaltung
+Comment=Google Documents
+Exec=google-chrome --new-window --class=gdocs --app=https://docs.google.com/spreadsheets/u/0/ --user-data-dir=/home/thyriaen/.webapps/gdocs %U
+Terminal=false
+Icon=libreoffice3-calc
+Type=Application
+StartupWMClass=gdocs
+Categories=Network;

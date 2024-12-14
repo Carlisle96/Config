@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Asana
+GenericName=Task Client
+Comment=Task Manager
+Exec=google-chrome --new-window --class=asana --app=https://app.asana.com/ --user-data-dir=/home/thyriaen/.webapps/asana %U
+Terminal=false
+Icon=evolution-tasks
+Type=Application
+StartupWMClass=asana
+Categories=Network;

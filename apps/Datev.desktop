@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Datev
-Comment=Datev Unternehmen Online
-Exec=firefox --new-window https://login.datev.de/wopl/FC/FC
-Terminal=false
-Icon=datev2
-Type=Application
-StartupWMClass=datev
-Categories=Network;
