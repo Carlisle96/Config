@@ -4,9 +4,15 @@ PACKAGES="fedora-workstation-repositories redhat-rpm-config flatpak
 pdftk python3-pip zathura zathura-pdf-mupdf bat
 kitty zsh zsh-syntax-highlighting fzf fastfetch
 evince simple-scan hexchat keepassxc mate-calc syncthing mediawriter nemo
-gtk-murrine-engine gtk3-devel"  
+gtk-murrine-engine gtk3-devel"
 
-SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2 qt5-qtsvg"
+HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
+mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel 
+tomlplusplus-devel systemd-devel
+libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel xcb-util-errors-devel
+wayland-protocols-devel udis86-devel hyprwayland-scanner-devel xcb-util-wm-devel"
+
+SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2"
 NONEED="pavucontrol mpv firefox ImageMagick poppler-utils gnome-disk-utility dunst"
 UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
 XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
@@ -21,7 +27,7 @@ texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 # Install basics
 sudo dnf -y upgrade
 #sudo dnf -y copr enable solopasha/hyprland
-sudo dnf --refresh -y install $PACKAGES $HYPRLAND $LATEX
+sudo dnf --refresh -y install $PACKAGES $HYPRLAND $SDDMTHEME $HYPRPM $LATEX
 
 read -r -p "Install laptop version? [y/N]: " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
