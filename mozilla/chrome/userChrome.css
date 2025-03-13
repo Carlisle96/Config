@@ -1,11 +1,34 @@
-/* imports */
-@import url("ShyFox/shy-variables.css");
-@import url("ShyFox/shy-global.css");
-@import url("ShyFox/shy-sidebar.css");
-@import url("ShyFox/shy-toolbar.css");
-@import url("ShyFox/shy-navbar.css");
-@import url("ShyFox/shy-findbar.css");
-@import url("ShyFox/shy-controls.css");
-@import url("ShyFox/shy-compact.css");
-@import url("ShyFox/shy-icons.css");
-@import url("ShyFox/shy-floating-search.css");
+/* Change the secondary text color in the address bar dropdown */
+.urlbarView-url {
+    color: #7652B8 !important; /* Change to any color */
+}
+
+/* Change the highlight color when selecting an autocomplete suggestion */
+.urlbarView-row[selected] {
+    background-color: #7652B8 !important; /* Change to a dark gray, or any other color */
+    color: #E9EAEB !important; /* Ensure text is readable */
+}
+
+:root, panel, dialog, window{
+  --thy-color: #7652B8;
+  --in-content-primary-button-background-active: var(--thy-color) !important;
+  --in-content-primary-button-background-hover:  var(--thy-color) !important;
+  --lwt-toolbarbutton-icon-fill-attention:       var(--thy-color) !important;
+  --in-content-primary-button-background:        var(--thy-color) !important;
+  --toolbarbutton-icon-fill-attention:           var(--thy-color) !important;
+  --fxview-primary-action-background:            var(--thy-color) !important;
+  --toolbar-field-focus-border-color:            var(--thy-color) !important;
+  --uei-button-attention-dot-color:              var(--thy-color) !important;
+  --button-primary-active-bgcolor:               var(--thy-color) !important;
+  --button-primary-hover-bgcolor:                var(--thy-color) !important;
+  --uc-checkbox-checked-bgcolor:                 var(--thy-color) !important;
+  --color-accent-primary-active:                 var(--thy-color) !important;
+  --color-accent-primary-hover:                  var(--thy-color) !important;
+  --checkbox-checked-bgcolor:                    var(--thy-color) !important;
+  --in-content-accent-color:                     var(--thy-color) !important;
+  --button-primary-bgcolor:                      var(--thy-color) !important;
+  --in-content-link-color:                       var(--thy-color) !important;
+  --color-accent-primary:                        var(--thy-color) !important;
+  --focus-outline-color:                         var(--thy-color) !important;
+  --input-border-color:                          var(--thy-color) !important;
+}
