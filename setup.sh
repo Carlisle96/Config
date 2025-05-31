@@ -8,7 +8,7 @@ gtk-murrine-engine gtk3-devel"
 
 HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
 mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel 
-tomlplusplus-devel systemd-devel
+tomlplusplus-devel systemd-devel socat
 libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel xcb-util-errors-devel
 wayland-protocols-devel udis86-devel hyprwayland-scanner-devel xcb-util-wm-devel"
 

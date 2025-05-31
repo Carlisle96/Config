@@ -1,0 +1,73 @@
+#waybar {
+  background: rgba(0, 0, 0, 0.0);
+}
+
+#waybar .module {
+  border-radius: 16px;
+  /*
+  box-shadow: 0px 4px 16px rgba(24, 25, 26, 0.93);
+  */
+}
+
+#tray {
+  background: #18191A;
+  padding: 16px;
+}
+
+/* Style the system tray icons. */
+#tray > .tray-icons > .tray-icon {
+  padding: 4px;
+}
+
+#workspaces {
+  background: #18191A;
+  color: #E9EAEB;
+}
+
+/* Workspace icons */
+#workspaces button {
+  color: #94B852;
+  font-family: "HasklugNerdFont";
+  font-size: 24px; 
+  padding-left: 4px;
+
+  border: 1px solid;
+  border-color: #18191A;
+  border-radius: 16px;  
+}
+
+#workspaces button.empty {
+  color: #E9EAEB;
+}
+
+#workspaces button:hover {
+  background: #27292D;
+}
+
+/* Highlight the active workspace. */
+#workspaces button.active {
+  background: #18191A;
+  color: #7652B8;
+
+  border: 1px solid;
+  border-color: #7652B8;
+  border-radius: 16px;  
+}
+
+
+/* Clock styling */
+#clock {
+  background: #E9EAEB;
+  color: #18191A;
+  font-family: "HasklugNerdFont";
+  font-weight: Bold;
+  font-size: 16px;
+  padding: 6px;
+}
+
+/* Custom script modules */
+#custom-thywork, #custom-whatever {
+  background: #18191A;
+  padding: 4px;
+  color: #E9EAEB;
+}
