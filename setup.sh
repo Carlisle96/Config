@@ -17,7 +17,7 @@ NONEED="pavucontrol mpv firefox ImageMagick poppler-utils gnome-disk-utility dun
 UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
 XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
 
-QEME="qemu-kvm virt-manager"
+QEME="qemu-kvm virt-manager polkit-gnome gparted"
 
 LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
 texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
