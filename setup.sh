@@ -16,7 +16,6 @@ SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2"
 NONEED="pavucontrol mpv firefox ImageMagick poppler-utils gnome-disk-utility dunst"
 UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
 XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
-
 QEME="qemu-kvm virt-manager polkit-gnome gparted"
 
 LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
@@ -29,7 +28,7 @@ texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 # Install basics
 sudo dnf -y upgrade
 #sudo dnf -y copr enable solopasha/hyprland
-sudo dnf --refresh -y install $PACKAGES $HYPRLAND $SDDMTHEME $HYPRPM $LATEX
+sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $LATEX
 
 read -r -p "Install laptop version? [y/N]: " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
@@ -128,7 +127,10 @@ ssh-keygen
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
 # SDDM
-# sudo cp ./sddm.conf /etc/
+sudo mkdir -p /usr/share/sddm/themes/
+sudo cp ./sddm.conf /etc/
+sudo cp -r ./sddm/eucalyptus-drop /usr/share/sddm/themes/
+sudo cp ./sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
 
 # Binaries
 sudo cp -r ./bin/* /bin/
