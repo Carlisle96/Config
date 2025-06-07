@@ -1,6 +1,10 @@
 rm ~/.bash*
-rm -r ~/.xmonad
-sudo dnf -y remove i3 awesome ratpoison openbox
+
+hyprpm add https://github.com/zakk4223/hyprNStack
+hyprpm enable hyprNStack
+cp -r ./hypr ~/.config/
+
+sudo dnf -y remove sway
 
 fstabstring="
 UUID=75868785-af97-4b46-a511-1b7122e54953 /home/thyriaen/Data	   ext4	 defaults 	0 0

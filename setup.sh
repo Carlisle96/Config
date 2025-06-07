@@ -8,7 +8,7 @@ gtk-murrine-engine gtk3-devel"
 
 HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
 mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel 
-tomlplusplus-devel systemd-devel socat
+tomlplusplus-devel systemd-devel socat hyprland hyprpaper
 libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel xcb-util-errors-devel
 wayland-protocols-devel udis86-devel hyprwayland-scanner-devel xcb-util-wm-devel"
 
@@ -27,7 +27,7 @@ texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 
 # Install basics
 sudo dnf -y upgrade
-#sudo dnf -y copr enable solopasha/hyprland
+sudo dnf -y copr enable solopasha/hyprland
 sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $LATEX
 
 read -r -p "Install laptop version? [y/N]: " response
