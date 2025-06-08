@@ -12,7 +12,7 @@ tomlplusplus-devel systemd-devel socat
 libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel xcb-util-errors-devel
 wayland-protocols-devel udis86-devel hyprwayland-scanner-devel xcb-util-wm-devel"
 
-STILLNEED="hyprland hyprpaper sddm hyprland-devel pavucontrol mpv firefox"
+STILLNEED="hyprland hyprpaper sddm hyprland-devel pavucontrol mpv firefox rofi-wayland"
 
 SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2"
 NONEED="ImageMagick poppler-utils gnome-disk-utility dunst"
