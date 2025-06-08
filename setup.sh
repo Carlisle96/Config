@@ -8,12 +8,14 @@ gtk-murrine-engine gtk3-devel"
 
 HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
 mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel 
-tomlplusplus-devel systemd-devel socat hyprland hyprpaper
+tomlplusplus-devel systemd-devel socat 
 libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel xcb-util-errors-devel
 wayland-protocols-devel udis86-devel hyprwayland-scanner-devel xcb-util-wm-devel"
 
+STILLNEED="hyprland hyprpaper sddm hyprland-devel pavucontrol mpv firefox"
+
 SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2"
-NONEED="pavucontrol mpv firefox ImageMagick poppler-utils gnome-disk-utility dunst"
+NONEED="ImageMagick poppler-utils gnome-disk-utility dunst"
 UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
 XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
 QEME="qemu-kvm virt-manager polkit-gnome gparted"
@@ -28,7 +30,8 @@ texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 # Install basics
 sudo dnf -y upgrade
 sudo dnf -y copr enable solopasha/hyprland
-sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $LATEX
+sudo dnf -y remove sway nwg-panel tuned foot
+sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $STILLNEED $LATEX
 
 read -r -p "Install laptop version? [y/N]: " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
@@ -95,8 +98,8 @@ sudo grub2-editenv - set menu_auto_hide=1
 sudo grub2-mkconfig
 
 # SDDM
-# sudo systemctl enable sddm --force
-# sudo systemctl start graphical.target
+sudo systemctl enable sddm --force
+sudo systemctl set-default graphical.target
 
 # Terminal
 gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
