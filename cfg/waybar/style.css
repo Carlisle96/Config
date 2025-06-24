@@ -54,20 +54,21 @@
   border-radius: 16px;  
 }
 
-
-/* Clock styling */
-#clock {
-  background: #E9EAEB;
-  color: #18191A;
+#clock, #custom-thywork {
   font-family: "HasklugNerdFont";
   font-weight: Bold;
   font-size: 16px;
   padding: 6px;
 }
 
+/* Clock styling */
+#clock {
+  background: #E9EAEB;
+  color: #18191A;
+}
+
 /* Custom script modules */
-#custom-thywork, #custom-whatever {
+#custom-thywork {
   background: #18191A;
-  padding: 4px;
   color: #E9EAEB;
 }
