@@ -1,10 +1,10 @@
 ### ------------------------------------- Basics ------------------------------------ ###
 
 PACKAGES="fedora-workstation-repositories redhat-rpm-config flatpak 
-pdftk python3-pip zathura zathura-pdf-mupdf bat
-kitty zsh zsh-syntax-highlighting fzf fastfetch
+pdftk python3-pip zathura zathura-pdf-mupdf bat imv
+kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo
 evince simple-scan hexchat keepassxc mate-calc syncthing mediawriter nemo
-gtk-murrine-engine gtk3-devel"
+gtk-murrine-engine gtk3-devel remmina fuse fuse-libs"
 
 HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
 mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel 
@@ -64,6 +64,7 @@ sudo dnf -y install google-chrome-stable
 # Signal
 sudo flatpak install -y flathub org.signal.Signal
 sudo flatpak override org.signal.Signal --filesystem=host
+flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
 
 # Spotify
 sudo flatpak install -y flathub com.spotify.Client
@@ -85,8 +86,15 @@ sudo dnf -y install synology-drive-noextra
 sudo dnf -y copr enable abn/web-eid
 sudo dnf -y install web-eid
 
-# Rpm Fusion
-# sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+# Rpm Fusion ( Mesa Drivers Codec )
+sudo dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+#sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf upgrade
+sudo dnf -y install mpv ffmpeg-libs --allowerasing
+sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
+sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+
+
 
 # Rpms
 # sudo dnf -y install ./rpms/*
@@ -106,6 +114,13 @@ gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 
 # Gtk File Chooser ( current working directory ):
 gsettings set org.gtk.Settings.FileChooser startup-mode cwd
+
+# Interface themeing
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'mathy'
+gsettings set org.gnome.desktop.interface icon-theme 'Newaita-reborn-deep-purple-dark'
+gsettings set org.gnome.desktop.interface font-name 'M PLUS 1 Medium 10.5'
+gsettings set org.gnome.desktop.interface cursor-theme 'material_light_cursors'
 
 # Find utils
 sudo updatedb

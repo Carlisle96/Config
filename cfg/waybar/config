@@ -4,11 +4,12 @@
   "orientation": "vertical",
   "margin": "16 0 16 16", 
   "width": 64,
+  "spacing": 16,
 
   "modules-left": [
-    //"custom/thywork",
     //"custom/thynbox"
-    "clock"
+    "clock",
+    "custom/thywork"
   ],
   "modules-center": [
     "tray"
