@@ -7,8 +7,8 @@ evince simple-scan hexchat keepassxc mate-calc syncthing mediawriter nemo
 gtk-murrine-engine gtk3-devel remmina fuse fuse-libs"
 
 HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
-mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel 
-tomlplusplus-devel systemd-devel socat 
+mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel hyprgraphics-devel
+tomlplusplus-devel systemd-devel socat cairo-devel pixman-devel glib2-devel re2-devel
 libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel xcb-util-errors-devel
 wayland-protocols-devel udis86-devel hyprwayland-scanner-devel xcb-util-wm-devel"
 
@@ -62,9 +62,11 @@ sudo dnf config-manager setopt google-chrome.enabled=1
 sudo dnf -y install google-chrome-stable
 
 # Signal
-sudo flatpak install -y flathub org.signal.Signal
-sudo flatpak override org.signal.Signal --filesystem=host
-flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
+sudo dnf -y copr enable useidel/signal-desktop
+sudo den -y install signal-desktop 
+#sudo flatpak install -y flathub org.signal.Signal
+#sudo flatpak override org.signal.Signal --filesystem=host
+#flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
 
 # Spotify
 sudo flatpak install -y flathub com.spotify.Client
@@ -121,6 +123,7 @@ gsettings set org.gnome.desktop.interface gtk-theme 'mathy'
 gsettings set org.gnome.desktop.interface icon-theme 'Newaita-reborn-deep-purple-dark'
 gsettings set org.gnome.desktop.interface font-name 'M PLUS 1 Medium 10.5'
 gsettings set org.gnome.desktop.interface cursor-theme 'material_light_cursors'
+gsettings set org.gnome.desktop.interface accent-color 'purple'
 
 # Find utils
 sudo updatedb
