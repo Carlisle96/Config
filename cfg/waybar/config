@@ -7,13 +7,15 @@
   "spacing": 16,
 
   "modules-left": [
-    //"custom/thynbox"
     "clock",
+    "custom/thynbox",
     "custom/thywork"
   ],
+
   "modules-center": [
     "tray"
   ],
+
   "modules-right": [
     "hyprland/workspaces"
   ],
@@ -47,10 +49,16 @@
     "tooltip-format": "{:%A, %d %B %Y %H:%M:%S}"
   },
 
-
   "custom/thywork": {
     "format": "{}",
     "exec": "thywork",
+    "justify": "center",
+    "interval": 60
+  },
+
+  "custom/thynbox": {
+    "format": "{}",
+    "exec": "thynbox",
     "interval": 60
   }
 

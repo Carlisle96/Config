@@ -2,7 +2,7 @@
 Name=Superhuman
 GenericName=Task Client
 Comment=E-Mail Client
-Exec=google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman %U
+Exec=google-chrome --new-window --class=superhuman --app=https://mail.superhuman.com/ --user-data-dir=/home/thyriaen/.webapps/superhuman --ozone-platform=wayland %U
 Terminal=false
 Icon=gmail-offline
 Type=Application

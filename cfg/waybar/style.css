@@ -54,7 +54,7 @@
   border-radius: 16px;  
 }
 
-#clock, #custom-thywork {
+#clock, #custom-thywork, #custom-thynbox {
   font-family: "HasklugNerdFont";
   font-weight: Bold;
   font-size: 16px;
@@ -68,7 +68,7 @@
 }
 
 /* Custom script modules */
-#custom-thywork {
+#custom-thywork, #custom-thynbox {
   background: #18191A;
   color: #E9EAEB;
 }
