@@ -30,8 +30,7 @@ texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
 # Install basics
 sudo dnf -y upgrade
 sudo dnf -y copr enable solopasha/hyprland
-sudo dnf -y remove sway nwg-panel tuned foot
-sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $STILLNEED $LATEX
+sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $STILLNEED $LATEX $NONEED
 
 read -r -p "Install laptop version? [y/N]: " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
