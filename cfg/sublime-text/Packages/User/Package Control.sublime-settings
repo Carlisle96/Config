@@ -5,7 +5,6 @@
 	],
 	"installed_packages":
 	[
-		"LaTeXTools",
 		"Package Control",
 	],
 }

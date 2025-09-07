@@ -4,6 +4,7 @@
 	[
 		"Vintage",
 	],
+	"auto_upgrade_ignore": ["LaTeXTools"],
 	"color_scheme": "Monokai Thyriaen.sublime-color-scheme",
     "gtk_client_side_window_decorations": false,
 	/*"font_size": 18,*/
