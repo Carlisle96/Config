@@ -329,16 +329,9 @@
 	// OPTION: "jobname"
 	// Specifies the jobname to use when building the document
 
-	"jobname": "",
-
-	// OPTION: "copy_output_on_build"
-	// Specifies whether to copy the final PDF file to the same folder
-	// as the main tex file; if it is neither true nor false it must be
-	// as list of extensions of the files to copy into the same folder as
-	// the main tex file; this  only applies if an output directory is
-	// set via a setting or a `%!TEX` directive
-
 	"copy_output_on_build": true,
+
+	"jobname": "",
 
 // ------------------------------------------------------------------
 // Build engine settings
@@ -376,7 +369,7 @@
 	// NOTE: custom builders CANNOT have the same name as an existing
 	// built-in build engine (including "default")
 
-	"builder": "traditional",
+	"builder": "basic",
 
 	// OPTION: "builder_path"
 	// If non-empty, specifies a path to a custom builder, relative to the

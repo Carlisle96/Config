@@ -4,7 +4,7 @@ PACKAGES="fedora-workstation-repositories redhat-rpm-config flatpak
 pdftk python3-pip zathura zathura-pdf-mupdf bat imv
 kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo
 evince simple-scan hexchat keepassxc mate-calc syncthing mediawriter nemo
-gtk-murrine-engine gtk3-devel remmina fuse fuse-libs"
+gtk-murrine-engine gtk3-devel remmina fuse fuse-libs cups cups-filters"
 
 HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
 mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel hyprgraphics-devel
