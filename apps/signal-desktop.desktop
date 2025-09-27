@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Signal
-Exec=env ELECTRON_OZONE_PLATFORM_HINT=wayland /usr/bin/signal-desktop --use-tray-icon %U
+Exec=env ELECTRON_OZONE_PLATFORM_HINT=wayland /usr/bin/signal-desktop --ozone-platform=wayland --use-tray-icon %U
 Terminal=false
 Type=Application
 Icon=signal-desktop
