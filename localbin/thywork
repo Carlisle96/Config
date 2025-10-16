@@ -5,8 +5,8 @@
 # proper income:    192 min/d -  96 h/m   <-- Per Day
 # absolute minimum  128 min/d -  64 h/m   
 
-work_per_day_target="$((120 * 96))"
-work_per_day="$((120 * 64))"
+work_per_day_target="$((120 * 80))"
+work_per_day="$((120 * 96))"
 
 # Function to format and print the time with different colors and icons
 print_time() {
@@ -15,7 +15,7 @@ print_time() {
   local icon=$3
 
   formatted_time=$(date -u -d @${time_left} +"%-H:%M")
-  printf "<span fgcolor='%s'><span size='16pt'> %s </span>%s</span>" "$color" "$icon" "$formatted_time"
+  printf "<span fgcolor='%s'>%s</span>" "$color" "$formatted_time"
 }
 
 worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
@@ -25,7 +25,7 @@ if [[ $left_today -ge 0 ]]; then
 else
   worked_month="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
   monthday="$(date +%-d)"
-  monthly_left_today=$(( (work_per_day * monthday - worked_month) )) 
+  monthly_left_today=$(( (work_per_day_target * monthday - worked_month) )) 
 
   left_today_target=$(( work_per_day_target - worked_today ))
   if [[ $left_today_target -ge 0 && $monthly_left_today -ge 0 ]]; then
@@ -34,12 +34,7 @@ else
     if [[ $monthly_left_today -ge 0 ]]; then
       print_time "$monthly_left_today" '#7652B8' '󰃖 '
     else
-      monthly_left_today_target=$(( (work_per_day_target * monthday - worked_month) ))
-      if [[ $monthly_left_today_target -ge 0 ]]; then
-        print_time "$monthly_left_today_target" '#B8A952' '󰃖 '
-      else
         print_time "${monthly_left_today#-}" '#94B852' '󰃗 '
-      fi
     fi
   fi
 fi
