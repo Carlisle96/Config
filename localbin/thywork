@@ -1,90 +1,77 @@
 #!/bin/bash
 
-# fulltime:         300 min/d - 150 h/m   
-# really nice:      256 min/d - 128 h/m   <-- Target
-# proper income:    192 min/d -  96 h/m   <-- Per Day
-# absolute minimum  128 min/d -  64 h/m   
+# fulltime:         300 min/d - 150 h/m
+# really nice:      256 min/d - 128 h/m
+# proper income:    192 min/d -  96 h/m
+# absolute minimum  160 min/d -  80 h/m
 
-work_per_day_target="$((120 * 80))"
-work_per_day="$((120 * 96))"
+work_per_day=$((120 * 128))
 
-# Function to format and print the time with different colors and icons
+# Zeit hübsch ausgeben
 print_time() {
-  local time_left=$1
+  local secs=$1
   local color=$2
   local icon=$3
 
-  formatted_time=$(date -u -d @${time_left} +"%-H:%M")
-  printf "<span fgcolor='%s'>%s</span>" "$color" "$formatted_time"
+  local formatted
+  formatted=$(date -u -d "@$secs" +"%-H:%M")
+  printf "<span fgcolor='%s'>%s</span>" "$color" "$formatted"
 }
 
-worked_today="$(watson report -d -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-left_today=$(( work_per_day - worked_today ))
-if [[ $left_today -ge 0 ]]; then
-  print_time "$left_today" '#B85261' '󰃖 '
-else
-  worked_month="$(watson report -m -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-  monthday="$(date +%-d)"
-  monthly_left_today=$(( (work_per_day_target * monthday - worked_month) )) 
+# Watson-Zeit in Sekunden holen (Argument z.B. -d oder -m)
+watson_time() {
+  local range=$1
+  watson report "$range" -c -j \
+    | grep '"time"' \
+    | tail -n1 \
+    | grep -oE '[0-9]+' \
+    | head -n1 \
+    | tr -d '\n'
+}
 
-  left_today_target=$(( work_per_day_target - worked_today ))
-  if [[ $left_today_target -ge 0 && $monthly_left_today -ge 0 ]]; then
-    print_time "$left_today_target" '#B85294' '󰃖 '
-  else 
-    if [[ $monthly_left_today -ge 0 ]]; then
-      print_time "$monthly_left_today" '#7652B8' '󰃖 '
-    else
-        print_time "${monthly_left_today#-}" '#94B852' '󰃗 '
-    fi
-  fi
+# Tage im aktuellen Monat
+days_in_month() {
+  date -d "$(date +%Y-%m-01) +1 month -1 day" +%d
+}
+
+# Verbleibende Tage im aktuellen Monat (inkl. heute)
+days_remaining_in_month() {
+  local end now
+  end=$(date -d "$(date +%Y-%m-01) +1 month -1 day" +%s)
+  now=$(date +%s)
+  echo $(( (end - now) / 86400 + 1 ))
+}
+
+worked_today=$(watson_time -d)
+left_today=$(( work_per_day - worked_today ))
+
+# 1. Ziel: Tagesziel schaffen
+if (( left_today >= 0 )); then
+  print_time "$left_today" '#B85261' '󰃖 '
+  exit 0
 fi
 
-#worked_before_frame="$(watson report -d -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-#lastday_in_month="$(date -d "$(date +'%Y-%m-01') +1 month -1 day" +%d)"
+# 2. Ziel: Monatsziel linear auf Resttage verteilen
+worked_month=$(watson_time -m)
+daysInMonth=$(days_in_month)
+totalInMonth=$(( daysInMonth * work_per_day ))
+daysRemaining=$(days_remaining_in_month)
 
-#work_per_frame="$((60 * 48))"
-#numweek="$(date +%V)"
-#work_per_day="$(( 60 * (120 + (numweek-25)*4) ))"
+monthlyTarget=$(( (totalInMonth - worked_month + worked_today) / daysRemaining ))
+left_today_target=$(( monthlyTarget - worked_today ))
 
-#left_frame=$(( work_per_frame - worked_today + worked_before_frame ))
+if (( left_today_target >= 0 )); then
+  print_time "$left_today_target" '#B85294' '󰃖 '
+  exit 0
+fi
 
-#frames_left="$(( (work_per_day - worked_before_frame) / work_per_frame))"
-    #worked_week="$(watson report -w -c -j | grep \"time\" | tail -n1 | grep -oE '[0-9]+' | head -n 1 | tr -d '\n')"
-    #weekday="$(date +%u)"
-    #weekly_left_today=$((work_per_day * weekday - worked_week))
+# 3. Ziel: rückwirkend „sollte bis heute im Monat“
+monthday=$(date +%-d)
+monthly_left_today=$(( work_per_day * monthday - worked_month ))
 
-
-    #    per week in minutes
-    #    purp=$(( 8 * work_per_day ))
-    #    cyan=$(( purp + work_per_day ))
-    #    gree=$(( cyan + work_per_day ))
-    #    remaining_days=$(( 8-weekday ))
-    #    morning=$(( worked_week - worked_today ))
-    #
-    #    gree_today=$(( (gree - morning) / remaining_days - worked_today ))
-    #    cyan_today=$(( (cyan - morning) / remaining_days - worked_today ))
-    #    purp_today=$(( (purp - morning) / remaining_days - worked_today ))
-    #    done_today=$(( 2 * work_per_day - worked_today ))
-    #
-    #    if [[ $done_today -ge 0 ]]; then
-    #      if [[ $gree_today -ge 0 ]]; then
-    #        if [[ $cyan_today -ge 0 ]]; then
-    #          if [[ $purp_today -ge 0 ]]; then
-    #            formatted_time=$(date -u -d @${done_today} +"%-H:%M")
-    #            printf "<span fgcolor='#B85294'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-    #          else
-    #            formatted_time=$(date -u -d @${done_today} +"%-H:%M")
-    #            printf "<span fgcolor='#7652B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-    #          fi
-    #        else
-    #          formatted_time=$(date -u -d @${done_today} +"%-H:%M")
-    #          printf "<span fgcolor='#5294B8'><span size='16pt'> 󰃖  </span>%s</span>" "$formatted_time"
-    #        fi
-    #      else
-    #        formatted_time=$(date -u -d @${done_today} +"%-H:%M")
-    #        printf "<span fgcolor='#B8A952'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"      
-    #      fi  
-    #    else
-    #      formatted_time=$(date -u -d @${done_today#-} +"%-H:%M")
-    #      printf "<span fgcolor='#94B852'><span size='16pt'> 󰃗  </span>%s</span>" "$formatted_time"
-    #    fi
+if (( monthly_left_today >= 0 )); then
+  print_time "$monthly_left_today" '#7652B8' '󰃖 '
+else
+  # Überschuss im Monat
+  print_time "${monthly_left_today#-}" '#94B852' '󰃗 '
+fi
