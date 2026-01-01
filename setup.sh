@@ -1,7 +1,7 @@
 ### ------------------------------------- Basics ------------------------------------ ###
 
 PACKAGES="fedora-workstation-repositories redhat-rpm-config flatpak 
-pdftk python3-pip zathura zathura-pdf-mupdf bat imv
+pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
 kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo
 evince simple-scan hexchat keepassxc mate-calc syncthing mediawriter nemo
 gtk-murrine-engine gtk3-devel remmina fuse fuse-libs cups cups-filters"
