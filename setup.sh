@@ -176,6 +176,9 @@ cp ./home/.* ~/
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
 
+# Green flicker fix ?
+# sudo grubby --update-kernel=ALL --remove-args="amdgpu.runpm=0 amdgpu.gpu_recovery=1"
+
 
 ### -------------------------------------- Todo ------------------------------------- ###
 
