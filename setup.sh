@@ -32,6 +32,8 @@ sudo dnf -y upgrade
 sudo dnf -y copr enable solopasha/hyprland
 sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $STILLNEED $LATEX $NONEED
 
+# sudo dnf -y remove abrt
+
 read -r -p "Install laptop version? [y/N]: " response
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
