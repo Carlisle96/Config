@@ -1,1 +1,0 @@
-s=$(awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master)) && notify-send -i ~/.config/thymonad/speaker.svg "${s} Volume" -r 906

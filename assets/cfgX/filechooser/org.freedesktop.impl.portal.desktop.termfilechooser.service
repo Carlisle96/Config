@@ -1,4 +1,0 @@
-[D-BUS Service]
-Name=org.freedesktop.impl.portal.desktop.termfilechooser
-Exec=/home/thyriaen/.local/bin/xdg-desktop-portal-termfilechooser
-SystemdService=xdg-desktop-portal-termfilechooser.service

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Spendesk
-Comment=Accounting
-Exec=google-chrome --new-window --class=spendesk --app=https://app.spendesk.com/ --user-data-dir=/home/thyriaen/.webapps/spendesk %U
-Terminal=false
-Icon=sheets
-Type=Application
-StartupWMClass=spendesk
-Categories=Network;

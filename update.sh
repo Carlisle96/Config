@@ -1,6 +1,22 @@
-cp ~/.config/xmonad/xmonad.hs ./cfg/xmonad/
-cp ~/.config/dunst/dunstrc ./cfg/dunst/
-cp -r ~/.config/tint2/* ./cfg/tint2/
-cp ~/.config/xmonad/hooks/tint.sh ./cfg/xmonad/hooks/
-cp ~/.config/mimeapps.list ./cfg/
-cp ~/.config/picom/picom.conf ./cfg/picom/
+#!/usr/bin/env bash
+
+### ------------------------------------ Configs ------------------------------------- ###
+
+# Kitty
+cp ~/.config/kitty/kitty.conf ./cfg/kitty/
+
+# Waybar
+cp ~/.config/waybar/config ./cfg/waybar/
+cp ~/.config/waybar/style.css ./cfg/waybar/
+
+# Sublime Text
+cp -r ~/.config/sublime-text/Packages/User/. ./cfg/sublime-text/Packages/User/
+
+### ----------------------------------- Hyprland ------------------------------------- ###
+
+cp -r ~/.config/hypr/. ./hypr/
+
+### ----------------------------------- Dotfiles ------------------------------------- ###
+
+cp ~/.zshrc ./home/
+cp ~/.profile ./home/
