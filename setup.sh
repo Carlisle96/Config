@@ -1,73 +1,112 @@
-### ------------------------------------- Basics ------------------------------------ ###
+#!/usr/bin/env bash
 
-PACKAGES="fedora-workstation-repositories redhat-rpm-config flatpak 
-pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
+### ------------------------------------ Variables ----------------------------------- ###
+
+PACKAGES="flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
 kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo
 evince simple-scan hexchat keepassxc mate-calc syncthing mediawriter nemo
-gtk-murrine-engine gtk3-devel remmina fuse fuse-libs cups cups-filters"
+gtk-murrine-engine gtk3-devel remmina fuse fuse-libs cups cups-filters
+darktable brightnessctl dunst"
 
-HYPRPM="cmake meson g++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
-mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel hyprgraphics-devel
-tomlplusplus-devel systemd-devel socat cairo-devel pixman-devel glib2-devel re2-devel
-libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel xcb-util-errors-devel
-wayland-protocols-devel udis86-devel hyprwayland-scanner-devel xcb-util-wm-devel"
+HYPRLAND="hyprland hyprpaper sddm hyprland-devel pavucontrol firefox
+rofi-wayland wlsunset xdg-desktop-portal-hyprland"
 
-STILLNEED="hyprland hyprpaper sddm hyprland-devel pavucontrol mpv firefox rofi-wayland wlsunset"
+HYPRPM="cmake meson gcc-c++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
+mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel
+hyprgraphics-devel tomlplusplus-devel systemd-devel socat cairo-devel pixman-devel
+glib2-devel re2-devel libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel
+xcb-util-errors-devel wayland-protocols-devel udis86-devel hyprwayland-scanner-devel
+xcb-util-wm-devel"
 
 SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2"
-NONEED="ImageMagick poppler-utils gnome-disk-utility dunst"
-UNKNOWN="sqlite libreoffice-calc libreoffice-gtk3"
-XMONAD="xmonad xsetroot xclip redshift rofi sddm-x11 picom maim feh xdg-desktop-portal-gtk"
-QEME="qemu-kvm virt-manager polkit-gnome gparted"
+OFFICE="libreoffice-calc libreoffice-gtk3"
 
-LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview 
+LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview
 texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
 texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
-texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak 
-texlive-collection-fontsrecommended texlive-skaknew texlive-doi texlive-mdframed
-texlive-fontawesome5 texlive-ebgaramond texlive-datetime2-english"
+texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak texlive-skaknew
+texlive-collection-fontsrecommended texlive-doi texlive-mdframed texlive-fontawesome5
+texlive-ebgaramond texlive-datetime2-english"
 
-# Install basics
-sudo dnf -y upgrade
-sudo dnf -y copr enable solopasha/hyprland
-sudo dnf --refresh -y install $PACKAGES $SDDMTHEME $HYPRPM $STILLNEED $LATEX $NONEED
+EXTERNAL="google-chrome-stable sublime-text synology-drive-noextra web-eid"
 
-# sudo dnf -y remove abrt
+RPMFUSION="https://download1.rpmfusion.org"
+
+### ------------------------------ Interactive Setup -------------------------------- ###
 
 read -r -p "Install laptop version? [y/N]: " response
+IS_LAPTOP=false
 if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
 then
-	# Laptop Only section
+	IS_LAPTOP=true
+fi
+
+### ------------------------------------- Repos ------------------------------------- ###
+
+# COPRs
+# Official Fedora repos ship Hyprland but lag behind -- COPR ensures latest version
+sudo dnf -y copr enable solopasha/hyprland
+sudo dnf -y copr enable emixampp/synology-drive
+sudo dnf -y copr enable abn/web-eid
+
+# Sublime Text
+sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+sudo dnf config-manager addrepo \
+	--from-repofile=https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
+
+# Rpm Fusion
+# Fedora omits H.264/H.265 for patent reasons -- the freeworld Mesa drivers supply
+# these codecs, otherwise hardware decoding falls back to software (CPU)
+sudo dnf -y install \
+	$RPMFUSION/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+
+### --------------------------------- DNF Packages ---------------------------------- ###
+
+# Bootstrap: needed for the Google Chrome repo file
+sudo dnf -y install fedora-workstation-repositories redhat-rpm-config
+sudo dnf config-manager setopt google-chrome.enabled=1
+
+sudo dnf -y upgrade
+sudo dnf --refresh -y install \
+	$PACKAGES $SDDMTHEME $HYPRPM $HYPRLAND $LATEX $OFFICE $EXTERNAL
+
+if [ "$IS_LAPTOP" = true ]
+then
 	sudo dnf -y install tlp light
 	sudo hostnamectl set-hostname carthy
 	sudo systemctl enable tlp.service
-	rm ./usrshare/backgrounds/wpMoon.png
-	mv ./usrshare/backgrounds/wpMoonLaptop.png ./usrshare/backgrounds/wpMoon.png
 else
-	hostnamectl set-hostname thyrium
-	rm ./usrshare/backgrounds/wpMoonLaptop.png
+	sudo hostnamectl set-hostname thyrium
 fi
 
-### ------------------------------------ Flatpak ------------------------------------ ###
+# H.264/H.265 hardware decoding -- replaces Fedora's restricted build with RPM Fusion
+sudo dnf -y install mpv ffmpeg-libs --allowerasing
+sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
+sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+
+# Pomotroid (latest RPM from GitHub releases)
+POMOTROID_URL=$(curl -s https://api.github.com/repos/Splode/pomotroid/releases/latest \
+	| grep "browser_download_url.*x86_64\.rpm" | cut -d'"' -f4)
+sudo dnf -y install "$POMOTROID_URL"
+
+# Rpms
+# sudo dnf -y install ./rpms/*
+
+### --------------------------------- Flatpak Apps ---------------------------------- ###
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+
+# Global theme overrides
 sudo flatpak override --filesystem=$HOME/.themes
 sudo flatpak override --filesystem=$HOME/.icons
 sudo flatpak override --env=GTK_THEME=mathy
 sudo flatpak override --env=ICON_THEME=Newaita-reborn-deep-purple-dark
 
-### ------------------------------ Installing Packages ------------------------------ ###
-
-# Chrome
-sudo dnf config-manager setopt google-chrome.enabled=1
-sudo dnf -y install google-chrome-stable
-
 # Signal
-sudo dnf -y copr enable useidel/signal-desktop
-sudo dnf -y install signal-desktop 
-#sudo flatpak install -y flathub org.signal.Signal
-#sudo flatpak override org.signal.Signal --filesystem=host
-#flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
+sudo flatpak install -y flathub org.signal.Signal
+sudo flatpak override --user --filesystem=home org.signal.Signal
+sudo flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
+sudo flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=auto org.signal.Signal
 
 # Spotify
 sudo flatpak install -y flathub com.spotify.Client
@@ -78,52 +117,30 @@ flatpak override --user --filesystem=xdg-config/Actual org.actualbudget.Actual
 flatpak override --user --filesystem=xdg-data/Actual org.actualbudget.Actual
 
 # Watson
-pip install td-watson
+pip install --user td-watson
 
-# Sublime Text
-sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-sudo dnf config-manager addrepo \
-	--from-repofile=https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
-sudo dnf -y install sublime-text
-
-# Synology Drive
-sudo dnf -y copr enable emixampp/synology-drive
-sudo dnf -y install synology-drive-noextra
-
-# Estonian Software
-sudo dnf -y copr enable abn/web-eid
-sudo dnf -y install web-eid
-
-# Rpm Fusion ( Mesa Drivers Codec )
-sudo dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
-#sudo dnf -y install https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-sudo dnf upgrade
-sudo dnf -y install mpv ffmpeg-libs --allowerasing
-sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
-sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
-
-
-
-# Rpms
-# sudo dnf -y install ./rpms/*
-
-### ------------------------------------ Settings ----------------------------------- ###
+### ------------------------------- System Settings --------------------------------- ###
 
 # Grub
 sudo grub2-editenv - set menu_auto_hide=1
-sudo grub2-mkconfig
+if [ -d /boot/efi ]
+then
+	sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
+else
+	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+fi
+
+# Green vertical flicker fix (desktop only) -- disables AMD GPU runtime power management
+if [ "$IS_LAPTOP" = false ]
+then
+	sudo grubby --update-kernel=ALL --args="amdgpu.runpm=0 amdgpu.gpu_recovery=1"
+fi
 
 # SDDM
 sudo systemctl enable sddm --force
 sudo systemctl set-default graphical.target
 
-# Terminal
-gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
-
-# Gtk File Chooser ( current working directory ):
-gsettings set org.gtk.Settings.FileChooser startup-mode cwd
-
-# Interface themeing
+# Interface theming
 gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 gsettings set org.gnome.desktop.interface gtk-theme 'mathy'
 gsettings set org.gnome.desktop.interface icon-theme 'Newaita-reborn-deep-purple-dark'
@@ -131,15 +148,21 @@ gsettings set org.gnome.desktop.interface font-name 'M PLUS 1 Medium 10.5'
 gsettings set org.gnome.desktop.interface cursor-theme 'material_light_cursors'
 gsettings set org.gnome.desktop.interface accent-color 'purple'
 
-# Find utils
-sudo updatedb
+# Default terminal
+gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 
-# Default Applications
+# Gtk File Chooser ( current working directory )
+gsettings set org.gtk.Settings.FileChooser startup-mode cwd
+
+# Default applications
 xdg-mime default sublime_text.desktop text/x-tex
 xdg-mime default sublime_text.desktop text/csv
 
-# Syncthing
+# Services
 systemctl --user enable syncthing.service
+sudo updatedb
+
+### --------------------------------- User Settings --------------------------------- ###
 
 # Git
 git config --global user.email "thyriaen@googlemail.com"
@@ -157,56 +180,37 @@ sudo cp -r ./sddm/eucalyptus-drop /usr/share/sddm/themes/
 sudo cp ./sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
 
 # Binaries
-sudo cp -r ./bin/* /bin/
+sudo cp -r ./bin/* /usr/local/bin/
 cp -r ./localbin/* ~/.local/bin/
 
-# Global Configs
+# Global configs
 sudo cp -r ./usrshare/* /usr/share/
 
-mkdir -p ~/.themes
-mkdir -p ~/.icons
+# User themes and icons
+mkdir -p ~/.themes ~/.icons
 cp -r ./usrshare/icons/* ~/.icons/
 cp -r ./usrshare/themes/* ~/.themes/
 
-# Configs
+# User configs
 cp -r ./cfg/* ~/.config/
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
+if [ ! -d ~/.config/powerlevel10k ]
+then
+	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
+fi
 curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+
+# Dotfiles
+cp ./home/.[!.]* ~/
 
 # Wallpaper
 mkdir -p ~/Pictures/Wallpapers
-cp ./usrshare/backgrounds/wpMoon.png ~/Pictures/Wallpapers/wpMoon.png
+if [ "$IS_LAPTOP" = true ]
+then
+	cp ./usrshare/backgrounds/wpMoonLaptop.png ~/Pictures/Wallpapers/wpMoon.png
+else
+	cp ./usrshare/backgrounds/wpMoon.png ~/Pictures/Wallpapers/wpMoon.png
+fi
 
-cp ./home/.* ~/
-
-# Applications 
+# Applications
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
-
-# Green flicker fix ?
-# sudo grubby --update-kernel=ALL --remove-args="amdgpu.runpm=0 amdgpu.gpu_recovery=1"
-
-
-### -------------------------------------- Todo ------------------------------------- ###
-
-# fff filepicker
-# sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /etc/systemd/system/
-		# sudo mkdir -p /usr/local/lib/systemd/user/
-		# sudo cp ./cfg/filechooser/xdg-desktop-portal-termfilechooser.service /usr/local/lib/systemd/user/
-# sudo cp ./cfg/filechooser/termfilechooser.portal /usr/share/xdg-desktop-portal/portals/
-		# sudo mkdir -p /usr/local/share/xdg-desktop-portal/portals/
-		# sudo cp ./cfg/filechooser/termfilechooser.portal /usr/local/share/xdg-desktop-portal/portals/
-# mkdir -p ~/.config/xdg-desktop-portal-termfilechooser/
-# cp ./cfg/filechooser/config ~/.config/xdg-desktop-portal-termfilechooser/
-# cp ./cfg/filechooser/fff.sh ~/.config/xdg-desktop-portal-termfilechooser/
-
-# TODO for non-Laptop -- different background in sddm // different config
-
-
-# Todo
-# install fzf keybindings
-# pip command line completen guide tailordev.github.io/Watson/
-# sublime - hide menu - hide minimap
-# Copy new Icons over to mathy theme
-
-#Todo fstab
