@@ -64,13 +64,18 @@ sudo dnf -y install google-chrome-stable
 
 # Signal
 sudo dnf -y copr enable useidel/signal-desktop
-sudo den -y install signal-desktop 
+sudo dnf -y install signal-desktop 
 #sudo flatpak install -y flathub org.signal.Signal
 #sudo flatpak override org.signal.Signal --filesystem=host
 #flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
 
 # Spotify
 sudo flatpak install -y flathub com.spotify.Client
+
+# Actual Budget
+sudo flatpak install -y flathub org.actualbudget.Actual
+flatpak override --user --filesystem=xdg-config/Actual org.actualbudget.Actual
+flatpak override --user --filesystem=xdg-data/Actual org.actualbudget.Actual
 
 # Watson
 pip install td-watson
