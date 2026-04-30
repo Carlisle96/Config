@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -Eeuo pipefail
+
+trap 'echo "ERROR: setup.sh failed at line $LINENO" >&2' ERR
+
 ### ------------------------------------ Variables ----------------------------------- ###
 
 PACKAGES="flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
@@ -58,8 +62,7 @@ sudo dnf config-manager addrepo \
 # Rpm Fusion
 # Fedora omits H.264/H.265 for patent reasons -- the freeworld Mesa drivers supply
 # these codecs, otherwise hardware decoding falls back to software (CPU)
-sudo dnf -y install \
-	$RPMFUSION/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+sudo dnf -y install "${RPMFUSION}/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
 
 ### --------------------------------- DNF Packages ---------------------------------- ###
 
@@ -70,6 +73,8 @@ sudo dnf config-manager setopt google-chrome.enabled=1
 sudo dnf -y upgrade
 sudo dnf --refresh -y install \
 	$PACKAGES $SDDMTHEME $HYPRPM $HYPRLAND $LATEX $OFFICE $EXTERNAL
+
+mkdir -p ~/.config/hypr ~/.local/bin
 
 if [ "$IS_LAPTOP" = true ]
 then
@@ -85,12 +90,17 @@ fi
 
 # H.264/H.265 hardware decoding -- replaces Fedora's restricted build with RPM Fusion
 sudo dnf -y install mpv ffmpeg-libs --allowerasing
-sudo dnf swap mesa-va-drivers mesa-va-drivers-freeworld
-sudo dnf swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
+sudo dnf -y swap mesa-va-drivers mesa-va-drivers-freeworld
+sudo dnf -y swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
 # Pomotroid (latest RPM from GitHub releases)
-POMOTROID_URL=$(curl -s https://api.github.com/repos/Splode/pomotroid/releases/latest \
-	| grep "browser_download_url.*x86_64\.rpm" | cut -d'"' -f4)
+POMOTROID_URL=$(curl -fsSL --retry 3 https://api.github.com/repos/Splode/pomotroid/releases/latest \
+	| awk -F'"' '/browser_download_url.*x86_64\.rpm/ { print $4; exit }')
+if [ -z "$POMOTROID_URL" ]
+then
+	echo "Could not find latest Pomotroid x86_64 RPM." >&2
+	exit 1
+fi
 sudo dnf -y install "$POMOTROID_URL"
 
 # Rpms
@@ -171,7 +181,10 @@ git config --global user.email "thyriaen@googlemail.com"
 git config --global user.name "Carlisle Nightingale"
 
 # SSH
-ssh-keygen
+if [ ! -f ~/.ssh/id_ed25519.pub ] && [ ! -f ~/.ssh/id_rsa.pub ]
+then
+	ssh-keygen
+fi
 
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
@@ -204,7 +217,7 @@ if [ ! -d ~/.config/powerlevel10k ]
 then
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 fi
-curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+curl -fsSL --retry 3 https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 
 # Dotfiles
 cp ./home/.[!.]* ~/
