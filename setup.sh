@@ -30,6 +30,9 @@ texlive-ebgaramond texlive-datetime2-english"
 
 EXTERNAL="google-chrome-stable sublime-text synology-drive-noextra web-eid"
 
+DESKTOP="easyeffects"
+LAPTOP="tlp light"
+
 RPMFUSION="https://download1.rpmfusion.org"
 
 ### ------------------------------ Interactive Setup -------------------------------- ###
@@ -45,7 +48,7 @@ fi
 
 # COPRs
 # Official Fedora repos ship Hyprland but lag behind -- COPR ensures latest version
-sudo dnf -y copr enable solopasha/hyprland
+sudo dnf -y copr enable sdegler/hyprland
 sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf -y copr enable abn/web-eid
 
@@ -72,11 +75,14 @@ sudo dnf --refresh -y install \
 
 if [ "$IS_LAPTOP" = true ]
 then
-	sudo dnf -y install tlp light
+	sudo dnf -y install $LAPTOP
 	sudo hostnamectl set-hostname carthy
 	sudo systemctl enable tlp.service
+	cp ./hypr/device-laptop.conf ~/.config/hypr/device.conf
 else
+	sudo dnf -y install $DESKTOP
 	sudo hostnamectl set-hostname thyrium
+	cp ./hypr/device-desktop.conf ~/.config/hypr/device.conf
 fi
 
 # H.264/H.265 hardware decoding -- replaces Fedora's restricted build with RPM Fusion
