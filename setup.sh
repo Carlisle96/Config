@@ -31,7 +31,7 @@ texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak texliv
 texlive-collection-fontsrecommended texlive-doi texlive-mdframed texlive-fontawesome5
 texlive-ebgaramond texlive-datetime2-english"
 
-EXTERNAL="google-chrome-stable sublime-text synology-drive-noextra"
+EXTERNAL="google-chrome-stable sublime-text synology-drive-noextra vicinae"
 
 DESKTOP="easyeffects"
 LAPTOP="tlp light"
@@ -53,6 +53,7 @@ fi
 # Official Fedora repos ship Hyprland but lag behind -- COPR ensures latest version
 sudo dnf -y copr enable sdegler/hyprland
 sudo dnf -y copr enable emixampp/synology-drive
+sudo dnf -y copr enable quadratech188/vicinae
 
 # Sublime Text
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
@@ -74,7 +75,7 @@ sudo dnf -y upgrade
 sudo dnf --refresh -y install \
 	$PACKAGES $SDDMTHEME $HYPRPM $HYPRLAND $LATEX $OFFICE $EXTERNAL
 
-mkdir -p ~/.config/hypr ~/.local/bin
+mkdir -p ~/.config/hypr ~/.config/environment.d ~/.config/uwsm ~/.local/bin
 
 if [ "$IS_LAPTOP" = true ]
 then
@@ -132,6 +133,9 @@ flatpak override --user --filesystem=xdg-data/Actual org.actualbudget.Actual
 pip install --user td-watson
 
 ### ------------------------------- System Settings --------------------------------- ###
+
+# Login shell
+chsh -s /usr/bin/zsh
 
 # Grub
 sudo grub2-editenv - set menu_auto_hide=1
@@ -217,6 +221,14 @@ if [ ! -d ~/.config/powerlevel10k ]
 then
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 fi
+NNN_RELEASE=$(curl -fsSL https://api.github.com/repos/jarun/nnn/releases/latest | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'])")
+NNN_VERSION=${NNN_RELEASE#v}
+NNN_TMP=$(mktemp -d)
+curl -fsSL --retry 3 "https://github.com/jarun/nnn/releases/download/${NNN_RELEASE}/nnn-nerd-static-${NNN_VERSION}.x86_64.tar.gz" -o "${NNN_TMP}/nnn.tar.gz"
+tar -xzf "${NNN_TMP}/nnn.tar.gz" -C "${NNN_TMP}/"
+cp "${NNN_TMP}/nnn-nerd-static" ~/.local/bin/nnn
+chmod +x ~/.local/bin/nnn
+rm -rf "${NNN_TMP}"
 curl -fsSL --retry 3 https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 
 # Dotfiles
