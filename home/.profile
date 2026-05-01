@@ -55,5 +55,4 @@ export EDITOR=vi
 export VISUAL=vi
 
 export GTK_USE_PORTAL=1
-export XDG_CURRENT_DESKTOP=xmonad
 export XDG_CONFIG_HOME=$HOME/.config
