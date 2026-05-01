@@ -40,9 +40,8 @@ echo "Fedora ${CURRENT} -> ${TARGET} upgrade readiness check"
 echo "======================================================="
 echo ""
 echo "COPRs:"
-check_copr solopasha   hyprland        "Hyprland (latest)"
+check_copr sdegler     hyprland        "Hyprland (latest)"
 check_copr emixampp    synology-drive  "Synology Drive"
-check_copr abn         web-eid         "Web eID"
 
 echo ""
 if $ALL_OK; then
