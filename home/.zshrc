@@ -33,6 +33,7 @@ alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 alias nnn='nnn -d -P p'
+alias connect='gcloud compute ssh server --zone=us-central1-f'
 
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
