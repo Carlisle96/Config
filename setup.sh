@@ -9,7 +9,7 @@ trap 'echo "ERROR: setup.sh failed at line $LINENO" >&2' ERR
 PACKAGES="flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
 kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo evince
 simple-scan keepassxc mate-calc syncthing mediawriter nemo dunst brightnessctl
-gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol"
+gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit"
 
 HYPRLAND="hyprland hyprpaper sddm hyprland-devel wlsunset xdg-desktop-portal-hyprland"
 
