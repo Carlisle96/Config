@@ -11,8 +11,7 @@ kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo evince
 simple-scan keepassxc mate-calc syncthing mediawriter nemo dunst brightnessctl
 gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol"
 
-HYPRLAND="hyprland hyprpaper sddm hyprland-devel rofi-wayland wlsunset
-xdg-desktop-portal-hyprland"
+HYPRLAND="hyprland hyprpaper sddm hyprland-devel wlsunset xdg-desktop-portal-hyprland"
 
 HYPRPM="cmake meson gcc-c++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
 mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel
