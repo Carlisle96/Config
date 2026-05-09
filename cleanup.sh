@@ -1,10 +1,15 @@
-rm ~/.bash*
+#!/usr/bin/env bash
 
+set -Eeuo pipefail
+
+printf 'Desktop mount reference: ./desktop-fstab.example\n'
 hyprpm update
-hyprpm add https://github.com/zakk4223/hyprNStack
-hyprpm enable hyprNStack
-cp -r ./hypr/* ~/.config/hypr/
 
-fstabstring="
-UUID=d459de50-ebe4-4e64-9b63-a65b80d18ba6 /home/thyriaen/Data	   ext4	 defaults 	0 0
-UUID=3baa35ef-d65e-435a-827b-e6166993d36e /home/thyriaen/Documents ext4	 defaults 	0 0"
+if ! hyprpm list 2>/dev/null | grep -q 'hyprNStack'
+then
+	hyprpm add https://github.com/zakk4223/hyprNStack
+fi
+
+hyprpm enable hyprNStack
+mkdir -p ~/.config/hypr
+cp -r ./hypr/. ~/.config/hypr/

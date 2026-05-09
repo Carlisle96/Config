@@ -1,6 +1,7 @@
 #!/usr/bin/env sh
 
 selection=${NNN_SEL:-${XDG_CONFIG_HOME:-$HOME/.config}/nnn/.selection}
+# shellcheck disable=SC2034
 resp=c
 
 if [ -s "$selection" ]; then

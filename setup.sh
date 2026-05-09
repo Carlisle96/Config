@@ -1,39 +1,57 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
-
 trap 'echo "ERROR: setup.sh failed at line $LINENO" >&2' ERR
 
 ### ------------------------------------ Variables ----------------------------------- ###
 
-PACKAGES="flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
-kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo evince
-simple-scan keepassxc mate-calc syncthing mediawriter nemo dunst brightnessctl
-gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit"
+BASICS=(
+	ddcutil
+	grim
+	jq
+	ripgrep
+	slurp
+	socat
+	wireplumber
+	wl-clipboard
+)
 
-HYPRLAND="hyprland hyprpaper sddm hyprland-devel wlsunset xdg-desktop-portal-hyprland"
+PACKAGES=(
+	flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
+	kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo evince
+	simple-scan keepassxc mate-calc syncthing mediawriter nemo dunst brightnessctl
+	gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit
+)
 
-HYPRPM="cmake meson gcc-c++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
-mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel
-hyprgraphics-devel tomlplusplus-devel systemd-devel socat cairo-devel pixman-devel
-glib2-devel re2-devel libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel
-xcb-util-errors-devel wayland-protocols-devel udis86-devel hyprwayland-scanner-devel
-xcb-util-wm-devel muParser-devel hyprwire-devel"
+HYPRLAND=(
+	hyprland hyprpaper sddm hyprland-devel wlsunset xdg-desktop-portal-hyprland
+)
 
-SDDMTHEME="qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2"
-OFFICE="libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox"
+HYPRPM=(
+	cmake meson gcc-c++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
+	mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel
+	hyprgraphics-devel tomlplusplus-devel systemd-devel cairo-devel pixman-devel
+	glib2-devel re2-devel libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel
+	xcb-util-errors-devel wayland-protocols-devel udis86-devel hyprwayland-scanner-devel
+	xcb-util-wm-devel muParser-devel hyprwire-devel
+)
 
-LATEX="texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview
-texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
-texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
-texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak texlive-skaknew
-texlive-collection-fontsrecommended texlive-doi texlive-mdframed texlive-fontawesome5
-texlive-ebgaramond texlive-datetime2-english"
+SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
+OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox)
 
-EXTERNAL="google-chrome-stable sublime-text synology-drive-noextra vicinae"
+LATEX=(
+	texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview
+	texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
+	texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
+	texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak texlive-skaknew
+	texlive-collection-fontsrecommended texlive-doi texlive-mdframed texlive-fontawesome5
+	texlive-ebgaramond texlive-datetime2-english
+)
 
-DESKTOP="easyeffects"
-LAPTOP="tlp light"
+EXTERNAL=(google-chrome-stable sublime-text synology-drive-noextra vicinae)
+
+DESKTOP=(easyeffects)
+LAPTOP=(tlp light)
 
 RPMFUSION="https://download1.rpmfusion.org"
 
@@ -72,18 +90,19 @@ sudo dnf config-manager setopt google-chrome.enabled=1
 
 sudo dnf -y upgrade
 sudo dnf --refresh -y install \
-	$PACKAGES $SDDMTHEME $HYPRPM $HYPRLAND $LATEX $OFFICE $EXTERNAL
+	"${BASICS[@]}" "${PACKAGES[@]}" "${SDDMTHEME[@]}" "${HYPRPM[@]}" \
+	"${HYPRLAND[@]}" "${LATEX[@]}" "${OFFICE[@]}" "${EXTERNAL[@]}"
 
 mkdir -p ~/.config/hypr ~/.config/environment.d ~/.config/uwsm ~/.local/bin
 
 if [ "$IS_LAPTOP" = true ]
 then
-	sudo dnf -y install $LAPTOP
+	sudo dnf -y install "${LAPTOP[@]}"
 	sudo hostnamectl set-hostname carthy
 	sudo systemctl enable tlp.service
 	cp ./hypr/device-laptop.conf ~/.config/hypr/device.conf
 else
-	sudo dnf -y install $DESKTOP
+	sudo dnf -y install "${DESKTOP[@]}"
 	sudo hostnamectl set-hostname thyrium
 	cp ./hypr/device-desktop.conf ~/.config/hypr/device.conf
 fi
@@ -111,7 +130,7 @@ sudo dnf -y install "$POMOTROID_URL"
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 # Global theme overrides
-sudo flatpak override --filesystem=$HOME
+sudo flatpak override --filesystem="$HOME"
 sudo flatpak override --env=GTK_THEME=mathy
 sudo flatpak override --env=ICON_THEME=Newaita-reborn-deep-purple-dark
 
@@ -196,6 +215,14 @@ sudo mkdir -p /usr/share/sddm/themes/
 sudo cp ./sddm.conf /etc/
 sudo cp -r ./sddm/eucalyptus-drop /usr/share/sddm/themes/
 sudo cp ./sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
+if [ "$IS_LAPTOP" = true ]
+then
+	sudo install -m 0644 ./usrshare/backgrounds/wpMoonLaptop.png \
+		/usr/share/sddm/themes/eucalyptus-drop/Backgrounds/wpMoon.png
+else
+	sudo install -m 0644 ./usrshare/backgrounds/wpMoon.png \
+		/usr/share/sddm/themes/eucalyptus-drop/Backgrounds/wpMoon.png
+fi
 
 # Binaries
 sudo cp -r ./bin/* /usr/local/bin/
@@ -225,16 +252,16 @@ NNN_VERSION=${NNN_RELEASE#v}
 NNN_TMP=$(mktemp -d)
 curl -fsSL --retry 3 "https://github.com/jarun/nnn/releases/download/${NNN_RELEASE}/nnn-nerd-static-${NNN_VERSION}.x86_64.tar.gz" -o "${NNN_TMP}/nnn.tar.gz"
 tar -xzf "${NNN_TMP}/nnn.tar.gz" -C "${NNN_TMP}/"
-cp "${NNN_TMP}/nnn-nerd-static" ~/.local/bin/nnn
-chmod +x ~/.local/bin/nnn
+install -m 0755 "${NNN_TMP}/nnn-nerd-static" ~/.local/bin/nnn
 rm -rf "${NNN_TMP}"
 curl -fsSL --retry 3 https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
+install -D -m 0755 ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/drag
 
 # Dotfiles
 cp ./home/.[!.]* ~/
 
 # Wallpaper
-mkdir -p ~/Pictures/Wallpapers
+mkdir -p ~/Pictures/Wallpapers ~/Pictures/screenshots
 if [ "$IS_LAPTOP" = true ]
 then
 	cp ./usrshare/backgrounds/wpMoonLaptop.png ~/Pictures/Wallpapers/wpMoon.png

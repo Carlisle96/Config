@@ -1,0 +1,14 @@
+# Desktop-only mount reference.
+# UUIDs can change after reinstalling or reformatting. Prefer filesystem labels:
+#
+#   sudo e2label /dev/disk/by-uuid/<data-uuid> thy-data
+#   sudo e2label /dev/disk/by-uuid/<documents-uuid> thy-documents
+#
+# Then use stable label-based fstab entries:
+
+LABEL=thy-data /home/thyriaen/Data ext4 defaults 0 2
+LABEL=thy-documents /home/thyriaen/Documents ext4 defaults 0 2
+
+# Previous UUID-based entries:
+# UUID=d459de50-ebe4-4e64-9b63-a65b80d18ba6 /home/thyriaen/Data ext4 defaults 0 0
+# UUID=3baa35ef-d65e-435a-827b-e6166993d36e /home/thyriaen/Documents ext4 defaults 0 0

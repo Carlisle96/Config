@@ -14,5 +14,5 @@ addr="${addr#0x}"
 # Regel: Nur class=nnn darf auf special:nnn bleiben
 if [[ "$workspace" == "special:nnn" && "$class" != "nnn" ]]; then
     target_ws=$(hyprctl activeworkspace -j | jq -r '.id')
-    hyprctl -q dispatch movetoworkspacesilent "$target_ws",address:"0x$addr"
+    hyprctl -q dispatch movetoworkspacesilent "$target_ws,address:0x$addr"
 fi

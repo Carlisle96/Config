@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 handle() {
     case $1 in
@@ -6,7 +6,7 @@ handle() {
     esac
 }
 
-socat -U - UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock \
+socat -U - "UNIX-CONNECT:$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock" \
   | rg --line-buffered -w 'openwindow' \
   | while read -r line ; do handle "$line" ; done &
 disown
