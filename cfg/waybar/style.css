@@ -72,3 +72,19 @@
   background: #18191A;
   color: #E9EAEB;
 }
+
+#custom-thywork.behind {
+  color: #B85261;
+}
+
+#custom-thywork.catchup {
+  color: #B85294;
+}
+
+#custom-thywork.month {
+  color: #7652B8;
+}
+
+#custom-thywork.ahead {
+  color: #94B852;
+}

@@ -5,24 +5,21 @@
 # proper income:    192 min/d -  96 h/m
 # absolute minimum  160 min/d -  80 h/m
 
-#  3  4  5  6   7   8   9  10  11  12
-# 72 80 88 96 104 112 120 128 136 144 152
-# 225 = 9x pomodoro
+#  5  6   7   8   9  10  11  12
+# 92 96 100 104 108 112 116 120
+# 112.5 = 9x pomodoro
 
-#work_per_day=$((60 * 225))
 work_per_day=$((120 * 92))
-#Berlin reise:
-#work_per_day=$((120 * 64))
 
 # Zeit hübsch ausgeben
 print_time() {
   local secs=$1
-  local color=$2
-  local icon=$3
+  local class=$2
+  local percentage=$3
 
   local formatted
   formatted=$(date -u -d "@$secs" +"%-H:%M")
-  printf "<span fgcolor='%s'>%s</span>" "$color" "$formatted"
+  printf '{"text":"%s","class":"%s","percentage":%s}\n' "$formatted" "$class" "$percentage"
 }
 
 # Watson-Zeit in Sekunden holen (Argument z.B. -d oder -m)
@@ -55,7 +52,7 @@ left_today=$(( work_per_day - worked_today ))
 
 # 1. Ziel: Tagesziel schaffen
 if (( left_today >= 0 )); then
-  print_time "$left_today" '#B85261' '󰃖 '
+  print_time "$left_today" 'behind' 0
   exit 0
 fi
 
@@ -69,7 +66,7 @@ monthlyTarget=$(( (totalInMonth - worked_month + worked_today) / daysRemaining )
 left_today_target=$(( monthlyTarget - worked_today ))
 
 if (( left_today_target >= 0 )); then
-  print_time "$left_today_target" '#B85294' '󰃖 '
+  print_time "$left_today_target" 'catchup' 0
   exit 0
 fi
 
@@ -78,8 +75,8 @@ monthday=$(date +%-d)
 monthly_left_today=$(( work_per_day * monthday - worked_month ))
 
 if (( monthly_left_today >= 0 )); then
-  print_time "$monthly_left_today" '#7652B8' '󰃖 '
+  print_time "$monthly_left_today" 'month' 100
 else
   # Überschuss im Monat
-  print_time "${monthly_left_today#-}" '#94B852' '󰃗 '
+  print_time "${monthly_left_today#-}" 'ahead' 100
 fi

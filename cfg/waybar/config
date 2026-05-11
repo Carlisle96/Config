@@ -50,8 +50,10 @@
   },
 
   "custom/thywork": {
-    "format": "{}",
+    "format": "{icon}\n{text}",
+    "format-icons": ["󰃖 ", "󰃗 "],
     "exec": "thywork",
+    "return-type": "json",
     "justify": "center",
     "interval": 60
   },
