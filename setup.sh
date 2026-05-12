@@ -5,16 +5,7 @@ trap 'echo "ERROR: setup.sh failed at line $LINENO" >&2' ERR
 
 ### ------------------------------------ Variables ----------------------------------- ###
 
-BASICS=(
-	ddcutil
-	grim
-	jq
-	ripgrep
-	slurp
-	socat
-	wireplumber
-	wl-clipboard
-)
+BASICS=(ddcutil grim jq ripgrep slurp socat wireplumber wl-clipboard)
 
 PACKAGES=(
 	flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
@@ -24,17 +15,15 @@ PACKAGES=(
 )
 
 HYPRLAND=(
-	hyprland hyprpaper sddm hyprland-devel wlsunset xdg-desktop-portal-hyprland
+	hyprland hyprpaper sddm wlsunset xdg-desktop-portal-hyprland
 )
 
-HYPRPM=(
-	cmake meson gcc-c++ hyprlang-devel hyprcursor-devel mesa-libgbm-devel libdrm-devel
-	mesa-libGLES-devel hyprutils-devel aquamarine-devel wayland-devel pango-devel
-	hyprgraphics-devel tomlplusplus-devel systemd-devel cairo-devel pixman-devel
-	glib2-devel re2-devel libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel
-	xcb-util-errors-devel wayland-protocols-devel udis86-devel hyprwayland-scanner-devel
-	xcb-util-wm-devel muParser-devel hyprwire-devel
-)
+#HYPRPM=(hyprland-devel cmake meson gcc-c++ glslang-devel hyprlang-devel hyprcursor-devel
+#	mesa-libgbm-devel libdrm-devel mesa-libGLES-devel hyprutils-devel aquamarine-devel
+#	hyprgraphics-devel tomlplusplus-devel systemd-devel cairo-devel pixman-devel lua-devel
+#	glib2-devel re2-devel libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel
+#	xcb-util-errors-devel wayland-protocols-devel udis86-devel hyprwayland-scanner-devel
+#	xcb-util-wm-devel muParser-devel hyprwire-devel wayland-devel pango-devel)
 
 SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
 OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox)
@@ -90,7 +79,7 @@ sudo dnf config-manager setopt google-chrome.enabled=1
 
 sudo dnf -y upgrade
 sudo dnf --refresh -y install \
-	"${BASICS[@]}" "${PACKAGES[@]}" "${SDDMTHEME[@]}" "${HYPRPM[@]}" \
+	"${BASICS[@]}" "${PACKAGES[@]}" "${SDDMTHEME[@]}" \
 	"${HYPRLAND[@]}" "${LATEX[@]}" "${OFFICE[@]}" "${EXTERNAL[@]}"
 
 mkdir -p ~/.config/hypr ~/.config/environment.d ~/.config/uwsm ~/.local/bin
