@@ -288,7 +288,7 @@
 	// if you do so, however, note that the path will be interpreted
 	// relative to the location of your project file
 
-	"aux_directory": "",
+	"aux_directory": "<<temp>>",
 
 	// OPTION: "output_directory"
 	// Specifies the output directory
@@ -324,12 +324,10 @@
 	// if you do so, however, note that the path will be interpreted
 	// relative to the location of your project file
 
-	"output_directory": "<<temp>>",
+	"output_directory": "",
 
 	// OPTION: "jobname"
 	// Specifies the jobname to use when building the document
-
-	"copy_output_on_build": true,
 
 	"jobname": "",
 
@@ -406,7 +404,7 @@
 		},
 
 		"linux" : {
-			// See README or third-party documentation
+			"options": ["-synctex=0"]  // Disables SyncTeX entirely (no .gz file generated)
 		}
 	},
 

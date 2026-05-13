@@ -8,22 +8,13 @@ trap 'echo "ERROR: setup.sh failed at line $LINENO" >&2' ERR
 BASICS=(ddcutil grim jq ripgrep slurp socat wireplumber wl-clipboard)
 
 PACKAGES=(
-	flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task
+	flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task trash-cli
 	kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo evince
 	simple-scan keepassxc mate-calc syncthing mediawriter nemo dunst brightnessctl
 	gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit
 )
 
-HYPRLAND=(
-	hyprland hyprpaper sddm wlsunset xdg-desktop-portal-hyprland
-)
-
-#HYPRPM=(hyprland-devel cmake meson gcc-c++ glslang-devel hyprlang-devel hyprcursor-devel
-#	mesa-libgbm-devel libdrm-devel mesa-libGLES-devel hyprutils-devel aquamarine-devel
-#	hyprgraphics-devel tomlplusplus-devel systemd-devel cairo-devel pixman-devel lua-devel
-#	glib2-devel re2-devel libinput-devel libxkbcommon-devel libuuid-devel libXcursor-devel
-#	xcb-util-errors-devel wayland-protocols-devel udis86-devel hyprwayland-scanner-devel
-#	xcb-util-wm-devel muParser-devel hyprwire-devel wayland-devel pango-devel)
+HYPRLAND=(hyprland hyprpaper sddm wlsunset xdg-desktop-portal-hyprland)
 
 SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
 OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox)
@@ -82,18 +73,16 @@ sudo dnf --refresh -y install \
 	"${BASICS[@]}" "${PACKAGES[@]}" "${SDDMTHEME[@]}" \
 	"${HYPRLAND[@]}" "${LATEX[@]}" "${OFFICE[@]}" "${EXTERNAL[@]}"
 
-mkdir -p ~/.config/hypr ~/.config/environment.d ~/.config/uwsm ~/.local/bin
+mkdir -p ~/.config/hypr ~/.config/environment.d ~/.local/bin
 
 if [ "$IS_LAPTOP" = true ]
 then
 	sudo dnf -y install "${LAPTOP[@]}"
 	sudo hostnamectl set-hostname carthy
 	sudo systemctl enable tlp.service
-	cp ./hypr/device-laptop.conf ~/.config/hypr/device.conf
 else
 	sudo dnf -y install "${DESKTOP[@]}"
 	sudo hostnamectl set-hostname thyrium
-	cp ./hypr/device-desktop.conf ~/.config/hypr/device.conf
 fi
 
 # H.264/H.265 hardware decoding -- replaces Fedora's restricted build with RPM Fusion
@@ -232,6 +221,13 @@ cp -r ./usrshare/themes/* ~/.themes/
 
 # User configs
 cp -r ./cfg/* ~/.config/
+cp -r ./hypr/* ~/.config/hypr/
+if [ "$IS_LAPTOP" = true ]
+then
+	cp ./hypr/device-laptop.lua ~/.config/hypr/device.lua
+else
+	cp ./hypr/device-desktop.lua ~/.config/hypr/device.lua
+fi
 if [ ! -d ~/.config/powerlevel10k ]
 then
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
