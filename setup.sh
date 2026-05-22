@@ -10,14 +10,17 @@ BASICS=(ddcutil grim jq ripgrep slurp socat wireplumber wl-clipboard)
 PACKAGES=(
 	flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task trash-cli
 	kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo evince
-	simple-scan keepassxc mate-calc syncthing mediawriter nemo dunst brightnessctl
+	simple-scan keepassxc mate-calc syncthing mediawriter nemo brightnessctl
 	gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit
 )
 
-HYPRLAND=(hyprland hyprpaper sddm wlsunset xdg-desktop-portal-hyprland)
+# own shell =( hyprpaper wlsunset dunst )
+# noctalia-shell
+
+HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst)
 
 SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
-OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox)
+OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox mpv)
 
 LATEX=(
 	texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview
@@ -25,7 +28,7 @@ LATEX=(
 	texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
 	texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak texlive-skaknew
 	texlive-collection-fontsrecommended texlive-doi texlive-mdframed texlive-fontawesome5
-	texlive-ebgaramond texlive-datetime2-english
+	texlive-ebgaramond texlive-datetime2-english texlive-koma-script
 )
 
 EXTERNAL=(google-chrome-stable sublime-text synology-drive-noextra vicinae)
@@ -58,8 +61,6 @@ sudo dnf config-manager addrepo \
 	--from-repofile=https://download.sublimetext.com/rpm/stable/x86_64/sublime-text.repo
 
 # Rpm Fusion
-# Fedora omits H.264/H.265 for patent reasons -- the freeworld Mesa drivers supply
-# these codecs, otherwise hardware decoding falls back to software (CPU)
 sudo dnf -y install "${RPMFUSION}/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
 
 ### --------------------------------- DNF Packages ---------------------------------- ###
@@ -73,7 +74,7 @@ sudo dnf --refresh -y install \
 	"${BASICS[@]}" "${PACKAGES[@]}" "${SDDMTHEME[@]}" \
 	"${HYPRLAND[@]}" "${LATEX[@]}" "${OFFICE[@]}" "${EXTERNAL[@]}"
 
-mkdir -p ~/.config/hypr ~/.config/environment.d ~/.local/bin
+mkdir -p ~/.local/bin
 
 if [ "$IS_LAPTOP" = true ]
 then
@@ -86,7 +87,7 @@ else
 fi
 
 # H.264/H.265 hardware decoding -- replaces Fedora's restricted build with RPM Fusion
-sudo dnf -y install mpv ffmpeg-libs --allowerasing
+sudo dnf -y install ffmpeg --allowerasing
 sudo dnf -y swap mesa-va-drivers mesa-va-drivers-freeworld
 sudo dnf -y swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
@@ -195,10 +196,10 @@ sudo cp -r ./sddm/eucalyptus-drop /usr/share/sddm/themes/
 sudo cp ./sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
 if [ "$IS_LAPTOP" = true ]
 then
-	sudo install -m 0644 ./usrshare/backgrounds/wpMoonLaptop.png \
+	sudo install -m 0644 ./usrshare/backgrounds/wpMoonLaptopCorner16.png \
 		/usr/share/sddm/themes/eucalyptus-drop/Backgrounds/wpMoon.png
 else
-	sudo install -m 0644 ./usrshare/backgrounds/wpMoon.png \
+	sudo install -m 0644 ./usrshare/backgrounds/wpMoonCorner16.png \
 		/usr/share/sddm/themes/eucalyptus-drop/Backgrounds/wpMoon.png
 fi
 
@@ -221,6 +222,7 @@ cp -r ./usrshare/themes/* ~/.themes/
 
 # User configs
 cp -r ./cfg/* ~/.config/
+mkdir -p ~/.config/hypr
 cp -r ./hypr/* ~/.config/hypr/
 if [ "$IS_LAPTOP" = true ]
 then
@@ -249,9 +251,9 @@ cp ./home/.[!.]* ~/
 mkdir -p ~/Pictures/Wallpapers ~/Pictures/screenshots
 if [ "$IS_LAPTOP" = true ]
 then
-	cp ./usrshare/backgrounds/wpMoonLaptop.png ~/Pictures/Wallpapers/wpMoon.png
+	cp ./usrshare/backgrounds/wpMoonLaptopCorner16.png ~/Pictures/Wallpapers/wpMoon.png
 else
-	cp ./usrshare/backgrounds/wpMoon.png ~/Pictures/Wallpapers/wpMoon.png
+	cp ./usrshare/backgrounds/wpMoonCorner16.png ~/Pictures/Wallpapers/wpMoon.png
 fi
 
 # Applications

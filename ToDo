@@ -4,11 +4,11 @@ waybar bug fix: nicht mehr clickable seit 0.55 / lua
 
 updateActual irgendwie persistent über PCs machen
 file picker defaults ( sortierung, hidden files, default location ... )
-    anderen file picker ?
-
-Latex fehler:
-/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty: You have requested release `2026/06/01' of LaTeX, but only release `2025-11-01' is available
 
 synology drive desktop file ?
-
 mime thema default applications
+
+vicinae theme übernehmen aus lokal
+
+pdfgnomevier/gtk -- blau statt violett ( erst nach neu install fixen )
+rpmfusion wieder dazu // terra entfernen
