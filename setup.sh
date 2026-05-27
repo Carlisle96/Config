@@ -172,10 +172,6 @@ gsettings set org.gtk.Settings.FileChooser startup-mode cwd
 xdg-mime default sublime_text.desktop text/x-tex
 xdg-mime default sublime_text.desktop text/csv
 
-# Services
-systemctl --user enable syncthing.service
-sudo updatedb
-
 ### --------------------------------- User Settings --------------------------------- ###
 
 # Git
@@ -260,3 +256,9 @@ fi
 # Applications
 mkdir -p ~/.local/share/applications
 cp ./apps/*.desktop ~/.local/share/applications
+
+# Services
+systemctl --user daemon-reload
+systemctl --user enable syncthing.service
+systemctl --user enable --now thyachieve.timer
+sudo updatedb
