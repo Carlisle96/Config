@@ -1,0 +1,94 @@
+(defvar assets "./assets")
+
+(defwidget ribbon_rows [progression]
+  (box
+    :class "ribbon-area"
+    :orientation "horizontal"
+    :halign "center"
+    :valign "center"
+    (box
+      :orientation "vertical"
+      :spacing 0
+      :space-evenly false
+      :halign "center"
+      :valign "center"
+        (image
+            :class "badge"
+            :visible {progression <= 20}
+            :path "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png"
+            :image-height 144
+            :halign "center"
+            :valign "center")
+        (box
+            :visible {progression >= 40}
+            :class "ribbon-row"
+            :orientation "horizontal"
+            :spacing 0
+            :space-evenly false
+            :halign "center"
+            :valign "start"
+            (image
+            :visible {progression >= 50}
+            :class "ribbon"
+            :path "${assets}/R5.png"
+            :image-width 256)
+            (image
+            :visible {progression >= 40}
+            :class "ribbon"
+            :path "${assets}/R4.png"
+            :image-width 256)
+        )
+        (box
+            :visible {progression >= 20}
+            :class "ribbon-row"
+            :orientation "horizontal"
+            :spacing 0
+            :space-evenly false
+            :halign "center"
+            :valign "start"
+            (image
+            :visible {progression >= 30}
+            :class "ribbon"
+            :path "${assets}/R3.png"
+            :image-width 256)
+            (image
+            :visible {progression >= 20}
+            :class "ribbon"
+            :path "${assets}/R2.png"
+            :image-width 256)
+        )
+    )))
+
+(defwidget achievement_display [progression]
+  (box
+    :class "achievement-display"
+    :orientation "vertical"
+    :spacing 0
+    :space-evenly false
+    :halign "fill"
+    :valign "start"
+    (ribbon_rows :progression progression)
+    (image
+      :class "badge"
+      :visible {progression >= 20}
+      :path "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png"
+      :image-width 384
+      :halign "center"
+      :valign "center")
+   )
+)
+
+(defwindow achievements [progression]
+  :monitor 0
+  :geometry (geometry
+    ;:x "2842px"
+    :x "6px"
+    :y "16px"
+    :width "512px"
+    :height "512px"
+    :anchor "left top")
+  :stacking "bottom"
+  :exclusive false
+  :focusable false
+  :namespace "achievements"
+  (achievement_display :progression progression))
