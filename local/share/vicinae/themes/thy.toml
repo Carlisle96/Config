@@ -1,0 +1,23 @@
+[meta]
+name = "Thy Theme"
+description = "Thyriaen Theme"
+variant = "dark"                             
+inherits = "vicinae-dark"             
+
+[colors.core]
+accent = "#7652B8"
+accent_foreground = "#E9EAEB"
+background = "#1B1C1D"
+foreground = "#E9EAEB"
+secondary_background = "#27292D"
+border = "#7652B8"
+
+[colors.accents]
+blue = "#7652B8"           
+green = "#94B852"
+magenta = "#B85294"
+orange = "#B8A952"
+purple = "#B85294"
+red = "#B85261"
+yellow = "#EEE766"
+cyan = "#5294B8"

@@ -1,0 +1,30 @@
+{
+  "policies": {
+    "ExtensionSettings": {
+      "jid1-KKzOGWgsW3Ao4Q@jetpack": {
+        "installation_mode": "normal_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/file/4202634/i_dont_care_about_cookies-3.5.0.xpi"
+      },
+      "{e68418bc-f2b0-4459-a9ea-3e72b6751b07}": {
+        "installation_mode": "normal_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/file/4079746/web_eid_webextension-2.2.1.xpi"
+      },
+      "leechblockng@proginosko.com": {
+        "installation_mode": "normal_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/file/4657335/leechblock_ng-1.7.2.xpi"
+      },
+      "myallychou@gmail.com": {
+        "installation_mode": "normal_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/file/4733035/youtube_recommended_videos-1.6.9.xpi"
+      },
+      "keepassxc-browser@keepassxc.org": {
+        "installation_mode": "normal_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/file/4750788/keepassxc_browser-1.10.1.xpi"
+      },
+      "uBlock0@raymondhill.net": {
+        "installation_mode": "normal_installed",
+        "install_url": "https://addons.mozilla.org/firefox/downloads/file/4814095/ublock_origin-1.71.0.xpi"
+      }
+    }
+  }
+}

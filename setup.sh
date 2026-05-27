@@ -17,7 +17,7 @@ PACKAGES=(
 # own shell =( hyprpaper wlsunset dunst eww)
 # noctalia-shell
 
-HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst eww)
+HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst eww waybar)
 
 SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
 OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox mpv)
@@ -31,7 +31,7 @@ LATEX=(
 	texlive-ebgaramond texlive-datetime2-english texlive-koma-script
 )
 
-EXTERNAL=(google-chrome-stable sublime-text synology-drive-noextra vicinae)
+EXTERNAL=(google-chrome-stable sublime-text synology-drive-noextra vicinae zed)
 
 DESKTOP=(easyeffects)
 LAPTOP=(tlp light)
@@ -55,6 +55,7 @@ sudo dnf -y copr enable sdegler/hyprland
 sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf -y copr enable quadratech188/vicinae
 sudo dnf -y copr enable varlad/eww
+sudo dnf -y copr enable che/zed
 
 # Sublime Text
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg
@@ -89,15 +90,16 @@ fi
 
 # H.264/H.265 hardware decoding -- replaces Fedora's restricted build with RPM Fusion
 sudo dnf -y install ffmpeg --allowerasing
-sudo dnf -y swap mesa-va-drivers mesa-va-drivers-freeworld
-sudo dnf -y swap mesa-vdpau-drivers mesa-vdpau-drivers-freeworld
 
 # Pomotroid (latest RPM from GitHub releases)
-POMOTROID_URL=$(curl -fsSL --retry 3 https://api.github.com/repos/Splode/pomotroid/releases/latest \
-	| awk -F'"' '/browser_download_url.*x86_64\.rpm/ { print $4; exit }')
+POMOTROID_URL="$(
+	curl -fsSL --retry 3 https://api.github.com/repos/Splode/pomotroid/releases/latest \
+		| jq -r '.assets[].browser_download_url | select(test("x86_64\\.rpm$"))' \
+		| head -n1
+)"
 if [ -z "$POMOTROID_URL" ]
 then
-	echo "Could not find latest Pomotroid x86_64 RPM." >&2
+	echo "Could not find latest Pomotroid x86_64 RPM" >&2
 	exit 1
 fi
 sudo dnf -y install "$POMOTROID_URL"
@@ -107,23 +109,23 @@ sudo dnf -y install "$POMOTROID_URL"
 
 ### --------------------------------- Flatpak Apps ---------------------------------- ###
 
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 
 # Global theme overrides
-sudo flatpak override --filesystem="$HOME"
-sudo flatpak override --env=GTK_THEME=mathy
-sudo flatpak override --env=ICON_THEME=Newaita-reborn-deep-purple-dark
+flatpak override --user --filesystem="$HOME"
+flatpak override --user --env=GTK_THEME=mathy
+flatpak override --user --env=ICON_THEME=Newaita-reborn-deep-purple-dark
 
 # Signal
-sudo flatpak install -y flathub org.signal.Signal
-sudo flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
-sudo flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=auto org.signal.Signal
+flatpak install -y flathub org.signal.Signal
+flatpak override --user --env=PULSE_LATENCY_MSEC=30 org.signal.Signal
+flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=auto org.signal.Signal
 
 # Spotify
-sudo flatpak install -y flathub com.spotify.Client
+flatpak install -y flathub com.spotify.Client
 
 # Actual Budget
-sudo flatpak install -y flathub org.actualbudget.Actual
+flatpak install -y flathub com.actualbudget.Actual
 flatpak override --user --filesystem=xdg-config/Actual org.actualbudget.Actual
 flatpak override --user --filesystem=xdg-data/Actual org.actualbudget.Actual
 
@@ -137,12 +139,7 @@ chsh -s /usr/bin/zsh
 
 # Grub
 sudo grub2-editenv - set menu_auto_hide=1
-if [ -d /boot/efi ]
-then
-	sudo grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
-else
-	sudo grub2-mkconfig -o /boot/grub2/grub.cfg
-fi
+sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 
 # Green vertical flicker fix (desktop only) -- disables AMD GPU runtime power management
 if [ "$IS_LAPTOP" = false ]
@@ -202,10 +199,10 @@ fi
 
 # Binaries
 sudo cp -r ./bin/* /usr/local/bin/
-cp -r ./localbin/* ~/.local/bin/
 
 # Global configs
 sudo cp -r ./usrshare/* /usr/share/
+sudo install -D -m 0644 ./mozilla/policies.json /usr/lib64/firefox/distribution/policies.json
 
 # Custom XKB layout -- /etc/xkb/ survives xkeyboard-config package updates
 sudo mkdir -p /etc/xkb/symbols /etc/xkb/rules
@@ -219,8 +216,11 @@ cp -r ./usrshare/themes/* ~/.themes/
 
 # User configs
 cp -r ./cfg/* ~/.config/
+cp -r ./local/* ~/.local/
+
 mkdir -p ~/.config/hypr
 cp -r ./hypr/* ~/.config/hypr/
+
 if [ "$IS_LAPTOP" = true ]
 then
 	cp ./hypr/device-laptop.lua ~/.config/hypr/device.lua
@@ -231,6 +231,8 @@ if [ ! -d ~/.config/powerlevel10k ]
 then
 	git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.config/powerlevel10k
 fi
+
+# NNN
 NNN_RELEASE=$(curl -fsSL https://api.github.com/repos/jarun/nnn/releases/latest | python3 -c "import sys,json; print(json.load(sys.stdin)['tag_name'])")
 NNN_VERSION=${NNN_RELEASE#v}
 NNN_TMP=$(mktemp -d)
@@ -253,12 +255,9 @@ else
 	cp ./usrshare/backgrounds/wpMoonCorner16.png ~/Pictures/Wallpapers/wpMoon.png
 fi
 
-# Applications
-mkdir -p ~/.local/share/applications
-cp ./apps/*.desktop ~/.local/share/applications
-
 # Services
 systemctl --user daemon-reload
 systemctl --user enable syncthing.service
-systemctl --user enable --now thyachieve.timer
+systemctl --user enable vicinae.service
+systemctl --user enable thyachieve.timer
 sudo updatedb
