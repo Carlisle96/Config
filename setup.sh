@@ -14,10 +14,10 @@ PACKAGES=(
 	gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit
 )
 
-# own shell =( hyprpaper wlsunset dunst )
+# own shell =( hyprpaper wlsunset dunst eww)
 # noctalia-shell
 
-HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst)
+HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst eww)
 
 SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
 OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox mpv)
@@ -54,6 +54,7 @@ fi
 sudo dnf -y copr enable sdegler/hyprland
 sudo dnf -y copr enable emixampp/synology-drive
 sudo dnf -y copr enable quadratech188/vicinae
+sudo dnf -y copr enable varlad/eww
 
 # Sublime Text
 sudo rpm -v --import https://download.sublimetext.com/sublimehq-rpm-pub.gpg

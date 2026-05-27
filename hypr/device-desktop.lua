@@ -21,6 +21,8 @@ M.dragon_move = "3240 700"
 
 function M.autostart()
     hl.exec_cmd("easyeffects --gapplication-service")
+    hl.exec_cmd("eww daemon")
+    hl.exec_cmd("thyachieve")
 end
 
 function M.binds()

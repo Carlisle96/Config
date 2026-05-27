@@ -17,6 +17,8 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("keepassxc")
     hl.exec_cmd("synology-drive start")
     hl.exec_cmd("flatpak run org.signal.Signal --use-tray-icon")
+    --hl.exec_cmd("eww daemon")
+    --hl.exec_cmd("thyachieve")
     device.autostart()
 end)
 

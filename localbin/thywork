@@ -66,7 +66,7 @@ monthlyTarget=$(( (totalInMonth - worked_month + worked_today) / daysRemaining )
 left_today_target=$(( monthlyTarget - worked_today ))
 
 if (( left_today_target >= 0 )); then
-  print_time "$left_today_target" 'catchup' 0
+  print_time "$left_today_target" 'catchup' 35
   exit 0
 fi
 
@@ -75,7 +75,7 @@ monthday=$(date +%-d)
 monthly_left_today=$(( work_per_day * monthday - worked_month ))
 
 if (( monthly_left_today >= 0 )); then
-  print_time "$monthly_left_today" 'month' 100
+  print_time "$monthly_left_today" 'month' 65
 else
   # Überschuss im Monat
   print_time "${monthly_left_today#-}" 'ahead' 100
