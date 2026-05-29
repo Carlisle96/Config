@@ -1,32 +1,16 @@
 (defvar assets "./assets")
+(defvar progression 0)
+(defvar mountain 0)
+(defvar work 0)
 
-(defwidget ribbon_rows [progression]
-  (box
-    :class "ribbon-area"
-    :orientation "horizontal"
-    :halign "center"
-    :valign "center"
+(defwidget ribbon_rows []
     (box
-      :orientation "vertical"
-      :spacing 0
-      :space-evenly false
-      :halign "center"
-      :valign "center"
-        (image
-            :class "badge"
-            :visible {progression <= 20}
-            :path "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png"
-            :image-height 144
-            :halign "center"
-            :valign "center")
+        :orientation "vertical"
+        :space-evenly false
         (box
             :visible {progression >= 40}
             :class "ribbon-row"
             :orientation "horizontal"
-            :spacing 0
-            :space-evenly false
-            :halign "center"
-            :valign "start"
             (image
             :visible {progression >= 50}
             :class "ribbon"
@@ -39,13 +23,24 @@
             :image-width 256)
         )
         (box
+            :visible {mountain >= 1 || work >=1}
+            :class "ribbon-row"
+            :orientation "horizontal"
+            (image
+            :visible {mountain >= 1}
+            :class "ribbon"
+            :path {mountain >= 1 ? "${assets}/M${mountain}.png" : "${assets}/empty.png"}
+            :image-width 256)
+            (image
+            :visible {work >= 1}
+            :class "ribbon"
+            :path {work >= 1 ? "${assets}/W${work}.png" : "${assets}/empty.png"}
+            :image-width 256)
+            )
+        (box
             :visible {progression >= 20}
             :class "ribbon-row"
             :orientation "horizontal"
-            :spacing 0
-            :space-evenly false
-            :halign "center"
-            :valign "start"
             (image
             :visible {progression >= 30}
             :class "ribbon"
@@ -57,28 +52,33 @@
             :path "${assets}/R2.png"
             :image-width 256)
         )
-    )))
+        (image
+            :class "badge"
+            :visible {progression >= 11 && progression <= 20}
+            :path {progression >= 11 ? "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png" : "${assets}/empty.png"}
+            :image-height 144)
+    )
+)
 
-(defwidget achievement_display [progression]
+(defwidget achievement_display []
   (box
     :class "achievement-display"
     :orientation "vertical"
-    :spacing 0
     :space-evenly false
     :halign "fill"
     :valign "start"
-    (ribbon_rows :progression progression)
+    (ribbon_rows)
     (image
       :class "badge"
       :visible {progression >= 20}
-      :path "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png"
+      :path {progression >= 11 ? "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png" : "${assets}/empty.png"}
       :image-width 384
       :halign "center"
       :valign "center")
    )
 )
 
-(defwindow achievements [progression]
+(defwindow achievements []
   :monitor 0
   :geometry (geometry
     ;:x "2842px"
@@ -91,4 +91,5 @@
   :exclusive false
   :focusable false
   :namespace "achievements"
-  (achievement_display :progression progression))
+  (achievement_display)
+)

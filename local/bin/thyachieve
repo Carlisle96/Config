@@ -2,7 +2,6 @@
 
 set -Eeuo pipefail
 
-WINDOW="achievements"
 START_DATE="2026-05-26"
 CUTOFF_HOUR="20"
 DAYS=(1 2 3 4 5 7 10 14 21 28 35 42 50 60 70 84 100 120 150 180 210 240 270 310 365)
@@ -49,4 +48,4 @@ days_since_start() {
 date_key=$(effective_date)
 days_after_start=$(days_since_start "$date_key" "$START_DATE")
 progression=$(lookup_progression "$days_after_start")
-eww open "$WINDOW" --arg "progression=$progression"
+eww update "progression=$progression"

@@ -8,12 +8,12 @@ hl.monitor(device.monitor)
 -----------------
 
 hl.on("hyprland.start", function()
-    hl.exec_cmd("TZ=Etc/GMT-1 wlsunset -t 1000 -s 19:30 -S 07:30 -d 7200")
     hl.exec_cmd("waybar")
-    hl.exec_cmd("/usr/libexec/xfce-polkit")
     hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("thyachieve")
+    hl.exec_cmd("eww open achievements && thyachieve")
+    hl.exec_cmd("/usr/libexec/xfce-polkit")
     hl.exec_cmd("/home/thyriaen/.config/hypr/scripts/nnn-listen.sh")
+    hl.exec_cmd("TZ=Etc/GMT-1 wlsunset -t 1000 -s 19:30 -S 07:30 -d 7200")
     hl.exec_cmd("keepassxc")
     hl.exec_cmd("synology-drive start")
     hl.exec_cmd("flatpak run org.signal.Signal --use-tray-icon")
@@ -292,6 +292,12 @@ hl.window_rule({
     match = { class = "^(xdg-desktop-portal-gtk)$" },
     float = true,
     size = "1032 576",
+    center = true
+})
+hl.window_rule({
+    name = "gimp-export",
+    match = { class = "^(file-png)$" },
+    float = true,
     center = true
 })
 hl.window_rule({
