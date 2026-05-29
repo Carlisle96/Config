@@ -1,4 +1,9 @@
 (defvar assets "./assets")
+(defvar p_tier "${assets}/tier/T")
+(defvar p_ribbon "${assets}/ribbon/R")
+(defvar p_mountain "${assets}/mountain/M")
+(defvar p_work "${assets}/work/W")
+
 (defvar progression 0)
 (defvar mountain 0)
 (defvar work 0)
@@ -14,12 +19,12 @@
             (image
             :visible {progression >= 50}
             :class "ribbon"
-            :path "${assets}/R5.png"
+            :path "${p_ribbon}5.png"
             :image-width 256)
             (image
             :visible {progression >= 40}
             :class "ribbon"
-            :path "${assets}/R4.png"
+            :path "${p_ribbon}4.png"
             :image-width 256)
         )
         (box
@@ -29,12 +34,12 @@
             (image
             :visible {mountain >= 1}
             :class "ribbon"
-            :path {mountain >= 1 ? "${assets}/M${mountain}.png" : "${assets}/empty.png"}
+            :path {mountain >= 1 ? "${p_mountain}${mountain}.png" : "${assets}/empty.png"}
             :image-width 256)
             (image
             :visible {work >= 1}
             :class "ribbon"
-            :path {work >= 1 ? "${assets}/W${work}.png" : "${assets}/empty.png"}
+            :path {work >= 1 ? "${p_work}${work}.png" : "${assets}/empty.png"}
             :image-width 256)
             )
         (box
@@ -44,18 +49,18 @@
             (image
             :visible {progression >= 30}
             :class "ribbon"
-            :path "${assets}/R3.png"
+            :path "${p_ribbon}3.png"
             :image-width 256)
             (image
             :visible {progression >= 20}
             :class "ribbon"
-            :path "${assets}/R2.png"
+            :path "${p_ribbon}2.png"
             :image-width 256)
         )
         (image
             :class "badge"
             :visible {progression >= 11 && progression <= 20}
-            :path {progression >= 11 ? "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png" : "${assets}/empty.png"}
+            :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
             :image-height 144)
     )
 )
@@ -71,7 +76,7 @@
     (image
       :class "badge"
       :visible {progression >= 20}
-      :path {progression >= 11 ? "${assets}/T${substring(progression, 0, 1)}-${substring(progression, 1, 1)}.png" : "${assets}/empty.png"}
+      :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
       :image-width 384
       :halign "center"
       :valign "center")

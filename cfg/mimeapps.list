@@ -3,11 +3,6 @@ text/x-tex=sublime_text.desktop
 application/x-synology-drive-doc=synology-drive-open-file.desktop
 application/x-synology-drive-sheet=synology-drive-open-file.desktop
 application/x-synology-drive-slides=synology-drive-open-file.desktop
-text/html=google-chrome.desktop
-x-scheme-handler/http=google-chrome.desktop
-x-scheme-handler/https=google-chrome.desktop
-x-scheme-handler/about=google-chrome.desktop
-x-scheme-handler/unknown=google-chrome.desktop
 text/csv=sublime_text.desktop
 video/mp2t=mpv.desktop
 application/octet-stream=synology-drive-open-file.desktop
@@ -18,17 +13,3 @@ application/vnd.openxmlformats-officedocument.spreadsheetml.sheet=libreoffice-ca
 application/msword=libreoffice-writer.desktop
 text/plain=sublime_text.desktop
 application/encrypted=libreoffice-calc.desktop
-
-[Added Associations]
-application/wps-office.potx=wps-office-prometheus.desktop;
-application/wps-office.dpss=wps-office-prometheus.desktop;
-application/wps-office.dpso=wps-office-prometheus.desktop;
-application/wps-office.xlsx=wps-office-prometheus.desktop;
-application/wps-office.xltx=wps-office-prometheus.desktop;
-application/wps-office.ets=wps-office-prometheus.desktop;
-application/wps-office.eto=wps-office-prometheus.desktop;
-application/wps-office.docx=wps-office-prometheus.desktop;
-application/wps-office.dotx=wps-office-prometheus.desktop;
-application/wps-office.wpss=wps-office-prometheus.desktop;
-application/wps-office.wpso=wps-office-prometheus.desktop;
-
