@@ -1,5 +1,5 @@
 [Unit]
-Description=Run thyachieve daily at 20:00
+Description=Run thyachieve-progression daily at 20:00
 
 [Timer]
 OnCalendar=*-*-* 20:00:00

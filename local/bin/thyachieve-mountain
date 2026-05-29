@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/thyachieve"
+
+lookup_tsv() {
+  local input=$1
+  local table=$2
+  local result="0"
+  local threshold value
+
+  input=${input%.*}
+
+  while IFS=$'\t' read -r threshold value; do
+    [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
+
+    if (( input >= threshold )); then
+      result=$value
+    else
+      break
+    fi
+  done < "$table"
+
+  printf '%s\n' "$result"
+}
+
+POINTS_FILE="${STATE_DIR}/mountain-points"
+
+if [[ $# -gt 0 ]]; then
+  mkdir -p "$STATE_DIR"
+  printf '%s\n' "$1" > "$POINTS_FILE"
+fi
+
+if [[ -f "$POINTS_FILE" ]]; then
+  points=$(<"$POINTS_FILE")
+else
+  points=0
+fi
+
+mountain=$(lookup_tsv "$points" "${CONFIG_DIR}/mountain.tsv")
+
+eww update "mountain=$mountain"

@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+START_DATE="2026-05-26"
+CUTOFF_HOUR="20"
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
+
+lookup_tsv() {
+  local input=$1
+  local table=$2
+  local result="0"
+  local threshold value
+
+  input=${input%.*}
+
+  while IFS=$'\t' read -r threshold value; do
+    [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
+
+    if (( input >= threshold )); then
+      result=$value
+    else
+      break
+    fi
+  done < "$table"
+
+  printf '%s\n' "$result"
+}
+
+effective_date() {
+  local now cutoff
+  now=$(date +%s)
+  cutoff=$(date -d "$(date +%F) ${CUTOFF_HOUR}:00" +%s)
+
+  if (( now >= cutoff )); then
+    date +%F
+  else
+    date -d "yesterday" +%F
+  fi
+}
+
+days_since_start() {
+  local date_key=$1
+  local start_date=$2
+  local date_epoch start_epoch
+
+  date_epoch=$(date -d "$date_key" +%s)
+  start_epoch=$(date -d "$start_date" +%s)
+  printf '%s\n' "$(( (date_epoch - start_epoch) / 86400 ))"
+}
+
+date_key=$(effective_date)
+days_after_start=$(days_since_start "$date_key" "$START_DATE")
+progression=$(lookup_tsv "$days_after_start" "${CONFIG_DIR}/progression.tsv")
+
+eww update "progression=$progression"

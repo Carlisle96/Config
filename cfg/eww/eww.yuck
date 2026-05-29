@@ -1,8 +1,8 @@
 (defvar assets "./assets")
-(defvar p_tier "${assets}/tier/T")
-(defvar p_ribbon "${assets}/ribbon/R")
-(defvar p_mountain "${assets}/mountain/M")
-(defvar p_work "${assets}/work/W")
+(defvar p_tier "./assets/tier/T")
+(defvar p_ribbon "./assets/ribbon/R")
+(defvar p_mountain "./assets/mountain/M")
+(defvar p_work "./assets/work/W")
 
 (defvar progression 0)
 (defvar mountain 0)

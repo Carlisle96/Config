@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
+
+lookup_tsv() {
+  local input=$1
+  local table=$2
+  local result="0"
+  local threshold value
+
+  input=${input%.*}
+
+  while IFS=$'\t' read -r threshold value; do
+    [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
+
+    if (( input >= threshold )); then
+      result=$value
+    else
+      break
+    fi
+  done < "$table"
+
+  printf '%s\n' "$result"
+}
+
+worked_hours_last_30_days() {
+  local from to seconds
+
+  from=$(date -d "30 days ago" +%F)
+  to=$(date +%F)
+  seconds=$(
+    watson report -c -j -f "$from" -t "$to" \
+      | jq -r '.time | floor'
+  )
+
+  printf '%s\n' "$(( seconds / 3600 ))"
+}
+
+worked_hours=$(worked_hours_last_30_days)
+work=$(lookup_tsv "$worked_hours" "${CONFIG_DIR}/work.tsv")
+
+eww update "work=$work"

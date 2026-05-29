@@ -264,5 +264,6 @@ fi
 systemctl --user daemon-reload
 systemctl --user enable syncthing.service
 systemctl --user enable vicinae.service
-systemctl --user enable thyachieve.timer
+systemctl --user enable thyachieve-progression.timer
+systemctl --user enable thyachieve-work.timer
 sudo updatedb

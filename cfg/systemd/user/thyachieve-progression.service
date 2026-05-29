@@ -5,4 +5,4 @@ Description=Update Eww achievement progression
 Type=oneshot
 Environment=XDG_SESSION_TYPE=wayland
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin
-ExecStart=%h/.local/bin/thyachieve
+ExecStart=%h/.local/bin/thyachieve-progression
