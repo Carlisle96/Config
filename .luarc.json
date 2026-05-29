@@ -1,5 +1,20 @@
 {
     "diagnostics.globals": [
         "hl"
+    ],
+    "workspace.checkThirdParty": false,
+    "workspace.ignoreDir": [
+        ".claude",
+        ".git",
+        "assets",
+        "bin",
+        "cfg",
+        "home",
+        "local",
+        "mozilla",
+        "rpms",
+        "sddm",
+        "usrshare",
+        "xkb"
     ]
 }
