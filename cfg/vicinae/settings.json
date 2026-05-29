@@ -51,6 +51,15 @@
             }
          }
       },
+      "system": {
+         "entrypoints": {
+            "run": {
+               "preferences": {
+                  "default-action": "run"
+               }
+            }
+         }
+      },
       "theme": {
          "entrypoints": {
             "set": {
