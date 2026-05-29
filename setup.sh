@@ -184,9 +184,13 @@ fi
 ### ----------------------------------- Copy Files ---------------------------------- ###
 
 # SDDM
-sudo mkdir -p /usr/share/sddm/themes/
-sudo cp ./sddm.conf /etc/
-sudo cp -r ./sddm/eucalyptus-drop /usr/share/sddm/themes/
+SDDM_THEME_TMP=$(mktemp -d)
+git clone --depth=1 \
+	https://gitlab.com/Matt.Jolly/sddm-eucalyptus-drop \
+	"$SDDM_THEME_TMP/eucalyptus-drop"
+sudo mkdir -p /usr/share/sddm/themes/eucalyptus-drop
+sudo cp ./sddm/sddm.conf /etc/
+sudo cp -r "$SDDM_THEME_TMP/eucalyptus-drop/." /usr/share/sddm/themes/eucalyptus-drop/
 sudo cp ./sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
 if [ "$IS_LAPTOP" = true ]
 then
@@ -196,6 +200,7 @@ else
 	sudo install -m 0644 ./usrshare/backgrounds/wpMoonCorner16.png \
 		/usr/share/sddm/themes/eucalyptus-drop/Backgrounds/wpMoon.png
 fi
+rm -rf "$SDDM_THEME_TMP"
 
 # Binaries
 sudo cp -r ./bin/* /usr/local/bin/
