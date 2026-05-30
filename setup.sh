@@ -162,8 +162,17 @@ gsettings set org.gnome.desktop.interface accent-color 'purple'
 # Default terminal
 gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 
-# Gtk File Chooser ( current working directory )
+# Gtk File Chooser
 gsettings set org.gtk.Settings.FileChooser startup-mode cwd
+gsettings set org.gtk.Settings.FileChooser show-hidden false
+gsettings set org.gtk.Settings.FileChooser sort-column name
+gsettings set org.gtk.Settings.FileChooser sort-order ascending
+gsettings set org.gtk.Settings.FileChooser sort-directories-first true
+gsettings set org.gtk.gtk4.Settings.FileChooser startup-mode cwd
+gsettings set org.gtk.gtk4.Settings.FileChooser show-hidden false
+gsettings set org.gtk.gtk4.Settings.FileChooser sort-column name
+gsettings set org.gtk.gtk4.Settings.FileChooser sort-order ascending
+gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
 
 # Default applications
 xdg-mime default sublime_text.desktop text/x-tex

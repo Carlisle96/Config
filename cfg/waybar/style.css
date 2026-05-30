@@ -78,11 +78,15 @@
 }
 
 #custom-thywork.catchup {
-  color: #B85294;
+  color: #7652B8;
 }
 
 #custom-thywork.month {
   color: #7652B8;
+}
+
+#custom-thywork.reward {
+  color: #94B852;
 }
 
 #custom-thywork.ahead {

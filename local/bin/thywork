@@ -1,17 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-# fulltime:         300 min/d - 150 h/m
-# really nice:      256 min/d - 128 h/m
-# proper income:    192 min/d -  96 h/m
-# absolute minimum  160 min/d -  80 h/m
+set -Eeuo pipefail
 
-#  5  6   7   8   9  10  11  12
-# 92 96 100 104 108 112 116 120
-# 112.5 = 9x pomodoro
+work_per_day=$((90 * 60))
+CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
 
-work_per_day=$((120 * 92))
-
-# Zeit hübsch ausgeben
 print_time() {
   local secs=$1
   local class=$2
@@ -22,28 +15,28 @@ print_time() {
   printf '{"text":"%s","class":"%s","percentage":%s}\n' "$formatted" "$class" "$percentage"
 }
 
-# Watson-Zeit in Sekunden holen (Argument z.B. -d oder -m)
 watson_time() {
-  local range=$1
-  watson report "$range" -c -j \
-    | grep '"time"' \
-    | tail -n1 \
-    | grep -oE '[0-9]+' \
-    | head -n1 \
-    | tr -d '\n'
+  watson report "$@" -c -j | jq -r '.time | floor'
 }
 
-# Tage im aktuellen Monat
-days_in_month() {
-  date -d "$(date +%Y-%m-01) +1 month -1 day" +%d
-}
+lookup_work_thresholds() {
+  local worked_hours=$1
+  local current=0
+  local next=0
+  local threshold reward
 
-# Verbleibende Tage im aktuellen Monat (inkl. heute)
-days_remaining_in_month() {
-  local today last
-  today=$(date +%d)
-  last=$(date -d "$(date +%Y-%m-01) +1 month -1 day" +%d)
-  echo $(( last - today + 1 ))
+  while IFS=$'\t' read -r threshold reward; do
+    [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
+
+    if (( worked_hours >= threshold )); then
+      current=$threshold
+    elif (( next == 0 )); then
+      next=$threshold
+      break
+    fi
+  done < "${CONFIG_DIR}/work.tsv"
+
+  printf '%s\t%s\n' "$current" "$next"
 }
 
 
@@ -51,32 +44,35 @@ worked_today=$(watson_time -d)
 left_today=$(( work_per_day - worked_today ))
 
 # 1. Ziel: Tagesziel schaffen
-if (( left_today >= 0 )); then
+if (( left_today > 0 )); then
   print_time "$left_today" 'behind' 0
   exit 0
 fi
 
-# 2. Ziel: Monatsziel linear auf Resttage verteilen
-worked_month=$(watson_time -m)
-daysInMonth=$(days_in_month)
-totalInMonth=$(( daysInMonth * work_per_day ))
-daysRemaining=$(days_remaining_in_month)
+rolling_from=$(date -d "30 days ago" +%F)
+tomorrow_from=$(date -d "29 days ago" +%F)
 
-monthlyTarget=$(( (totalInMonth - worked_month + worked_today) / daysRemaining ))
-left_today_target=$(( monthlyTarget - worked_today ))
+worked_rolling=$(watson_time -f "$rolling_from")
+worked_tomorrow_window=$(watson_time -f "$tomorrow_from")
+worked_rolling_hours=$(( worked_rolling / 3600 ))
 
-if (( left_today_target >= 0 )); then
-  print_time "$left_today_target" 'catchup' 35
+IFS=$'\t' read -r current_threshold next_threshold < <(
+  lookup_work_thresholds "$worked_rolling_hours"
+)
+
+if (( current_threshold > 0 )); then
+  keep_current_left=$(( current_threshold * 3600 - worked_tomorrow_window ))
+
+  if (( keep_current_left > 0 )); then
+    print_time "$keep_current_left" 'catchup' 35
+    exit 0
+  fi
+fi
+
+if (( next_threshold > 0 )); then
+  next_reward_left=$(( next_threshold * 3600 - worked_rolling ))
+  print_time "$next_reward_left" 'reward' 65
   exit 0
 fi
 
-# 3. Ziel: rückwirkend „sollte bis heute im Monat“
-monthday=$(date +%-d)
-monthly_left_today=$(( work_per_day * monthday - worked_month ))
-
-if (( monthly_left_today >= 0 )); then
-  print_time "$monthly_left_today" 'month' 65
-else
-  # Überschuss im Monat
-  print_time "${monthly_left_today#-}" 'ahead' 100
-fi
+printf '{"text":"","class":"ahead","percentage":100}\n'

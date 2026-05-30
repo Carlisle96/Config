@@ -52,7 +52,7 @@
 
   "custom/thywork": {
     "format": "{icon}\n{text}",
-    "format-icons": ["󰃖 ", "󰜎 ", "󰕍 ", "󰃗 "],
+    "format-icons": ["󰃖 ", "󰒘 ", "󰦇 ", "󰃗 "],
     "exec": "thywork",
     "return-type": "json",
     "justify": "center",
