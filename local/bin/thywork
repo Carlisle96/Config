@@ -2,7 +2,6 @@
 
 set -Eeuo pipefail
 
-work_per_day=$((90 * 60))
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
 
 print_time() {
@@ -21,14 +20,16 @@ watson_time() {
 
 lookup_work_thresholds() {
   local worked_hours=$1
+  local previous=0
   local current=0
   local next=0
-  local threshold reward
+  local threshold _reward
 
-  while IFS=$'\t' read -r threshold reward; do
+  while IFS=$'\t' read -r threshold _reward; do
     [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
 
     if (( worked_hours >= threshold )); then
+      previous=$current
       current=$threshold
     elif (( next == 0 )); then
       next=$threshold
@@ -36,43 +37,66 @@ lookup_work_thresholds() {
     fi
   done < "${CONFIG_DIR}/work.tsv"
 
-  printf '%s\t%s\n' "$current" "$next"
+  printf '%s\t%s\t%s\n' "$previous" "$current" "$next"
 }
 
 
+rolling_from=$(date -d "30 days ago" +%F)
+
 worked_today=$(watson_time -d)
+worked_rolling=$(watson_time -f "$rolling_from")
+worked_morning=$(( worked_rolling - worked_today ))
+worked_morning_hours=$(( worked_morning / 3600 ))
+
+IFS=$'\t' read -r previous_threshold current_threshold next_threshold < <(
+  lookup_work_thresholds "$worked_morning_hours"
+)
+
+(( current_threshold == 0 )) && current_threshold=45
+(( previous_threshold == 0 )) && previous_threshold=45
+
+work_per_day=$(( current_threshold * 3600 / 30 ))
+
 left_today=$(( work_per_day - worked_today ))
 
-# 1. Ziel: Tagesziel schaffen
 if (( left_today > 0 )); then
   print_time "$left_today" 'behind' 0
   exit 0
 fi
 
-rolling_from=$(date -d "30 days ago" +%F)
-tomorrow_from=$(date -d "29 days ago" +%F)
-
-worked_rolling=$(watson_time -f "$rolling_from")
-worked_tomorrow_window=$(watson_time -f "$tomorrow_from")
-worked_rolling_hours=$(( worked_rolling / 3600 ))
-
-IFS=$'\t' read -r current_threshold next_threshold < <(
-  lookup_work_thresholds "$worked_rolling_hours"
-)
-
-if (( current_threshold > 0 )); then
-  keep_current_left=$(( current_threshold * 3600 - worked_tomorrow_window ))
-
-  if (( keep_current_left > 0 )); then
-    print_time "$keep_current_left" 'catchup' 35
-    exit 0
-  fi
-fi
+previous_work_per_day=$(( previous_threshold * 3600 / 30 ))
+defend_left=$(( work_per_day + previous_work_per_day - worked_today ))
 
 if (( next_threshold > 0 )); then
   next_reward_left=$(( next_threshold * 3600 - worked_rolling ))
+else
+  next_reward_left=0
+fi
+
+if (( defend_left > 0 && next_reward_left > 0 )); then
+  if (( defend_left <= next_reward_left )); then
+    print_time "$defend_left" 'catchup' 35
+  else
+    print_time "$next_reward_left" 'reward' 65
+  fi
+  exit 0
+fi
+
+if (( defend_left > 0 )); then
+  print_time "$defend_left" 'catchup' 35
+  exit 0
+fi
+
+if (( next_reward_left > 0 )); then
   print_time "$next_reward_left" 'reward' 65
   exit 0
 fi
 
-printf '{"text":"","class":"ahead","percentage":100}\n'
+if (( next_threshold > 0 )); then
+  buffer_base=$(( next_threshold * 3600 ))
+else
+  buffer_base=$(( current_threshold * 3600 ))
+fi
+
+buffer=$(( worked_rolling - buffer_base ))
+print_time "$buffer" 'ahead' 100
