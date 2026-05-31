@@ -177,6 +177,10 @@ gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
 # Default applications
 xdg-mime default sublime_text.desktop text/x-tex
 xdg-mime default sublime_text.desktop text/csv
+update-mime-database ~/.local/share/mime
+xdg-mime default mpv.desktop application/vnd.apple.mpegurl
+xdg-mime default mpv.desktop audio/x-mpegurl
+xdg-mime default mpv.desktop audio/mpegurl
 
 ### --------------------------------- User Settings --------------------------------- ###
 

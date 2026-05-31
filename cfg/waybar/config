@@ -62,6 +62,7 @@
   "custom/thynbox": {
     "format": "{}",
     "exec": "thynbox",
+    "tooltip": false,
     "interval": 60
   }
 

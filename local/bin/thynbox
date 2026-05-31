@@ -6,7 +6,3 @@ if [[ $files -eq 0 ]]; then
 else
 	printf "<span fgcolor='#B85261'><span size='16pt'>󱉳 </span>%s</span>" "$files"
 fi
-
-
-# printf "<span foreground='blue'>Blue text</span> is <i>cool</i>!"
-
