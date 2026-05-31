@@ -11,8 +11,9 @@ print_time() {
 
   local formatted
   formatted=$(format_duration "$secs")
-  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"day : %s\\nmonth : %s"}\n' \
-    "$formatted" "$class" "$percentage" "$worked_today_formatted" "$worked_this_month_formatted"
+  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"󰖙 : %s\\n󰒘 : %s\\n󰽥 : %s"}\n' \
+    "$formatted" "$class" "$percentage" \
+    "$worked_today_formatted" "$defend_formatted" "$worked_this_month_formatted"
 }
 
 format_duration() {
@@ -29,28 +30,42 @@ watson_time() {
 
 lookup_work_thresholds() {
   local worked_hours=$1
-  local previous=0
   local current=0
-  local next=0
+  local maximum=0
   local threshold _reward
 
   while IFS=$'\t' read -r threshold _reward; do
     [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
 
+    maximum=$threshold
+
     if (( worked_hours >= threshold )); then
-      previous=$current
       current=$threshold
-    elif (( next == 0 )); then
-      next=$threshold
-      break
     fi
   done < "${CONFIG_DIR}/work.tsv"
 
-  printf '%s\t%s\t%s\n' "$previous" "$current" "$next"
+  printf '%s\t%s\n' "$current" "$maximum"
+}
+
+lookup_next_threshold() {
+  local worked_secs=$1
+  local threshold _reward
+
+  while IFS=$'\t' read -r threshold _reward; do
+    [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
+
+    if (( worked_secs < threshold * 3600 )); then
+      printf '%s\n' "$threshold"
+      return
+    fi
+  done < "${CONFIG_DIR}/work.tsv"
+
+  printf '0\n'
 }
 
 
 rolling_from=$(date -d "30 days ago" +%F)
+rolling_from_next=$(date -d "$rolling_from +1 day" +%F)
 month_from=$(date +%Y-%m-01)
 
 worked_today=$(watson_time -d)
@@ -58,18 +73,42 @@ worked_this_month=$(watson_time -f "$month_from")
 worked_today_formatted=$(format_duration "$worked_today")
 worked_this_month_formatted=$(format_duration "$worked_this_month")
 worked_rolling=$(watson_time -f "$rolling_from")
-worked_morning=$(( worked_rolling - worked_today ))
-worked_morning_hours=$(( worked_morning / 3600 ))
+worked_falling_off=$(watson_time -f "$rolling_from" -t "$rolling_from_next")
+worked_morning_hours=$(( (worked_rolling - worked_today) / 3600 ))
+next_threshold=$(lookup_next_threshold "$worked_rolling")
 
-IFS=$'\t' read -r previous_threshold current_threshold next_threshold < <(
+if (( next_threshold > 0 )); then
+  next_ribbon_left=$(( next_threshold * 3600 - worked_rolling ))
+else
+  next_ribbon_left=0
+fi
+
+next_ribbon_formatted=$(format_duration "$next_ribbon_left")
+
+IFS=$'\t' read -r current_threshold maximum_threshold < <(
   lookup_work_thresholds "$worked_morning_hours"
 )
 
 (( current_threshold == 0 )) && current_threshold=45
-(( previous_threshold == 0 )) && previous_threshold=45
+
+IFS=$'\t' read -r held_threshold _maximum_threshold < <(
+  lookup_work_thresholds "$(( worked_rolling / 3600 ))"
+)
+
+if (( held_threshold > 0 )); then
+  defend_left=$(( held_threshold * 3600 + worked_falling_off - worked_rolling ))
+else
+  defend_left=0
+fi
+
+if (( defend_left > 0 )); then
+  defend_formatted=$(format_duration "$defend_left")
+else
+  defend_formatted='󰄬'
+fi
 
 work_per_day=$(( current_threshold * 3600 / 30 ))
-previous_work_per_day=$(( previous_threshold * 3600 / 30 ))
+maximum_work_per_day=$(( maximum_threshold * 3600 / 30 ))
 
 left_today=$(( work_per_day - worked_today ))
 
@@ -78,46 +117,11 @@ if (( left_today > 0 )); then
   exit 0
 fi
 
-defend_goal=$(( work_per_day + previous_work_per_day ))
-defend_left=$(( defend_goal - worked_today ))
+left_maximum=$(( maximum_work_per_day - worked_today ))
 
-if (( next_threshold > 0 )); then
-  next_reward_left=$(( next_threshold * 3600 - worked_rolling ))
-else
-  next_reward_left=0
-fi
-
-if (( defend_left > 0 && next_reward_left > 0 )); then
-  if (( next_reward_left <= defend_left )); then
-    print_time "$next_reward_left" 'reward' 65
-  else
-    print_time "$defend_left" 'catchup' 35
-  fi
+if (( left_maximum > 0 )); then
+  print_time "$left_maximum" 'catchup' 0
   exit 0
 fi
 
-if (( defend_left > 0 )); then
-  print_time "$defend_left" 'catchup' 35
-  exit 0
-fi
-
-if (( next_reward_left > 0 )); then
-  print_time "$next_reward_left" 'reward' 65
-  exit 0
-fi
-
-if (( next_threshold > 0 )); then
-  next_work_per_day=$(( next_threshold * 3600 / 30 ))
-
-  if (( worked_today < next_work_per_day * 2 && defend_left > 0 )); then
-    print_time "$defend_left" 'catchup' 35
-    exit 0
-  fi
-
-  buffer_base=$(( next_threshold * 3600 ))
-else
-  buffer_base=$(( current_threshold * 3600 ))
-fi
-
-buffer=$(( worked_rolling - buffer_base ))
-print_time "$buffer" 'ahead' 100
+print_time "$next_ribbon_left" 'ahead' 100
