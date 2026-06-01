@@ -65,7 +65,6 @@ lookup_next_threshold() {
 
 
 rolling_from=$(date -d "30 days ago" +%F)
-rolling_from_next=$(date -d "$rolling_from +1 day" +%F)
 month_from=$(date +%Y-%m-01)
 
 worked_today=$(watson_time -d)
@@ -73,7 +72,7 @@ worked_this_month=$(watson_time -f "$month_from")
 worked_today_formatted=$(format_duration "$worked_today")
 worked_this_month_formatted=$(format_duration "$worked_this_month")
 worked_rolling=$(watson_time -f "$rolling_from")
-worked_falling_off=$(watson_time -f "$rolling_from" -t "$rolling_from_next")
+worked_falling_off=$(watson_time -f "$rolling_from" -t "$rolling_from")
 worked_morning_hours=$(( (worked_rolling - worked_today) / 3600 ))
 next_threshold=$(lookup_next_threshold "$worked_rolling")
 
@@ -82,8 +81,6 @@ if (( next_threshold > 0 )); then
 else
   next_ribbon_left=0
 fi
-
-next_ribbon_formatted=$(format_duration "$next_ribbon_left")
 
 IFS=$'\t' read -r current_threshold maximum_threshold < <(
   lookup_work_thresholds "$worked_morning_hours"
