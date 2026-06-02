@@ -46,7 +46,7 @@
         "tab_bar.background": "#27292d",
         "tab.inactive_background": "#1f2123",
         "tab.active_background": "#303338",
-        "search.match_background": "#45131a80",
+        "search.match_background": "#b8a95280",
         "panel.background": "#1f2123",
         "panel.focused_border": "#18191a",
         "pane.focused_border": "#18191a",
@@ -68,8 +68,8 @@
         "editor.invisible": "#53378680",
         "editor.wrap_guide": "#53378640",
         "editor.active_wrap_guide": "#7652b880",
-        "editor.document_highlight.read_background": "#24134560",
-        "editor.document_highlight.write_background": "#33451380",
+        "editor.document_highlight.read_background": "#7652b880",
+        "editor.document_highlight.write_background": "#94b85280",
         "terminal.background": "#27292d",
         "terminal.foreground": "#e9eaeb",
         "terminal.bright_foreground": "#e9eaeb",
@@ -102,9 +102,9 @@
         "conflict": "#b85261",
         "conflict.background": "#45131a80",
         "conflict.border": "#f0dbde",
-        "created": "#b85261",
-        "created.background": "#45131a80",
-        "created.border": "#f0dbde",
+        "created": "#94b852",
+        "created.background": "#33451380",
+        "created.border": "#e9f0db",
         "deleted": "#b85261",
         "deleted.background": "#45131a80",
         "deleted.border": "#f0dbde",
@@ -142,14 +142,14 @@
         "warning.border": "#f0dbde",
         "players": [
           {
-            "cursor": "#7652b8",
+            "cursor": "#e9eaeb",
             "background": "#24134580",
-            "selection": "#24134560"
+            "selection": "#7652b880"
           },
           {
             "cursor": "#94b852",
             "background": "#33451380",
-            "selection": "#33451360"
+            "selection": "#94b85280"
           }
         ],
         "syntax": {
