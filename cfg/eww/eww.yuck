@@ -14,12 +14,11 @@
 (defwindow achievements []
     :monitor 0
     :geometry (geometry
-        :x "2850px"
-        ;:x "12px"
+        :x "12px"
         :y "12px"
         :width "498px"
         :height "512px"
-        :anchor "left top")
+        :anchor "top right")
     :stacking "bottom"
     :exclusive false
     :focusable false
