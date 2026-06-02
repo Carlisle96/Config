@@ -8,7 +8,8 @@
 // command palette (cmd-shift-p / ctrl-shift-p)
 {
   "terminal": {
-    "font_family": "Hasklug Nerd Font Mono"
+    "font_size": 14.0,
+    "font_family": "Hasklug Nerd Font Mono",
   },
   "preferred_line_length": 90,
   "ui_font_weight": 400.0,
@@ -16,43 +17,38 @@
   "agent_servers": {
     "codex-acp": {
       "default_config_options": {
-        "reasoning_effort": "high"
+        "reasoning_effort": "high",
       },
-      "type": "registry"
-    }
+      "type": "registry",
+    },
   },
   "agent": {
     "default_model": {
       "provider": "openai",
       "model": "gpt-5.3-codex",
-      "enable_thinking": true
+      "enable_thinking": true,
     },
     "favorite_models": [],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "auto_install_extensions": {
     "hyprlang": true,
   },
   "file_types": {
-    "Hyprland Config": [
-      "hyprland.conf",
-      "hyprlandd.conf",
-      "hyprland.hl",
-      "hyprlandd.hl",
-    ],
+    "Hyprland Config": ["hyprland.conf", "hyprlandd.conf", "hyprland.hl", "hyprlandd.hl"],
   },
-  "buffer_line_height": "comfortable",
+  "buffer_line_height": "standard",
   "buffer_font_weight": 400.0,
   "buffer_font_family": "Hasklug Nerd Font Mono",
   "telemetry": {
     "diagnostics": false,
-    "metrics": false
+    "metrics": false,
   },
   "session": {
-    "trust_all_worktrees": true
+    "trust_all_worktrees": true,
   },
   "base_keymap": "SublimeText",
   "ui_font_size": 14.0,
-  "buffer_font_size": 14.0,
-  "theme": "Monokai Pro (CE)",
+  "buffer_font_size": 16.0,
+  "theme": "Monokai Thyrium",
 }
