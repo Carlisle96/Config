@@ -15,8 +15,6 @@ lookup_tsv() {
   input=${input%.*}
 
   while IFS=$'\t' read -r threshold value; do
-    [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
-
     if (( input >= threshold )); then
       result=$value
     else

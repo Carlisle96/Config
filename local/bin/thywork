@@ -35,17 +35,18 @@ lookup_thresholds() {
   local current=0
   local next=0
   local threshold _reward
+  local threshold_secs
 
   while IFS=$'\t' read -r threshold _reward; do
-    next=$threshold
+    threshold_secs=$(( threshold * 3600 ))
+    next=$threshold_secs
 
-    if (( worked_secs < threshold * 3600 )); then
-      next=$threshold
+    if (( worked_secs < threshold_secs )); then
       printf '%s\t%s\n' "$current" "$next"
       return
     fi
 
-    current=$threshold
+    current=$threshold_secs
   done < "${CONFIG_DIR}/work.tsv"
 
   printf '%s\t%s\n' "$current" "$current"
@@ -54,39 +55,37 @@ lookup_thresholds() {
 rolling_from=$(date -d "30 days ago" +%F)
 worked_rolling=$(watson_time -f "$rolling_from")
 
-IFS=$'\t' read -r current_threshold next_threshold < <(
+IFS=$'\t' read -r current_threshold_secs next_threshold_secs < <(
   lookup_thresholds "$worked_rolling"
 )
 
-work_per_day=$(( next_threshold * 3600 / 30 ))
+work_per_day=$(( next_threshold_secs / 30 ))
 worked_today=$(watson_time -d)
 
 worked_today_f=$(format_duration "$worked_today")
 worked_this_month_f=$(format_duration "$(watson_time -m)")
 
-left_today=$(( work_per_day - worked_today ))
-
-worked_falling_off=$(watson_time -f "$rolling_from" -t "$rolling_from")
-defend_left=$(( current_threshold * 3600 + worked_falling_off - worked_rolling ))
-
 # Minimum work time
+left_today=$(( work_per_day - worked_today ))
 if (( left_today > 0 )); then
     print_time "$left_today" 'behind' 0 "$worked_today_f" "$worked_this_month_f"
     exit 0
 fi
 
 # Time to defend current goal
+worked_falling_off=$(watson_time -f "$rolling_from" -t "$rolling_from")
+defend_left=$(( current_threshold_secs + worked_falling_off - worked_rolling ))
 if (( defend_left > 0 )); then
     print_time "$defend_left" 'catchup' 35 "$worked_today_f" "$worked_this_month_f"
     exit 0
 fi
 
 # Last Goal is reached
-if (( current_threshold == next_threshold )); then
+if (( current_threshold_secs == next_threshold_secs )); then
     print_time "$worked_today" 'ahead' 100 "$worked_today_f" "$worked_this_month_f"
     exit 0
 fi
 
 # Time until next Goal
-next_ribbon_left=$(( next_threshold * 3600 - worked_rolling ))
+next_ribbon_left=$(( next_threshold_secs - worked_rolling ))
 print_time "$next_ribbon_left" 'ahead' 100 "$worked_today_f" "$worked_this_month_f"
