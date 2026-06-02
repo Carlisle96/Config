@@ -11,9 +11,9 @@ print_time() {
 
   local formatted
   formatted=$(format_duration "$secs")
-  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"󰖙 : %s\\n󰒘 : %s\\n󰽥 : %s"}\n' \
+  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"󰖙 : %s\\n󰽥 : %s"}\n' \
     "$formatted" "$class" "$percentage" \
-    "$worked_today_formatted" "$defend_formatted" "$worked_this_month_formatted"
+    "$worked_today_formatted" "$worked_this_month_formatted"
 }
 
 format_duration() {
@@ -31,20 +31,17 @@ watson_time() {
 lookup_work_thresholds() {
   local worked_hours=$1
   local current=0
-  local maximum=0
   local threshold _reward
 
   while IFS=$'\t' read -r threshold _reward; do
     [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
-
-    maximum=$threshold
 
     if (( worked_hours >= threshold )); then
       current=$threshold
     fi
   done < "${CONFIG_DIR}/work.tsv"
 
-  printf '%s\t%s\n' "$current" "$maximum"
+  printf '%s\n' "$current"
 }
 
 lookup_next_threshold() {
@@ -65,10 +62,9 @@ lookup_next_threshold() {
 
 
 rolling_from=$(date -d "30 days ago" +%F)
-month_from=$(date +%Y-%m-01)
 
 worked_today=$(watson_time -d)
-worked_this_month=$(watson_time -f "$month_from")
+worked_this_month=$(watson_time -m)
 worked_today_formatted=$(format_duration "$worked_today")
 worked_this_month_formatted=$(format_duration "$worked_this_month")
 worked_rolling=$(watson_time -f "$rolling_from")
@@ -82,30 +78,18 @@ else
   next_ribbon_left=0
 fi
 
-IFS=$'\t' read -r current_threshold maximum_threshold < <(
-  lookup_work_thresholds "$worked_morning_hours"
-)
+morning_threshold=$(lookup_work_thresholds "$worked_morning_hours")
+work_base_threshold=$morning_threshold
+(( work_base_threshold == 0 )) && work_base_threshold=45
 
-(( current_threshold == 0 )) && current_threshold=45
+work_per_day=$(( work_base_threshold * 3600 / 30 ))
+defend_threshold=$(lookup_work_thresholds "$(( (worked_rolling - worked_today + work_per_day) / 3600 ))")
 
-IFS=$'\t' read -r held_threshold _maximum_threshold < <(
-  lookup_work_thresholds "$(( worked_rolling / 3600 ))"
-)
-
-if (( held_threshold > 0 )); then
-  defend_left=$(( held_threshold * 3600 + worked_falling_off - worked_rolling ))
+if (( defend_threshold > 0 )); then
+  defend_left=$(( defend_threshold * 3600 + worked_falling_off - worked_rolling ))
 else
   defend_left=0
 fi
-
-if (( defend_left > 0 )); then
-  defend_formatted=$(format_duration "$defend_left")
-else
-  defend_formatted='󰄬'
-fi
-
-work_per_day=$(( current_threshold * 3600 / 30 ))
-maximum_work_per_day=$(( maximum_threshold * 3600 / 30 ))
 
 left_today=$(( work_per_day - worked_today ))
 
@@ -114,10 +98,8 @@ if (( left_today > 0 )); then
   exit 0
 fi
 
-left_maximum=$(( maximum_work_per_day - worked_today ))
-
-if (( left_maximum > 0 )); then
-  print_time "$left_maximum" 'catchup' 0
+if (( defend_left > 0 )); then
+  print_time "$defend_left" 'catchup' 35
   exit 0
 fi
 
