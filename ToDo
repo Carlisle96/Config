@@ -16,3 +16,7 @@ eww für laptop optimieren -- eww für empty window ?
 
 >>> thywork rework - rot ( daily ) danach steps bist zum nächsten ribbon ? usw.
 	-> thyachieve und thywork ggf. zusammenlegen ?
+
+	hunkyburrito:
+	sudo dnf copr enable mo-k12/personal
+    sudo dnf install xdg-desktop-portal-termfilechooser
