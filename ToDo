@@ -1,22 +1,10 @@
-(Binary Blobs), Referenzen zu anderen Projekten entfernen und durch referenzen installieren
-thylayout: enable resizing, grouping
-waybar bug fix: nicht mehr clickable seit 0.55 / lua
+major:
+:: thylayout: enable resizing, grouping
+:: termfilechooser: hunkyburrito & mo-k12/personal
+:: eww for empty window // laptop
 
-updateActual irgendwie persistent über PCs machen
-file picker defaults ( sortierung, hidden files, default location ... )
-
-synology drive desktop file ?
+minor:
+binary blobs ( icons )
+updateActual & connect irgendwie persistent über PCs machen
 mime thema default applications
-
-pdfgnomevier/gtk -- blau statt violett ( erst nach neu install fixen )
-
-layout für laptop optimieren
-eww für laptop optimieren -- eww für empty window ?
-
-
->>> thywork rework - rot ( daily ) danach steps bist zum nächsten ribbon ? usw.
-	-> thyachieve und thywork ggf. zusammenlegen ?
-
-	hunkyburrito:
-	sudo dnf copr enable mo-k12/personal
-    sudo dnf install xdg-desktop-portal-termfilechooser
+synology drive desktop file ?
