@@ -1,4 +1,6 @@
 [Default Applications]
+inode/directory=thy-nnn.desktop
+application/x-directory=thy-nnn.desktop
 text/x-tex=sublime_text.desktop
 application/x-synology-drive-doc=synology-drive-open-file.desktop
 application/x-synology-drive-sheet=synology-drive-open-file.desktop
