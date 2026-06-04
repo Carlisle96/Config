@@ -9,18 +9,42 @@ CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
 lookup_tsv() {
   local input=$1
   local table=$2
-  local result="0"
+  local result_threshold="0"
+  local result_value="0"
   local threshold value
 
   input=${input%.*}
 
   while IFS=$'\t' read -r threshold value; do
     if (( input >= threshold )); then
-      result=$value
+      result_threshold=$threshold
+      result_value=$value
     else
       break
     fi
   done < "$table"
+
+  printf '%s\t%s\n' "$result_threshold" "$result_value"
+}
+
+roman_numeral() {
+  local number=$1
+  local result=""
+  local values=(1000 900 500 400 100 90 50 40 10 9 5 4 1)
+  local numerals=(M CM D CD C XC L XL X IX V IV I)
+  local i
+
+  if (( number <= 0 )); then
+    printf '\n'
+    return
+  fi
+
+  for i in "${!values[@]}"; do
+    while (( number >= values[i] )); do
+      result+="${numerals[i]}"
+      number=$(( number - values[i] ))
+    done
+  done
 
   printf '%s\n' "$result"
 }
@@ -49,6 +73,14 @@ days_since_start() {
 
 date_key=$(effective_date)
 days_after_start=$(days_since_start "$date_key" "$START_DATE")
-progression=$(lookup_tsv "$days_after_start" "${CONFIG_DIR}/progression.tsv")
+IFS=$'\t' read -r progression_days progression < <(
+  lookup_tsv "$days_after_start" "${CONFIG_DIR}/progression.tsv"
+)
+progression_order=$(( progression / 10 ))
+progression_stage=$(( progression % 10 ))
 
-eww update "progression=$progression"
+eww update \
+  "progression=$progression" \
+  "progression_order_roman=$(roman_numeral "$progression_order")" \
+  "progression_stage_roman=$(roman_numeral "$progression_stage")" \
+  "progression_days_roman=$(roman_numeral "$progression_days")"

@@ -7,20 +7,42 @@ CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
 lookup_tsv() {
   local input=$1
   local table=$2
-  local result="0"
+  local result_threshold="0"
+  local result_value="0"
   local threshold value
 
   input=${input%.*}
 
   while IFS=$'\t' read -r threshold value; do
-    [[ -z ${threshold:-} || ${threshold:0:1} == "#" ]] && continue
-
     if (( input >= threshold )); then
-      result=$value
+      result_threshold=$threshold
+      result_value=$value
     else
       break
     fi
   done < "$table"
+
+  printf '%s\t%s\n' "$result_threshold" "$result_value"
+}
+
+roman_numeral() {
+  local number=$1
+  local result=""
+  local values=(1000 900 500 400 100 90 50 40 10 9 5 4 1)
+  local numerals=(M CM D CD C XC L XL X IX V IV I)
+  local i
+
+  if (( number <= 0 )); then
+    printf '\n'
+    return
+  fi
+
+  for i in "${!values[@]}"; do
+    while (( number >= values[i] )); do
+      result+="${numerals[i]}"
+      number=$(( number - values[i] ))
+    done
+  done
 
   printf '%s\n' "$result"
 }
@@ -39,6 +61,11 @@ worked_hours_last_30_days() {
 }
 
 worked_hours=$(worked_hours_last_30_days)
-work=$(lookup_tsv "$worked_hours" "${CONFIG_DIR}/work.tsv")
+IFS=$'\t' read -r work_hours work < <(
+  lookup_tsv "$worked_hours" "${CONFIG_DIR}/work.tsv"
+)
 
-eww update "work=$work"
+eww update \
+  "work=$work" \
+  "work_roman=$(roman_numeral "$work")" \
+  "work_hours_roman=$(roman_numeral "$work_hours")"

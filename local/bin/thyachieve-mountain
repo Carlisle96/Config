@@ -8,18 +8,42 @@ STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/thyachieve"
 lookup_tsv() {
   local input=$1
   local table=$2
-  local result="0"
+  local result_threshold="0"
+  local result_value="0"
   local threshold value
 
   input=${input%.*}
 
   while IFS=$'\t' read -r threshold value; do
     if (( input >= threshold )); then
-      result=$value
+      result_threshold=$threshold
+      result_value=$value
     else
       break
     fi
   done < "$table"
+
+  printf '%s\t%s\n' "$result_threshold" "$result_value"
+}
+
+roman_numeral() {
+  local number=$1
+  local result=""
+  local values=(1000 900 500 400 100 90 50 40 10 9 5 4 1)
+  local numerals=(M CM D CD C XC L XL X IX V IV I)
+  local i
+
+  if (( number <= 0 )); then
+    printf '\n'
+    return
+  fi
+
+  for i in "${!values[@]}"; do
+    while (( number >= values[i] )); do
+      result+="${numerals[i]}"
+      number=$(( number - values[i] ))
+    done
+  done
 
   printf '%s\n' "$result"
 }
@@ -37,6 +61,11 @@ else
   points=0
 fi
 
-mountain=$(lookup_tsv "$points" "${CONFIG_DIR}/mountain.tsv")
+IFS=$'\t' read -r mountain_points mountain < <(
+  lookup_tsv "$points" "${CONFIG_DIR}/mountain.tsv"
+)
 
-eww update "mountain=$mountain"
+eww update \
+  "mountain=$mountain" \
+  "mountain_roman=$(roman_numeral "$mountain")" \
+  "mountain_points_roman=$(roman_numeral "$mountain_points")"

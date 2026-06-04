@@ -220,6 +220,7 @@ sudo cp -r ./bin/* /usr/local/bin/
 
 # Global configs
 sudo cp -r ./usrshare/* /usr/share/
+sudo fc-cache -f /usr/share/fonts
 sudo install -D -m 0644 ./mozilla/policies.json /usr/lib64/firefox/distribution/policies.json
 
 # Custom XKB layout -- /etc/xkb/ survives xkeyboard-config package updates

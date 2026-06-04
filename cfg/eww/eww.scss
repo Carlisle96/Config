@@ -4,29 +4,55 @@
 
 .achievement-display {
     background-color: transparent;
-    border: 1px solid red;
+    //border: 1px solid red;
 }
 
 .achievement-display-full {
-    border: 1px solid red;
+    border-radius: 32px;
+    background-color: transparent;
+}
+
+.title,
+.ribbon-title {
+    color: #f7b431;
+    font-family: "Cinzel";
+    font-weight: 800;
+    font-size: 42px;
+    text-shadow:
+        1px -1px 0 #fff2a6,
+        -1px 1px 0 #7a4a12,
+        -2px 2px 0 #4a2b08,
+        -4px 4px 8px rgba(0, 0, 0, 0.8);
+}
+
+.ribbon-subtitle {
+    color: #b8bdc6;
+    font-family: "Cinzel";
+    font-weight: 500;
+    font-size: 36px;
+    text-shadow:
+        1px -1px 0 #eef1f4,
+        -1px 1px 0 #69717c,
+        -2px 2px 0 #2a2e34,
+        -4px 4px 8px rgba(0, 0, 0, 0.8);
 }
 
 .ribbon-row {
     background-color: transparent;
-    border: 1px solid lime;
+    //border: 1px solid lime;
 }
 
 .ribbon-area {
     background-color: transparent;
-    border: 1px solid purple;
+    //border: 1px solid purple;
 }
 
 .ribbon {
     background-color: transparent;
-    border: 1px solid teal;
+    //border: 1px solid teal;
 }
 
 .badge {
     background-color: transparent;
-    border: 1px solid yellow;
+    //border: 1px solid yellow;
 }

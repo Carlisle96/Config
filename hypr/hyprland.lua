@@ -165,7 +165,7 @@ hl.bind("SUPER + C", hl.dsp.exec_cmd("mate-calc"))
 hl.bind("SUPER + V", hl.dsp.workspace.toggle_special("sideterm"))
 hl.bind("SUPER + B", hl.dsp.exec_cmd("firefox"))
 
-
+hl.bind("SUPER + O", hl.dsp.exec_cmd("thyachieve-toggle"))
 hl.bind("SUPER + P",
     hl.dsp.exec_cmd('grim -g "$(slurp)" - | tee ~/Pictures/screenshots/$(date +%s).png | wl-copy'))
 

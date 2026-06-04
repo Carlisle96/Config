@@ -7,11 +7,19 @@
 (defvar ribbon_width 249)
 ; 2*249 = 498
 ;
-(defvar full_ribbon_height 128)
+(defvar full_ribbon_width 280)
+(defvar big_ribbon_width 400)
 
 (defvar progression 0)
 (defvar mountain 0)
 (defvar work 0)
+(defvar progression_order_roman "")
+(defvar progression_stage_roman "")
+(defvar progression_days_roman "")
+(defvar mountain_roman "")
+(defvar mountain_points_roman "")
+(defvar work_roman "")
+(defvar work_hours_roman "")
 
 (defwindow achievements []
     :monitor 0
@@ -106,7 +114,7 @@
                 :image-width {ribbon_width})
             (image
                 :visible {progression >= 11 && progression <= 14}
-                :path "${p_tier}${progression}.png"
+                :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
                 :class "ribbon"
                 :image-width {ribbon_width})
         )
@@ -118,8 +126,8 @@
     :geometry (geometry
         :x "0px"
         :y "0px"
-        :width "1820px"
-        :height "760px"
+        :width "1500px"
+        :height "800px"
         :anchor "center")
     :stacking "bottom"
     :exclusive false
@@ -135,9 +143,6 @@
         :space-evenly false
         :halign "center"
         :valign "center"
-        (label
-            :class "achievement-title"
-            :text "Achievements")
         (ribbon_rows_full)
         (badge_row)
     )
@@ -146,35 +151,78 @@
 (defwidget badge_row []
     (box
         :orientation "horizontal"
-        (mountain_collumn)
-        (badge_collumn)
+        :space-evenly false
         (work_collumn)
+        (badge_collumn)
+        (mountain_collumn)
     )
 )
 
 (defwidget work_collumn []
-    (image
+    (box
+        :orientation "vertical"
         :visible {work >= 1}
-        :class "ribbon"
-        :path {work >= 1 ? "${p_work}${work}.png" : "${assets}/empty.png"}
-        :image-height {full_ribbon_height})
+        :space-evenly false
+        :valign "center"
+        (label
+            :class "ribbon-title"
+            :text "Labor")
+        (image
+            :class "ribbon"
+            :path {work >= 1 ? "${p_work}${work}.png" : "${assets}/empty.png"}
+            :image-width {big_ribbon_width})
+        (box :height 64)
+        (label
+            :class "ribbon-title"
+            :text "Gradus ${work_roman}")
+        (label
+            :class "ribbon-subtitle"
+            :text "${work_hours_roman} Horae")
+    )
 )
 
 (defwidget badge_collumn []
-    (image
-        :class "badge"
+    (box
+        :orientation "vertical"
         :visible {progression >= 11}
-        :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
-        :image-width 800)
+        :space-evenly false
+        :valign "center"
+        (image
+            :class "badge"
+            :visible {progression >= 11}
+            :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
+            :image-width 700)
+        (label
+            :class "ribbon-title"
+            :text "Ordo ${progression_order_roman} · Stadium ${progression_stage_roman}")
+        (label
+            :class "ribbon-subtitle"
+            :text "${progression_days_roman} Dies")
     )
+)
 
 (defwidget mountain_collumn []
-    (image
+    (box
+        :orientation "vertical"
         :visible {mountain >= 1}
-        :class "ribbon"
-        :path {mountain >= 1 ? "${p_mountain}${mountain}.png" : "${assets}/empty.png"}
-        :image-height {full_ribbon_height})
+        :space-evenly false
+        :valign "center"
+        (label
+            :class "ribbon-title"
+            :text "Mons")
+        (image
+            :class "ribbon"
+            :path {mountain >= 1 ? "${p_mountain}${mountain}.png" : "${assets}/empty.png"}
+            :image-width {big_ribbon_width})
+        (box :height 64)
+        (label
+            :class "ribbon-title"
+            :text "Gradus ${mountain_roman}")
+        (label
+            :class "ribbon-subtitle"
+            :text "${mountain_points_roman} Puncta")
     )
+)
 
 (defwidget ribbon_rows_full []
     (box
@@ -182,30 +230,60 @@
         :orientation "horizontal"
         :space-evenly false
         :halign "center"
-        (image
-            :visible {progression >= 10}
-            :class "ribbon"
-            :path "${p_ribbon}1.png"
-            :image-height {full_ribbon_height})
-        (image
-            :visible {progression >= 20}
-            :class "ribbon"
-            :path "${p_ribbon}2.png"
-            :image-height {full_ribbon_height})
-        (image
-            :visible {progression >= 30}
-            :class "ribbon"
-            :path "${p_ribbon}3.png"
-            :image-height {full_ribbon_height})
-        (image
-            :visible {progression >= 40}
-            :class "ribbon"
-            :path "${p_ribbon}4.png"
-            :image-height {full_ribbon_height})
-        (image
-            :visible {progression >= 50}
-            :class "ribbon"
-            :path "${p_ribbon}5.png"
-            :image-height {full_ribbon_height})
+        (box
+            :orientation "vertical"
+            :visible {progression >= 15}
+            (label
+                :class "ribbon-title"
+                :text "Ordo I")
+            (image
+                :class "ribbon"
+                :path "${p_ribbon}1.png"
+                :image-width {full_ribbon_width})
+            )
+        (box
+            :orientation "vertical"
+            :visible {progression >= 22}
+            (label
+                :class "ribbon-title"
+                :text "Ordo II")
+            (image
+                :class "ribbon"
+                :path "${p_ribbon}2.png"
+                :image-width {full_ribbon_width})
+        )
+        (box
+            :orientation "vertical"
+            :visible {progression >= 32}
+            (label
+                :class "ribbon-title"
+                :text "Ordo III")
+            (image
+                :class "ribbon"
+                :path "${p_ribbon}3.png"
+                :image-width {full_ribbon_width})
+        )
+        (box
+            :orientation "vertical"
+            :visible {progression >= 42}
+            (label
+                :class "ribbon-title"
+                :text "Ordo IV")
+            (image
+                :class "ribbon"
+                :path "${p_ribbon}4.png"
+                :image-width {full_ribbon_width})
+        )
+        (box
+            :orientation "vertical"
+            :visible {progression >= 52}
+            (label
+                :class "ribbon-title"
+                :text "Ordo V")
+            (image
+                :class "ribbon"
+                :path "${p_ribbon}5.png"
+                :image-width {full_ribbon_width})
+        )
     )
 )
