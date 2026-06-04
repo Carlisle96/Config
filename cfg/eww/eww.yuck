@@ -6,6 +6,8 @@
 
 (defvar ribbon_width 249)
 ; 2*249 = 498
+;
+(defvar full_ribbon_height 128)
 
 (defvar progression 0)
 (defvar mountain 0)
@@ -23,17 +25,17 @@
     :exclusive false
     :focusable false
     :namespace "achievements"
-    (achievement_display)
+    (achievement_display_compact)
 )
 
-(defwidget achievement_display []
+(defwidget achievement_display_compact []
     (box
-        :class "achievement-display"
+        :class "achievement-display achievement-display-compact"
         :orientation "vertical"
         :space-evenly false
         :halign "fill"
         :valign "start"
-        (ribbon_rows)
+        (ribbon_rows_compact)
         (image
             :class "badge"
             :visible {progression >= 20}
@@ -44,23 +46,33 @@
     )
 )
 
-(defwidget ribbon_rows []
+(defwidget ribbon_rows_compact []
     (box
         :orientation "vertical"
         :space-evenly false
         (box
-            :visible {progression >= 40}
+            :visible {progression >= 52}
             :class "ribbon-row"
             :orientation "horizontal"
             (image
-                :visible {progression >= 50}
+                :visible {progression >= 52}
                 :class "ribbon"
                 :path "${p_ribbon}5.png"
                 :image-width {ribbon_width})
+        )
+        (box
+            :visible {progression >= 32}
+            :class "ribbon-row"
+            :orientation "horizontal"
             (image
-                :visible {progression >= 40}
+                :visible {progression >= 42}
                 :class "ribbon"
                 :path "${p_ribbon}4.png"
+                :image-width {ribbon_width})
+            (image
+                :visible {progression >= 32}
+                :class "ribbon"
+                :path "${p_ribbon}3.png"
                 :image-width {ribbon_width})
         )
         (box
@@ -79,24 +91,121 @@
                 :image-width {ribbon_width})
         )
         (box
-            :visible {progression >= 20}
+            :visible {progression >= 11}
             :class "ribbon-row"
             :orientation "horizontal"
             (image
-                :visible {progression >= 30}
-                :class "ribbon"
-                :path "${p_ribbon}3.png"
-                :image-width {ribbon_width})
-            (image
-                :visible {progression >= 20}
+                :visible {progression >= 22}
                 :class "ribbon"
                 :path "${p_ribbon}2.png"
                 :image-width {ribbon_width})
+            (image
+                :visible {progression >= 15}
+                :class "ribbon"
+                :path "${p_ribbon}1.png"
+                :image-width {ribbon_width})
+            (image
+                :visible {progression >= 11 && progression <= 14}
+                :path "${p_tier}${progression}.png"
+                :class "ribbon"
+                :image-width {ribbon_width})
         )
+    )
+)
+
+(defwindow achievements-full []
+    :monitor 0
+    :geometry (geometry
+        :x "0px"
+        :y "0px"
+        :width "1820px"
+        :height "760px"
+        :anchor "center")
+    :stacking "bottom"
+    :exclusive false
+    :focusable false
+    :namespace "achievements-full"
+    (achievement_display_full)
+)
+
+(defwidget achievement_display_full []
+    (box
+        :class "achievement-display-full"
+        :orientation "vertical"
+        :space-evenly false
+        :halign "center"
+        :valign "center"
+        (label
+            :class "achievement-title"
+            :text "Achievements")
+        (ribbon_rows_full)
+        (badge_row)
+    )
+)
+
+(defwidget badge_row []
+    (box
+        :orientation "horizontal"
+        (mountain_collumn)
+        (badge_collumn)
+        (work_collumn)
+    )
+)
+
+(defwidget work_collumn []
+    (image
+        :visible {work >= 1}
+        :class "ribbon"
+        :path {work >= 1 ? "${p_work}${work}.png" : "${assets}/empty.png"}
+        :image-height {full_ribbon_height})
+)
+
+(defwidget badge_collumn []
+    (image
+        :class "badge"
+        :visible {progression >= 11}
+        :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
+        :image-width 800)
+    )
+
+(defwidget mountain_collumn []
+    (image
+        :visible {mountain >= 1}
+        :class "ribbon"
+        :path {mountain >= 1 ? "${p_mountain}${mountain}.png" : "${assets}/empty.png"}
+        :image-height {full_ribbon_height})
+    )
+
+(defwidget ribbon_rows_full []
+    (box
+        :class "ribbon-row"
+        :orientation "horizontal"
+        :space-evenly false
+        :halign "center"
         (image
-            :class "badge"
-            :visible {progression >= 11 && progression <= 20}
-            :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
-            :image-height 144)
+            :visible {progression >= 10}
+            :class "ribbon"
+            :path "${p_ribbon}1.png"
+            :image-height {full_ribbon_height})
+        (image
+            :visible {progression >= 20}
+            :class "ribbon"
+            :path "${p_ribbon}2.png"
+            :image-height {full_ribbon_height})
+        (image
+            :visible {progression >= 30}
+            :class "ribbon"
+            :path "${p_ribbon}3.png"
+            :image-height {full_ribbon_height})
+        (image
+            :visible {progression >= 40}
+            :class "ribbon"
+            :path "${p_ribbon}4.png"
+            :image-height {full_ribbon_height})
+        (image
+            :visible {progression >= 50}
+            :class "ribbon"
+            :path "${p_ribbon}5.png"
+            :image-height {full_ribbon_height})
     )
 )
