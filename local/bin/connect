@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+INSTANCE="${INSTANCE:-server}"
+ZONE="${ZONE:-us-central1-f}"
+
+exec gcloud compute ssh "$INSTANCE" --zone="$ZONE" "$@"

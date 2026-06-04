@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+BUDGET_DIR="${BUDGET_DIR:-$HOME/Documents/code/budget}"
+INSTANCE="${INSTANCE:-server}"
+ZONE="${ZONE:-us-central1-f}"
+IMAGE_NAME="${IMAGE_NAME:-n26-sync}"
+PLATFORM="${PLATFORM:-linux/amd64}"
+ACTUAL_API_VERSION="${ACTUAL_API_VERSION:-latest}"
+REMOTE_TARBALL="${REMOTE_TARBALL:-/tmp/n26-sync-current.tar.gz}"
+REMOTE_SCRIPT_DIR="${REMOTE_SCRIPT_DIR:-~/}"
+
+cd "$BUDGET_DIR"
+
+for file in Dockerfile.sync sync.js applySyncOnServer.sh; do
+	if [[ ! -f "$file" ]]; then
+		echo "Missing $BUDGET_DIR/$file" >&2
+		exit 1
+	fi
+done
+
+if ! command -v docker >/dev/null 2>&1; then
+	echo "Missing docker command" >&2
+	exit 1
+fi
+
+if ! command -v gcloud >/dev/null 2>&1; then
+	echo "Missing gcloud command" >&2
+	exit 1
+fi
+
+tmpdir="$(mktemp -d)"
+trap 'rm -rf "$tmpdir"' EXIT
+cache_bust="$(date -u +%Y%m%d%H%M%S)"
+
+echo "Build $IMAGE_NAME:current with @actual-app/api@$ACTUAL_API_VERSION for $PLATFORM..."
+docker buildx build \
+	--pull \
+	--platform "$PLATFORM" \
+	-f Dockerfile.sync \
+	--build-arg ACTUAL_API_VERSION="$ACTUAL_API_VERSION" \
+	--build-arg CACHE_BUST="$cache_bust" \
+	-t "$IMAGE_NAME:current" \
+	--load \
+	.
+
+resolved_version="$(
+	docker run --rm --entrypoint node "$IMAGE_NAME:current" \
+		-p "JSON.parse(require('fs').readFileSync('/app/node_modules/@actual-app/api/package.json', 'utf8')).version"
+)"
+
+docker tag "$IMAGE_NAME:current" "$IMAGE_NAME:$resolved_version"
+
+tarball="$tmpdir/$IMAGE_NAME-$resolved_version.tar.gz"
+
+echo "Export image as $tarball..."
+docker save "$IMAGE_NAME:$resolved_version" "$IMAGE_NAME:current" | gzip -c > "$tarball"
+
+echo "Upload image to $INSTANCE:$REMOTE_TARBALL..."
+gcloud compute scp "$tarball" "$INSTANCE:$REMOTE_TARBALL" --zone="$ZONE"
+
+echo "Upload server apply script to $INSTANCE:$REMOTE_SCRIPT_DIR..."
+gcloud compute scp "$BUDGET_DIR/applySyncOnServer.sh" "$INSTANCE:$REMOTE_SCRIPT_DIR" --zone="$ZONE"
+
+echo
+echo "Done. Uploaded @actual-app/api@$resolved_version."
+echo "Next:"
+echo "  connect"
+echo "  ./applySyncOnServer.sh"
