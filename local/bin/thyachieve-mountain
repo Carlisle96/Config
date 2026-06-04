@@ -61,11 +61,11 @@ else
   points=0
 fi
 
-IFS=$'\t' read -r mountain_points mountain < <(
+IFS=$'\t' read -r _ mountain < <(
   lookup_tsv "$points" "${CONFIG_DIR}/mountain.tsv"
 )
 
 eww update \
   "mountain=$mountain" \
   "mountain_roman=$(roman_numeral "$mountain")" \
-  "mountain_points_roman=$(roman_numeral "$mountain_points")"
+  "mountain_points_roman=$(roman_numeral "$points")"

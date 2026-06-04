@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+lock_file="${XDG_RUNTIME_DIR:-/tmp}/thyachieve-layout-auto.lock"
+exec 9>"$lock_file"
+flock -n 9 || exit 0
+
+active_workspace_json=$(hyprctl activeworkspace -j)
+active_workspace_name=$(jq -r '.name' <<< "$active_workspace_json")
+
+if [[ $active_workspace_name == special:* ]]; then
+  exit 0
+fi
+
+active_workspace_id=$(jq -r '.id' <<< "$active_workspace_json")
+tiled_clients=$(
+  hyprctl clients -j |
+    jq --argjson workspace_id "$active_workspace_id" '
+      [
+        .[]
+        | select(.workspace.id == $workspace_id)
+        | select((.floating // false) | not)
+        | select((.mapped // true) == true)
+      ]
+      | length
+    '
+)
+
+case "$tiled_clients" in
+  0)
+    wanted=full
+    ;;
+  1)
+    wanted=compact
+    ;;
+  *)
+    wanted=none
+    ;;
+esac
+
+current=$(eww get active_display 2>/dev/null || true)
+
+if [[ $current != "$wanted" ]]; then
+  eww update "active_display=$wanted" >/dev/null 2>&1 || true
+fi

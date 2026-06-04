@@ -10,6 +10,8 @@
 (defvar full_ribbon_width 280)
 (defvar big_ribbon_width 400)
 
+(defvar active_display "compact")
+
 (defvar progression 0)
 (defvar mountain 0)
 (defvar work 0)
@@ -33,12 +35,16 @@
     :exclusive false
     :focusable false
     :namespace "achievements"
-    (achievement_display_compact)
+    (revealer
+        :transition "crossfade"
+        :duration "250ms"
+        :reveal {active_display == "compact"}
+        (achievement_display_compact))
 )
 
 (defwidget achievement_display_compact []
     (box
-        :class "achievement-display achievement-display-compact"
+        :class "achievement-display-compact"
         :orientation "vertical"
         :space-evenly false
         :halign "fill"
@@ -133,7 +139,11 @@
     :exclusive false
     :focusable false
     :namespace "achievements-full"
-    (achievement_display_full)
+    (revealer
+        :transition "crossfade"
+        :duration "250ms"
+        :reveal {active_display == "full"}
+        (achievement_display_full))
 )
 
 (defwidget achievement_display_full []

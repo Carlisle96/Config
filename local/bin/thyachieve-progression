@@ -73,7 +73,7 @@ days_since_start() {
 
 date_key=$(effective_date)
 days_after_start=$(days_since_start "$date_key" "$START_DATE")
-IFS=$'\t' read -r progression_days progression < <(
+IFS=$'\t' read -r _ progression < <(
   lookup_tsv "$days_after_start" "${CONFIG_DIR}/progression.tsv"
 )
 progression_order=$(( progression / 10 ))
@@ -83,4 +83,4 @@ eww update \
   "progression=$progression" \
   "progression_order_roman=$(roman_numeral "$progression_order")" \
   "progression_stage_roman=$(roman_numeral "$progression_stage")" \
-  "progression_days_roman=$(roman_numeral "$progression_days")"
+  "progression_days_roman=$(roman_numeral "$days_after_start")"

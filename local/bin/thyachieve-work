@@ -61,11 +61,11 @@ worked_hours_last_30_days() {
 }
 
 worked_hours=$(worked_hours_last_30_days)
-IFS=$'\t' read -r work_hours work < <(
+IFS=$'\t' read -r _ work < <(
   lookup_tsv "$worked_hours" "${CONFIG_DIR}/work.tsv"
 )
 
 eww update \
   "work=$work" \
   "work_roman=$(roman_numeral "$work")" \
-  "work_hours_roman=$(roman_numeral "$work_hours")"
+  "work_hours_roman=$(roman_numeral "$worked_hours")"
