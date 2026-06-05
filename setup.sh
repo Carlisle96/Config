@@ -14,21 +14,18 @@ PACKAGES=(
 	gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit
 )
 
-# own shell =( hyprpaper wlsunset dunst eww)
-# noctalia-shell
-
 HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst eww waybar)
 
 SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
 OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox mpv)
 
 LATEX=(
-	texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-preview
-	texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-spreadtab
+	texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-fontawesome5
+	texlive-mathtools texlive-babel-german texlive-multirow texlive-eurosym texlive-skak
 	texlive-numprint texlive-textpos texlive-tcolorbox texlive-qrcode texlive-datetime2
-	texlive-datetime2-german texlive-hyphen-german texlive-xskak texlive-skak texlive-skaknew
-	texlive-collection-fontsrecommended texlive-doi texlive-mdframed texlive-fontawesome5
-	texlive-ebgaramond texlive-datetime2-english texlive-koma-script
+	texlive-datetime2-german texlive-hyphen-german texlive-xskak  texlive-skaknew
+	texlive-collection-fontsrecommended texlive-doi texlive-mdframed  texlive-preview
+	texlive-ebgaramond texlive-datetime2-english texlive-koma-script texlive-spreadtab
 )
 
 EXTERNAL=(google-chrome-stable sublime-text synology-drive-noextra vicinae zed)
@@ -125,9 +122,9 @@ flatpak override --user --env=ELECTRON_OZONE_PLATFORM_HINT=auto org.signal.Signa
 flatpak install -y flathub com.spotify.Client
 
 # Actual Budget
-flatpak install -y flathub com.actualbudget.Actual
-flatpak override --user --filesystem=xdg-config/Actual org.actualbudget.Actual
-flatpak override --user --filesystem=xdg-data/Actual org.actualbudget.Actual
+flatpak install -y flathub com.actualbudget.actual
+flatpak override --user --filesystem=xdg-config/Actual org.actualbudget.actual
+flatpak override --user --filesystem=xdg-data/Actual org.actualbudget.actual
 
 # Watson
 pip install --user td-watson
@@ -173,14 +170,6 @@ gsettings set org.gtk.gtk4.Settings.FileChooser show-hidden false
 gsettings set org.gtk.gtk4.Settings.FileChooser sort-column name
 gsettings set org.gtk.gtk4.Settings.FileChooser sort-order ascending
 gsettings set org.gtk.gtk4.Settings.FileChooser sort-directories-first true
-
-# Default applications
-xdg-mime default sublime_text.desktop text/x-tex
-xdg-mime default sublime_text.desktop text/csv
-update-mime-database ~/.local/share/mime
-xdg-mime default mpv.desktop application/vnd.apple.mpegurl
-xdg-mime default mpv.desktop audio/x-mpegurl
-xdg-mime default mpv.desktop audio/mpegurl
 
 ### --------------------------------- User Settings --------------------------------- ###
 
@@ -237,12 +226,21 @@ cp -r ./usrshare/themes/* ~/.themes/
 cp -r ./cfg/* ~/.config/
 cp -r ./local/* ~/.local/
 
+# Default applications
+update-mime-database ~/.local/share/mime
+xdg-mime default sublime_text.desktop text/x-tex
+xdg-mime default sublime_text.desktop text/csv
+xdg-mime default mpv.desktop application/vnd.apple.mpegurl
+xdg-mime default mpv.desktop audio/x-mpegurl
+xdg-mime default mpv.desktop audio/mpegurl
+
 mkdir -p ~/.config/hypr
 cp -r ./hypr/* ~/.config/hypr/
 
 if [ "$IS_LAPTOP" = true ]
 then
 	cp ./hypr/device-laptop.lua ~/.config/hypr/device.lua
+	cp ./hypr/layouts/thylaptop.lua ~/.config/hypr/layouts/thylayout.lua
 else
 	cp ./hypr/device-desktop.lua ~/.config/hypr/device.lua
 fi
