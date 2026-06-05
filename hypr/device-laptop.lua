@@ -8,6 +8,7 @@ M.monitor = {
 }
 
 M.center_single_master = false
+M.achievement_display = "full"
 M.keepass_move = "1280 584"
 M.keepass_size = "576 432"
 M.nnn_size = "1267 864"

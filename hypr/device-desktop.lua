@@ -9,6 +9,7 @@ M.monitor = {
 }
 
 M.center_single_master = true
+M.achievement_display = "auto"
 M.keepass_move = "2344 800"
 M.keepass_size = "1032 576"
 M.nnn_size = "1720 1152"
