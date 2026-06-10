@@ -207,6 +207,20 @@ rm -rf "$SDDM_THEME_TMP"
 # Binaries
 sudo cp -r ./bin/* /usr/local/bin/
 
+# Newaita icon themes
+NEWAITA_THEMES=(
+	Newaita-reborn-dark
+	Newaita-reborn-deep-purple-dark
+)
+NEWAITA_TMP=$(mktemp -d)
+git clone --depth=1 https://github.com/cbrnix/Newaita-reborn "$NEWAITA_TMP/Newaita-reborn"
+mkdir -p ~/.icons
+for theme in "${NEWAITA_THEMES[@]}"
+do
+	cp -r "$NEWAITA_TMP/Newaita-reborn/$theme" ~/.icons/
+done
+rm -rf "$NEWAITA_TMP"
+
 # Global configs
 sudo cp -r ./usrshare/* /usr/share/
 sudo fc-cache -f /usr/share/fonts
@@ -225,6 +239,7 @@ cp -r ./usrshare/themes/* ~/.themes/
 # User configs
 cp -r ./cfg/* ~/.config/
 cp -r ./local/* ~/.local/
+gtk-update-icon-cache -q ~/.local/share/icons/hicolor || true
 
 # Default applications
 update-mime-database ~/.local/share/mime

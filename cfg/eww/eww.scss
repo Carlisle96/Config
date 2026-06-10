@@ -8,33 +8,32 @@
 }
 
 .achievement-display-full {
-    border-radius: 32px;
+    //border-radius: 32px;
     background-color: transparent;
 }
 
-.title,
 .ribbon-title {
-    color: #f7b431;
+    color: #e5b139;
     font-family: "Cinzel";
     font-weight: 800;
     font-size: 42px;
     text-shadow:
-        1px -1px 0 #fff2a6,
-        -1px 1px 0 #7a4a12,
-        -2px 2px 0 #4a2b08,
-        -4px 4px 8px rgba(0, 0, 0, 0.8);
+        0px -1px 0 #fcde7e,
+        0px 2px 0 #bf8013,
+        -2px 2px 0 #7f4801,
+        -3px 3px 2px rgba(0, 0, 0, 0.9);
 }
 
 .ribbon-subtitle {
-    color: #b8bdc6;
+    color: #c1c6cc;
     font-family: "Cinzel";
     font-weight: 500;
     font-size: 36px;
     text-shadow:
-        1px -1px 0 #eef1f4,
-        -1px 1px 0 #69717c,
-        -2px 2px 0 #2a2e34,
-        -4px 4px 8px rgba(0, 0, 0, 0.8);
+        0px -1px 0 #cbcac7,
+        0px 2px 0 #898f99,
+        -2px 2px 0 #2b2d33,
+        -3px 3px 2px rgba(0, 0, 0, 0.9);
 }
 
 .ribbon-row {

@@ -2,9 +2,13 @@
 
 set -Eeuo pipefail
 
-START_DATE="2026-05-26"
-CUTOFF_HOUR="20"
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
+
+# shellcheck source=/dev/null
+source "${CONFIG_DIR}/progression.conf"
+
+: "${START_DATE:?Missing START_DATE in ${CONFIG_DIR}/progression.conf}"
+: "${CUTOFF_TIME:?Missing CUTOFF_TIME in ${CONFIG_DIR}/progression.conf}"
 
 lookup_tsv() {
   local input=$1
@@ -52,7 +56,7 @@ roman_numeral() {
 effective_date() {
   local now cutoff
   now=$(date +%s)
-  cutoff=$(date -d "$(date +%F) ${CUTOFF_HOUR}:00" +%s)
+  cutoff=$(date -d "$(date +%F) ${CUTOFF_TIME}" +%s)
 
   if (( now >= cutoff )); then
     date +%F

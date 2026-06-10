@@ -10,7 +10,7 @@
 (defvar full_ribbon_width 280)
 (defvar big_ribbon_width 400)
 
-(defvar active_display "compact")
+(defvar active_display "init")
 
 (defvar progression 0)
 (defvar mountain 0)
@@ -35,11 +35,18 @@
     :exclusive false
     :focusable false
     :namespace "achievements"
-    (revealer
-        :transition "crossfade"
-        :duration "250ms"
-        :reveal {active_display == "compact"}
-        (achievement_display_compact))
+    (box
+        :width 498
+        :height 512
+        :halign "fill"
+        :valign "fill"
+        (revealer
+            :transition "crossfade"
+            :duration "250ms"
+            :reveal {active_display == "compact" || active_display == "init"}
+            (achievement_display_compact)
+        )
+    )
 )
 
 (defwidget achievement_display_compact []
@@ -139,11 +146,18 @@
     :exclusive false
     :focusable false
     :namespace "achievements-full"
-    (revealer
-        :transition "crossfade"
-        :duration "250ms"
-        :reveal {active_display == "full"}
-        (achievement_display_full))
+    (box
+        :width 1500
+        :height 800
+        :halign "fill"
+        :valign "fill"
+        (revealer
+            :transition "crossfade"
+            :duration "250ms"
+            :reveal {active_display == "full" || active_display == "init"}
+            (achievement_display_full)
+        )
+    )
 )
 
 (defwidget achievement_display_full []
@@ -177,11 +191,12 @@
         (label
             :class "ribbon-title"
             :text "Labor")
+        (box :height 24)
         (image
             :class "ribbon"
             :path {work >= 1 ? "${p_work}${work}.png" : "${assets}/empty.png"}
             :image-width {big_ribbon_width})
-        (box :height 64)
+        (box :height 32)
         (label
             :class "ribbon-title"
             :text "Gradus ${work_roman}")
@@ -197,12 +212,27 @@
         :visible {progression >= 11}
         :space-evenly false
         :valign "center"
+        (label
+            :visible {progression < 20}
+            :class "ribbon-title"
+            :text "Ordo I")
+        (box
+            :visible {progression < 20}
+            :height 42)
         (image
             :class "badge"
             :visible {progression >= 11}
             :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
             :image-width 700)
+        (box
+            :visible {progression < 20}
+            :height 56)
         (label
+            :visible {progression < 20}
+            :class "ribbon-title"
+            :text "Stadium ${progression_stage_roman}")
+        (label
+            :visible {progression >= 21}
             :class "ribbon-title"
             :text "Ordo ${progression_order_roman} · Stadium ${progression_stage_roman}")
         (label
@@ -220,11 +250,12 @@
         (label
             :class "ribbon-title"
             :text "Mons")
+        (box :height 24)
         (image
             :class "ribbon"
             :path {mountain >= 1 ? "${p_mountain}${mountain}.png" : "${assets}/empty.png"}
             :image-width {big_ribbon_width})
-        (box :height 64)
+        (box :height 32)
         (label
             :class "ribbon-title"
             :text "Gradus ${mountain_roman}")
@@ -242,7 +273,7 @@
         :halign "center"
         (box
             :orientation "vertical"
-            :visible {progression >= 15}
+            :visible {progression >= 21}
             (label
                 :class "ribbon-title"
                 :text "Ordo I")
