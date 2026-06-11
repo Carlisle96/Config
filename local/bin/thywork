@@ -60,6 +60,7 @@ IFS=$'\t' read -r current_threshold_secs next_threshold_secs < <(
 )
 
 work_per_day=$(( next_threshold_secs / 30 ))
+solid_per_day=$(( next_threshold_secs / 20 ))
 worked_today=$(watson_time -d)
 
 worked_today_f=$(format_duration "$worked_today")
@@ -83,6 +84,13 @@ fi
 # Last Goal is reached
 if (( current_threshold_secs == next_threshold_secs )); then
     print_time "$worked_today" 'ahead' 100 "$worked_today_f" "$worked_this_month_f"
+    exit 0
+fi
+
+# Solid work day
+solid_left=$(( solid_per_day - worked_today ))
+if (( solid_left > 0 )); then
+    print_time "$solid_left" 'solid' 65 "$worked_today_f" "$worked_this_month_f"
     exit 0
 fi
 

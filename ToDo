@@ -19,12 +19,13 @@ Laptop Einspielen:
  - eww folder
  - thyachieve progression
  - thyachieve  cfg folder
+ - waybar
+ - thywork
 
 
 
 -- Zed Startup time fix
 
-Eww Bilder fertige machen
 Eww rechts größer ? ( untereinander only )
 notizbuch mit tags ( mood, energie,... tracking )
 keyboard training
@@ -38,5 +39,5 @@ actual theme github erstellen
 -> Actualbudget theme abschließen:
     => Oben links budget monat fehler
     => Reportfarben fehler
-    => Scheduled Block Status heller
+    => Scheduled Block Status heller ( +due, missing )
     => Pre Stage Block Status ( ggf. edit button bei Rules )
