@@ -166,7 +166,7 @@ hl.bind("SUPER + G", hl.dsp.group.toggle())
 
 -- hl.bind("SUPER + Z")
 -- hl.bind("SUPER + X")
-hl.bind("SUPER + C", hl.dsp.exec_cmd("mate-calc"))
+hl.bind("SUPER + C", hl.dsp.workspace.toggle_special("calc"))
 hl.bind("SUPER + V", hl.dsp.workspace.toggle_special("sideterm"))
 hl.bind("SUPER + B", hl.dsp.exec_cmd("firefox"))
 
@@ -194,6 +194,7 @@ local keep_on_special = {
     nnn = true,
     sideterm = true,
     pomotroid = true,
+    calc = true
 }
 
 hl.on("window.open", function(w)
@@ -223,7 +224,7 @@ end)
 hl.workspace_rule({ workspace = "special:nnn", on_created_empty = 'kitty --class=nnn sh -c "nnn -d -P p"' })
 hl.workspace_rule({ workspace = "special:sideterm", on_created_empty = "kitty --class=sideterm" })
 hl.workspace_rule({ workspace = "special:pomo", on_created_empty = "pomotroid" })
-
+hl.workspace_rule({ workspace = "special:calc", on_created_empty = "mate-calc" })
 
 hl.window_rule({
     name = "xwayland-error",
@@ -254,7 +255,7 @@ hl.window_rule({
 hl.window_rule({
     name = "zed-workspace",
     match = { class = "^(dev.zed.Zed)$" },
-    workspace = "3"
+    workspace = "1"
 })
 hl.window_rule({
     name = "datev-workspace",
