@@ -10,12 +10,13 @@ print_time() {
   local percentage=$3
   local worked_today_f=$4
   local worked_this_month_f=$5
+  local normalized_month_hours=$6
 
   local formatted
   formatted=$(format_duration "$secs")
-  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"󰖙 : %s\\n󰽥 : %s"}\n' \
+  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"󰖙  :: %s\\n󰽥  :: %s\\n󰽢  :: %s h"}\n' \
     "$formatted" "$class" "$percentage" \
-    "$worked_today_f" "$worked_this_month_f"
+    "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
 }
 
 format_duration() {
@@ -62,14 +63,17 @@ IFS=$'\t' read -r current_threshold_secs next_threshold_secs < <(
 work_per_day=$(( next_threshold_secs / 30 ))
 solid_per_day=$(( next_threshold_secs / 20 ))
 worked_today=$(watson_time -d)
+worked_this_month=$(watson_time -m)
+day_of_month=$(date +%-d)
+normalized_month_hours=$(( worked_this_month * 30 / day_of_month / 3600 ))
 
 worked_today_f=$(format_duration "$worked_today")
-worked_this_month_f=$(format_duration "$(watson_time -m)")
+worked_this_month_f=$(format_duration "$worked_this_month")
 
 # Minimum work time
 left_today=$(( work_per_day - worked_today ))
 if (( left_today > 0 )); then
-    print_time "$left_today" 'behind' 0 "$worked_today_f" "$worked_this_month_f"
+    print_time "$left_today" 'behind' 0 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
     exit 0
 fi
 
@@ -77,23 +81,23 @@ fi
 worked_falling_off=$(watson_time -f "$rolling_from" -t "$rolling_from")
 defend_left=$(( current_threshold_secs + worked_falling_off - worked_rolling ))
 if (( defend_left > 0 )); then
-    print_time "$defend_left" 'catchup' 35 "$worked_today_f" "$worked_this_month_f"
+    print_time "$defend_left" 'catchup' 35 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
     exit 0
 fi
 
 # Last Goal is reached
 if (( current_threshold_secs == next_threshold_secs )); then
-    print_time "$worked_today" 'ahead' 100 "$worked_today_f" "$worked_this_month_f"
+    print_time "$worked_today" 'ahead' 100 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
     exit 0
 fi
 
 # Solid work day
 solid_left=$(( solid_per_day - worked_today ))
 if (( solid_left > 0 )); then
-    print_time "$solid_left" 'solid' 65 "$worked_today_f" "$worked_this_month_f"
+    print_time "$solid_left" 'solid' 65 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
     exit 0
 fi
 
 # Time until next Goal
 next_ribbon_left=$(( next_threshold_secs - worked_rolling ))
-print_time "$next_ribbon_left" 'ahead' 100 "$worked_today_f" "$worked_this_month_f"
+print_time "$next_ribbon_left" 'ahead' 100 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
