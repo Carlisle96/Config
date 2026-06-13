@@ -7,17 +7,18 @@
 (defvar ribbon_width 249)
 ; 2*249 = 498
 ;
-(defvar full_ribbon_width 284)
-(defvar big_ribbon_width 360)
+(defvar full_ribbon_width 267)
+(defvar big_ribbon_width 340)
+(defvar badge_width 425)
 
 (defvar active_display "init")
 
 (defvar progression 0)
 (defvar mountain 0)
 (defvar work 0)
-(defvar progression_order_roman "")
-(defvar progression_stage_roman "")
-(defvar progression_days_roman "")
+(defvar progression_order_roman "O")
+(defvar progression_stage_roman "O")
+(defvar progression_days_roman "O")
 (defvar mountain_roman "")
 (defvar mountain_points_roman "")
 (defvar work_roman "")
@@ -139,8 +140,8 @@
     :geometry (geometry
         :x "0px"
         :y "0px"
-        :width "1816px"
-        :height "900px"
+        :width "1707px"
+        :height "846px"
         :anchor "center") ; center
     :stacking "bottom"
     :exclusive false
@@ -165,29 +166,27 @@
         :space-evenly false
         :halign "center"
         :valign "top"
-        :width 1816
-        :height 900
+        :width 1707
+        :height 846
         (box
             :class "ribbon"
-            :height 90)
+            :height 82)
         (label
-            :visible {progression >= 11}
             :class "ribbon-title"
             :text "Ordo ${progression_order_roman} · Stadium ${progression_stage_roman}")
         (box
             :class "ribbon"
-            :height 22)
+            :height 18)
         (label
-            :visible {progression >= 11}
             :class "ribbon-subtitle"
             :text "${progression_days_roman} Dies")
         (box
-            :height 26
+            :height 24
             :class "ribbon"
             )
         (badge_row)
         (box
-            :height 52
+            :height 45
             :class "ribbon")
         (ribbon_rows_full)
     )
@@ -202,10 +201,10 @@
         :class "ribbon"
         (work_collumn)
         (box
-            :width 65)
+            :width 58)
         (badge_collumn)
         (box
-            :width 65)
+            :width 58)
         (mountain_collumn)
     )
 )
@@ -213,22 +212,24 @@
 (defwidget work_collumn []
     (box
         :orientation "vertical"
-        :visible {work >= 1}
         :space-evenly false
         :valign "center"
         (box :height 32)
         (label
+            :visible {work >= 1}
             :class "ribbon-title"
             :text "Labor")
-        (box :height 64)
+        (box :height 56)
         (image
             :path {work >= 1 ? "${p_work}${work}.png" : "${assets}/empty.png"}
             :image-width {big_ribbon_width})
-        (box :height 64)
+        (box :height 48)
         (label
+            :visible {work >= 1}
             :class "ribbon-title"
             :text "Gradus ${work_roman}")
         (label
+            :visible {work >= 1}
             :class "ribbon-subtitle"
             :text "${work_hours_roman} Horae")
     )
@@ -236,37 +237,38 @@
 
 (defwidget badge_collumn []
     (box
+        :class "badge"
         :orientation "vertical"
-        :visible {progression >= 11}
         :space-evenly true
-        :height 450
+        :height {badge_width}
         (image
             :class "badge"
-            :visible {progression >= 11}
             :path {progression >= 11 ? "${p_tier}${progression}.png" : "${assets}/empty.png"}
-            :image-width 450)
+            :image-width {badge_width})
     )
 )
 
 (defwidget mountain_collumn []
     (box
         :orientation "vertical"
-        :visible {mountain >= 1}
         :space-evenly false
         :valign "center"
         (box :height 32)
         (label
+            :visible {mountain >= 1}
             :class "ribbon-title"
             :text "Mons")
-        (box :height 64)
+        (box :height 56)
         (image
             :path {mountain >= 1 ? "${p_mountain}${mountain}.png" : "${assets}/empty.png"}
             :image-width {big_ribbon_width})
-        (box :height 64)
+        (box :height 48)
         (label
+            :visible {mountain >= 1}
             :class "ribbon-title"
             :text "Gradus ${mountain_roman}")
         (label
+            :visible {mountain >= 1}
             :class "ribbon-subtitle"
             :text "${mountain_points_roman} Puncta")
     )
