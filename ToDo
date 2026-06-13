@@ -1,10 +1,8 @@
 major:
 :: thylayout: enable resizing, grouping
 :: termfilechooser: hunkyburrito & mo-k12/personal
-:: eww for empty window // laptop
 
 minor:
-binary blobs ( icons )
 updateActual & connect irgendwie persistent über PCs machen
 mime thema default applications
 synology drive desktop file ?
@@ -15,18 +13,6 @@ next:
 - google cli testen
 - hyprland für externes display / präsentation ?
 
-
 Laptop Einspielen:
- - hyprland.lua
  - eww folder
- - thyachieve progression
- - thyachieve  cfg folder
- - waybar
- - thywork
  - actual theme
-
-
-Eww rechts größer ? ( untereinander only )
-
-
-eww fix wenn progression 0, ggf kleinere bilder für bessere quali ?

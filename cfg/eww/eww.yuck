@@ -161,7 +161,7 @@
 
 (defwidget achievement_display_full []
     (box
-        :class {progression >= 40 ? "stoneBackground" : "woodBackground"}
+        :class {progression >= 30 && mountain >= 4 && work >= 4 ? "stoneBackground" : "woodBackground"}
         :orientation "vertical"
         :space-evenly false
         :halign "center"
