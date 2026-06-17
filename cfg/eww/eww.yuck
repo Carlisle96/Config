@@ -4,15 +4,15 @@
 (defvar p_mountain "./assets/mountain/M")
 (defvar p_work "./assets/work/W")
 
-(defvar ribbon_width 249)
-; 2*249 = 498
-;
+
+
 (defvar full_ribbon_width 267)
 (defvar big_ribbon_width 340)
 (defvar badge_width 425)
+(defvar ribbon_width 249)
+; 2*249 = 498
 
 (defvar active_display "init")
-
 (defvar progression 0)
 (defvar mountain 0)
 (defvar work 0)
@@ -191,7 +191,6 @@
         (ribbon_rows_full)
     )
 )
-
 
 (defwidget badge_row []
     (box

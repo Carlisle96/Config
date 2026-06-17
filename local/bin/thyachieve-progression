@@ -39,7 +39,7 @@ roman_numeral() {
   local i
 
   if (( number <= 0 )); then
-    printf '\n'
+    printf 'O\n'
     return
   fi
 
