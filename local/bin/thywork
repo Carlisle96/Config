@@ -4,6 +4,19 @@ set -Eeuo pipefail
 
 CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/thyachieve"
 
+print_state() {
+  local text=$1
+  local class=$2
+  local percentage=$3
+  local worked_today_f=$4
+  local worked_this_month_f=$5
+  local normalized_month_hours=$6
+
+  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"󰖙  :: %s\\n󰽥  :: %s\\n󰽢  :: %s h"}\n' \
+    "$text" "$class" "$percentage" \
+    "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
+}
+
 print_time() {
   local secs=$1
   local class=$2
@@ -14,8 +27,7 @@ print_time() {
 
   local formatted
   formatted=$(format_duration "$secs")
-  printf '{"text":"%s","class":"%s","percentage":%s,"tooltip":"󰖙  :: %s\\n󰽥  :: %s\\n󰽢  :: %s h"}\n' \
-    "$formatted" "$class" "$percentage" \
+  print_state "\\n${formatted}" "$class" "$percentage" \
     "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
 }
 
@@ -53,15 +65,28 @@ lookup_thresholds() {
   printf '%s\t%s\n' "$current" "$current"
 }
 
+last_threshold_secs() {
+  local threshold _reward
+  local last=0
+
+  while IFS=$'\t' read -r threshold _reward; do
+    last=$threshold
+  done < "${CONFIG_DIR}/work.tsv"
+
+  printf '%s\n' "$(( last * 3600 ))"
+}
+
 rolling_from=$(date -d "30 days ago" +%F)
 worked_rolling=$(watson_time -f "$rolling_from")
 
-IFS=$'\t' read -r current_threshold_secs next_threshold_secs < <(
+IFS=$'\t' read -r _current_threshold_secs next_threshold_secs < <(
   lookup_thresholds "$worked_rolling"
 )
+final_threshold_secs=$(last_threshold_secs)
 
 work_per_day=$(( next_threshold_secs / 30 ))
 solid_per_day=$(( next_threshold_secs / 20 ))
+done_per_day=$(( final_threshold_secs / 30 ))
 worked_today=$(watson_time -d)
 worked_this_month=$(watson_time -m)
 day_of_month=$(date +%-d)
@@ -77,27 +102,19 @@ if (( left_today > 0 )); then
     exit 0
 fi
 
-# Time to defend current goal
-worked_falling_off=$(watson_time -f "$rolling_from" -t "$rolling_from")
-defend_left=$(( current_threshold_secs + worked_falling_off - worked_rolling ))
-if (( defend_left > 0 )); then
-    print_time "$defend_left" 'catchup' 35 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
-    exit 0
-fi
-
-# Last Goal is reached
-if (( current_threshold_secs == next_threshold_secs )); then
-    print_time "$worked_today" 'ahead' 100 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
-    exit 0
-fi
-
 # Solid work day
 solid_left=$(( solid_per_day - worked_today ))
 if (( solid_left > 0 )); then
-    print_time "$solid_left" 'solid' 65 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
+    print_time "$solid_left" 'solid' 35 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
     exit 0
 fi
 
-# Time until next Goal
-next_ribbon_left=$(( next_threshold_secs - worked_rolling ))
-print_time "$next_ribbon_left" 'ahead' 100 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
+# Solid reached, final daily target still open
+done_left=$(( done_per_day - worked_today ))
+if (( done_left > 0 )); then
+    print_time "$worked_today" 'checked' 65 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"
+    exit 0
+fi
+
+# Done for today
+print_state "" 'ahead' 100 "$worked_today_f" "$worked_this_month_f" "$normalized_month_hours"

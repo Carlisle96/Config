@@ -1,98 +1,105 @@
 #waybar {
-  background: rgba(0, 0, 0, 0.0);
+    background: rgba(0, 0, 0, 0);
 }
 
 #waybar .module {
-  border-radius: 16px;
-  /*
+    border-radius: 16px;
+    /*
   box-shadow: 0px 4px 16px rgba(24, 25, 26, 0.93);
   */
 }
 
 #tray {
-  background: #18191A;
-  padding: 16px;
+    background: #18191a;
+    padding: 16px;
 }
 
 /* Style the system tray icons. */
 #tray > .tray-icons > .tray-icon {
-  padding: 4px;
+    padding: 4px;
 }
 
 #workspaces {
-  background: #18191A;
-  color: #E9EAEB;
+    background: #18191a;
+    color: #e9eaeb;
 }
 
 /* Workspace icons */
 #workspaces button {
-  color: #94B852;
-  font-family: "HasklugNerdFont";
-  font-size: 24px; 
-  padding-left: 4px;
+    color: #94b852;
+    font-family: "Hasklug Nerd Font";
+    font-size: 24px;
+    padding-left: 4px;
 
-  border: 1px solid;
-  border-color: #18191A;
-  border-radius: 16px;  
+    border: 1px solid;
+    border-color: #18191a;
+    border-radius: 16px;
 }
 
 #workspaces button.empty {
-  color: #E9EAEB;
+    color: #e9eaeb;
 }
 
 #workspaces button:hover {
-  background: #27292D;
+    background: #27292d;
 }
 
 /* Highlight the active workspace. */
 #workspaces button.active {
-  background: #18191A;
-  color: #7652B8;
+    background: #18191a;
+    color: #7652b8;
 
-  border: 1px solid;
-  border-color: #7652B8;
-  border-radius: 16px;  
+    border: 1px solid;
+    border-color: #7652b8;
+    border-radius: 16px;
 }
 
-#clock, #custom-thywork, #custom-thynbox {
-  font-family: "HasklugNerdFont";
-  font-weight: Bold;
-  font-size: 16px;
-  padding: 6px;
+#clock,
+#custom-thywork,
+#custom-thynbox {
+    font-family: "Hasklug Nerd Font Propo";
+    font-weight: Bold;
+    font-size: 16px;
+    padding: 6px;
 }
 
 /* Clock styling */
 #clock {
-  background: #E9EAEB;
-  color: #18191A;
+    background: #e9eaeb;
+    color: #18191a;
 }
 
 /* Custom script modules */
-#custom-thywork, #custom-thynbox {
-  background: #18191A;
-  color: #E9EAEB;
+#custom-thywork,
+#custom-thynbox {
+    background: #18191a;
+    color: #e9eaeb;
 }
 
 #custom-thywork.behind {
-  color: #B85261;
+    color: #b85261;
 }
 
 #custom-thywork.catchup {
-  color: #7652B8;
+    color: #7652b8;
 }
 
 #custom-thywork.month {
-  color: #7652B8;
+    color: #7652b8;
 }
 
 #custom-thywork.reward {
-  color: #7652B8;
+    color: #7652b8;
 }
 
 #custom-thywork.solid {
-  color: #B8A952;
+    color: #7652b8;
+}
+
+#custom-thywork.checked {
+    color: #b8a952;
 }
 
 #custom-thywork.ahead {
-  color: #94B852;
+    color: #94b852;
 }

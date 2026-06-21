@@ -215,7 +215,6 @@
         :valign "center"
         (box :height 32)
         (label
-            :visible {work >= 1}
             :class "ribbon-title"
             :text "Labor")
         (box :height 56)
@@ -224,11 +223,9 @@
             :image-width {big_ribbon_width})
         (box :height 48)
         (label
-            :visible {work >= 1}
             :class "ribbon-title"
             :text "Gradus ${work_roman}")
         (label
-            :visible {work >= 1}
             :class "ribbon-subtitle"
             :text "${work_hours_roman} Horae")
     )
@@ -254,7 +251,6 @@
         :valign "center"
         (box :height 32)
         (label
-            :visible {mountain >= 1}
             :class "ribbon-title"
             :text "Mons")
         (box :height 56)
@@ -263,11 +259,9 @@
             :image-width {big_ribbon_width})
         (box :height 48)
         (label
-            :visible {mountain >= 1}
             :class "ribbon-title"
             :text "Gradus ${mountain_roman}")
         (label
-            :visible {mountain >= 1}
             :class "ribbon-subtitle"
             :text "${mountain_points_roman} Puncta")
     )

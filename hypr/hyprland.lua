@@ -77,7 +77,7 @@ hl.config({
         groupbar = {
             enabled = true,
             font_size = 14,
-            font_family = "Hasklug Nerd Font",
+            font_family = "Hasklug Nerd Font Propo",
             font_weight_active = "Bold",
             gradients = true,
             height = 24,

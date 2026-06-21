@@ -9,7 +9,7 @@
 {
   "terminal": {
     "font_size": 14.0,
-    "font_family": "Hasklug Nerd Font Mono",
+    "font_family": "Hasklug Nerd Font Propo",
     "cursor_shape": "bar",
   },
   "preferred_line_length": 90,
