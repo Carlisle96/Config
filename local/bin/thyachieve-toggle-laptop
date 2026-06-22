@@ -10,11 +10,11 @@ eww_cmd() {
   eww "$@" 9>&-
 }
 
-current=$(eww_cmd get active_display 2>/dev/null || printf '%s\n' compact)
+current=$(eww_cmd get active_display 2>/dev/null || printf '%s\n' hidden)
 
 case "$current" in
   full)
-    eww_cmd update active_display=compact
+    eww_cmd update active_display=hidden
     ;;
   *)
     eww_cmd update active_display=full

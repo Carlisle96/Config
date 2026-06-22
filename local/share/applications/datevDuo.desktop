@@ -2,7 +2,7 @@
 Name=DATEV Duo
 GenericName=Authenticator
 Comment=DATEV Duo Authentifizierung
-Exec=google-chrome --new-window --class=datev-duo --app=https://duo.datev.de/ --user-data-dir=/home/thyriaen/.webapps/datev-duo --ozone-platform=wayland --password-store=basic %U
+Exec=google-chrome --new-window --class=datev-duo --app=https://duo.datev.de/ --user-data-dir=/home/thyriaen/.local/share/webapps/datev-duo --ozone-platform=wayland --password-store=basic %U
 Terminal=false
 Icon=datev2
 Type=Application

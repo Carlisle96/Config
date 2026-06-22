@@ -17,7 +17,7 @@ PACKAGES=(
 HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst eww waybar)
 
 SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
-OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox mpv)
+OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox mpv remmina)
 
 LATEX=(
 	texlive-scheme-basic latexmk texlive-bibtex8 texlive-standalone texlive-fontawesome5
@@ -129,6 +129,13 @@ flatpak override --user --filesystem=xdg-data/Actual org.actualbudget.actual
 # Watson
 pip install --user td-watson
 
+# npm
+mkdir -p ~/.cache/npm
+if command -v npm >/dev/null 2>&1
+then
+	npm config set cache ~/.cache/npm
+fi
+
 ### ------------------------------- System Settings --------------------------------- ###
 
 # Login shell
@@ -232,14 +239,23 @@ sudo cp ./xkb/symbols/thy /etc/xkb/symbols/thy
 sudo cp ./xkb/rules/evdev.xml /etc/xkb/rules/evdev.xml
 
 # User themes and icons
-mkdir -p ~/.themes ~/.icons
+mkdir -p ~/.local/share/themes ~/.icons
 cp -r ./usrshare/icons/* ~/.icons/
-cp -r ./usrshare/themes/* ~/.themes/
+cp -r ./usrshare/themes/* ~/.local/share/themes/
 
 # User configs
 cp -r ./cfg/* ~/.config/
 cp -r ./local/* ~/.local/
+if [ "$IS_LAPTOP" = true ]
+then
+	mv ~/.local/bin/thyachieve-toggle-laptop ~/.local/bin/thyachieve-toggle
+else
+	rm -f ~/.local/bin/thyachieve-toggle-laptop
+fi
 gtk-update-icon-cache -q ~/.local/share/icons/hicolor || true
+
+# Web app browser profiles
+mkdir -p ~/.local/share/webapps/superhuman ~/.local/share/webapps/datev-duo
 
 # Default applications
 update-mime-database ~/.local/share/mime

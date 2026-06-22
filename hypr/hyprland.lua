@@ -153,7 +153,7 @@ hl.bind("SUPER + Q", hl.dsp.window.close())
 hl.bind("SUPER + W", hl.dsp.window.fullscreen())
 hl.bind("SUPER + E", hl.dsp.exec_cmd(
     "google-chrome --new-window --app=https://mail.superhuman.com/ " ..
-    "--user-data-dir=/home/thyriaen/.webapps/superhuman " ..
+    "--user-data-dir=/home/thyriaen/.local/share/webapps/superhuman " ..
     "--ozone-platform=wayland --password-store=basic"))
 -- hl.bind("SUPER + R")
 hl.bind("SUPER + T", hl.dsp.exec_cmd("kitty"))
