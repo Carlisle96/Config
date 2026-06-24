@@ -1,5 +1,5 @@
 [Unit]
-Description=Run thyachieve-work every 30 minutes
+Description=Run thyachieve every 30 minutes
 
 [Timer]
 OnCalendar=*-*-* *:00/30:00

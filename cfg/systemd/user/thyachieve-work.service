@@ -1,8 +1,8 @@
 [Unit]
-Description=Update Eww achievement work status
+Description=Update Eww achievement status
 
 [Service]
 Type=oneshot
 Environment=XDG_SESSION_TYPE=wayland
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin
-ExecStart=%h/.local/bin/thyachieve-work
+ExecStart=%h/.local/bin/thyachieve

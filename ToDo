@@ -3,16 +3,9 @@ major:
 :: termfilechooser: hunkyburrito & mo-k12/personal
 
 minor:
-updateActual & connect irgendwie persistent über PCs machen
-mime thema default applications
-synology drive desktop file ?
 notizbuch mit tags ( mood, energie,... tracking )
 keyboard training
 
 next:
 - google cli testen
 - hyprland für externes display / präsentation ?
-
-Laptop Einspielen:
- - eww folder
- - actual theme
