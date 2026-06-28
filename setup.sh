@@ -248,6 +248,7 @@ cp -r ./cfg/* ~/.config/
 cp -r ./local/* ~/.local/
 if [ "$IS_LAPTOP" = true ]
 then
+	sed -i 's#^RUSTICL_ENABLE=.*#RUSTICL_ENABLE=iris#' ~/.config/environment.d/session.conf
 	mv ~/.local/bin/thyachieve-toggle-laptop ~/.local/bin/thyachieve-toggle
 else
 	rm -f ~/.local/bin/thyachieve-toggle-laptop

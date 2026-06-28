@@ -13,10 +13,11 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("eww open-many achievements achievements-full && thyachieve")
     hl.exec_cmd("/usr/libexec/xfce-polkit")
     hl.exec_cmd("/home/thyriaen/.config/hypr/scripts/nnn-listen.sh")
-    if device.achievement_display == "full" then
-        hl.exec_cmd("eww update active_display=full")
-    else
+    local achievement_display = device.achievement_display or "auto"
+    if achievement_display == "auto" then
         hl.exec_cmd("/home/thyriaen/.config/hypr/scripts/thyachieve-layout-listen.sh")
+    else
+        hl.exec_cmd("eww update active_display=" .. achievement_display)
     end
     hl.exec_cmd("TZ=Etc/GMT-1 wlsunset -t 1000 -s 19:30 -S 07:30 -d 7200")
     hl.exec_cmd("keepassxc")

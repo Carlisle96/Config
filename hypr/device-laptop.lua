@@ -8,7 +8,7 @@ M.monitor = {
 }
 
 M.center_single_master = false
-M.achievement_display = "full"
+M.achievement_display = "compact"
 M.keepass_move = "1280 584"
 M.keepass_size = "576 432"
 M.nnn_size = "1267 864"
@@ -28,7 +28,8 @@ end
 function M.binds()
     hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("light -U 10"), { locked = true, repeating = true })
     hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("light -A 10"), { locked = true, repeating = true })
-    hl.gesture({ fingers = 3, direction = "horizontal", action = "workspace" })
+    hl.bind("SUPER + slash", hl.dsp.exec_cmd("thyachieve-toggle"), { locked = true })
+    hl.gesture({ fingers = 3, direction = "vertical", action = "workspace" })
 end
 
 function M.rules() end
