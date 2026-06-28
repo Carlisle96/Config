@@ -56,7 +56,8 @@
 
 #clock,
 #custom-thywork,
-#custom-thynbox {
+#custom-thynbox,
+#custom-thybattery {
     font-family: "Hasklug Nerd Font Propo";
     font-weight: Bold;
     font-size: 16px;
@@ -71,9 +72,26 @@
 
 /* Custom script modules */
 #custom-thywork,
-#custom-thynbox {
+#custom-thynbox,
+#custom-thybattery {
     background: #18191a;
     color: #e9eaeb;
+}
+
+#custom-thybattery.critical {
+    color: #b85261;
+}
+
+#custom-thybattery.warning {
+    color: #b8a952;
+}
+
+#custom-thybattery.good {
+    color: #94b852;
+}
+
+#custom-thybattery.charging {
+    color: #7652b8;
 }
 
 #custom-thywork.behind {

@@ -78,8 +78,11 @@ mkdir -p ~/.local/bin
 if [ "$IS_LAPTOP" = true ]
 then
 	sudo dnf -y install "${LAPTOP[@]}"
+	sudo install -D -m 0644 ./etc/tlp.d/01-thyriaen-battery.conf /etc/tlp.d/01-thyriaen-battery.conf
 	sudo hostnamectl set-hostname carthy
-	sudo systemctl enable tlp.service
+	sudo systemctl enable --now tlp.service
+	sudo tlp start
+	sudo tlp setcharge
 else
 	sudo dnf -y install "${DESKTOP[@]}"
 	sudo hostnamectl set-hostname thyrium
