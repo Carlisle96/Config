@@ -36,6 +36,23 @@ function M.rules()
         float = true,
         fullscreen = true,
     })
+    hl.window_rule({
+        name = "mtga",
+        match = { class = "^(steam_app_2141910)$", title = "^(MTGA)$" },
+        float = true,
+        fullscreen = true,
+    })
+    hl.on("window.open", function(w)
+        if w.class ~= "steam_app_2141910" and w.initial_class ~= "steam_app_2141910" then
+            return
+        end
+
+        hl.dispatch(hl.dsp.window.fullscreen_state({
+            window = w,
+            internal = 2,
+            client = 2,
+        }))
+    end)
 end
 
 return M
