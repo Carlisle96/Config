@@ -4,7 +4,7 @@ set -Eeuo pipefail
 trap 'echo "ERROR: firefox.sh failed at line $LINENO" >&2' ERR
 
 REPO_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-FIREFOX_DIR="$HOME/.mozilla/firefox"
+FIREFOX_DIR="$HOME/.config/mozilla/firefox"
 PROFILES_INI="$FIREFOX_DIR/profiles.ini"
 
 if [ ! -f "$PROFILES_INI" ]

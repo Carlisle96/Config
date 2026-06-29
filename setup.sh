@@ -245,6 +245,8 @@ cp -r ./usrshare/themes/* ~/.local/share/themes/
 
 # User configs
 cp -r ./cfg/* ~/.config/
+install -D -m 0644 ./cfg/task/taskrc ~/.config/task/taskrc
+mkdir -p ~/.config/task/hooks ~/.local/share/task
 cp -r ./local/* ~/.local/
 if [ "$IS_LAPTOP" = true ]
 then
