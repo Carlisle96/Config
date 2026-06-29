@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+battery_path() {
+  local supply
+
+  for supply in /sys/class/power_supply/BAT*; do
+    [[ -e "$supply/type" ]] || continue
+    [[ $(<"$supply/type") == "Battery" ]] || continue
+    printf '%s\n' "$supply"
+    return 0
+  done
+
+  return 1
+}
+
+read_threshold() {
+  local battery=$1
+  local primary=$2
+  local fallback=$3
+
+  if [[ -r "$battery/$primary" ]]; then
+    cat "$battery/$primary"
+  elif [[ -r "$battery/$fallback" ]]; then
+    cat "$battery/$fallback"
+  else
+    printf '?'
+  fi
+}
+
+read_num() {
+  local path=$1
+
+  if [[ -r "$path" ]]; then
+    cat "$path"
+  else
+    printf '0'
+  fi
+}
+
+format_duration() {
+  local seconds=$1
+  local hours=$(( seconds / 3600 ))
+  local minutes=$(( seconds % 3600 / 60 ))
+
+  printf '%d:%02d' "$hours" "$minutes"
+}
+
+remaining_time() {
+  local battery=$1
+  local battery_status=$2
+  local stop=$3
+  local energy_now
+  local energy_full
+  local power_now
+  local target_energy
+  local remaining_energy
+
+  energy_now=$(read_num "$battery/energy_now")
+  energy_full=$(read_num "$battery/energy_full")
+  power_now=$(read_num "$battery/power_now")
+
+  if (( power_now <= 0 || energy_full <= 0 )); then
+    printf '%s' '--:--'
+    return
+  fi
+
+  if [[ "$battery_status" == "Charging" ]]; then
+    if [[ "$stop" =~ ^[0-9]+$ ]]; then
+      target_energy=$(( energy_full * stop / 100 ))
+    else
+      target_energy=$energy_full
+    fi
+    remaining_energy=$(( target_energy - energy_now ))
+  else
+    remaining_energy=$energy_now
+  fi
+
+  if (( remaining_energy <= 0 )); then
+    printf '0:00'
+    return
+  fi
+
+  format_duration "$(( remaining_energy * 3600 / power_now ))"
+}
+
+json_escape() {
+  local value=$1
+  value=${value//\\/\\\\}
+  value=${value//\"/\\\"}
+  value=${value//$'\n'/\\n}
+  printf '%s' "$value"
+}
+
+bat=$(battery_path) || exit 0
+capacity=$(<"$bat/capacity")
+status=$(<"$bat/status")
+start_threshold=$(read_threshold "$bat" charge_control_start_threshold charge_start_threshold)
+stop_threshold=$(read_threshold "$bat" charge_control_end_threshold charge_stop_threshold)
+remaining=$(remaining_time "$bat" "$status" "$stop_threshold")
+display_capacity=$(( capacity + 1 ))
+
+case "$status" in
+  Charging)
+    icon=""
+    class="charging"
+    ;;
+  Full)
+    icon=""
+    class="charging"
+    remaining="${display_capacity}%"
+    ;;
+  Not\ charging)
+    icon=""
+    class="charging"
+    remaining="${display_capacity}%"
+    ;;
+  *)
+    if (( capacity < 15 )); then
+      icon=""
+      class="critical"
+    elif (( capacity < 35 )); then
+      icon=""
+      class="warning"
+    elif (( capacity < 55 )); then
+      icon=""
+      class="warning"
+    elif (( capacity < 75 )); then
+      icon=""
+      class="good"
+    else
+      icon=""
+      class="good"
+    fi
+    ;;
+esac
+
+text="${icon}"$'\n'"${remaining}"
+tooltip="Akku: ${capacity}%"$'\n'"Ladeschwelle: ${start_threshold}-${stop_threshold}%"
+
+printf '{"text":"%s","class":"%s","tooltip":"%s"}\n' \
+  "$(json_escape "$text")" \
+  "$(json_escape "$class")" \
+  "$(json_escape "$tooltip")"

@@ -12,7 +12,7 @@
 (defvar ribbon_width 249)
 ; 2*249 = 498
 
-(defvar active_display "init")
+(defvar active_display "compact")
 (defvar progression 0)
 (defvar mountain 0)
 (defvar work 0)
@@ -44,7 +44,7 @@
         (revealer
             :transition "crossfade"
             :duration "250ms"
-            :reveal {active_display == "compact" || active_display == "init"}
+            :reveal {active_display == "compact"}
             (achievement_display_compact)
         )
     )
@@ -153,7 +153,7 @@
         (revealer
             :transition "crossfade"
             :duration "250ms"
-            :reveal {active_display == "full" || active_display == "init"}
+            :reveal {active_display == "full"}
             (achievement_display_full)
         )
     )
