@@ -10,6 +10,9 @@ M.monitor = {
 
 M.center_single_master = true
 M.achievement_display = "auto"
+M.achievement_compact_x = "12"
+M.achievement_compact_y = "12"
+M.achievement_compact_anchor = "top right"
 M.keepass_move = "2344 800"
 M.keepass_size = "1032 576"
 M.nnn_size = "1720 1152"
