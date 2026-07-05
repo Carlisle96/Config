@@ -19,6 +19,8 @@ M.pomo_size = "352 416"
 M.calc_size = "420 480"
 M.calc_move = "2968 42"
 M.dragon_move = "3240 700"
+M.pomotroid_move_idle = "160 84"
+M.pomotroid_move_active = "240 128"
 
 function M.autostart()
     hl.exec_cmd("easyeffects --gapplication-service")

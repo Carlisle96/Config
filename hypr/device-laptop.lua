@@ -9,16 +9,16 @@ M.monitor = {
 
 M.center_single_master = false
 M.achievement_display = "compact"
-M.keepass_move = "1280 584"
-M.keepass_size = "576 432"
+M.keepass_move = "1056 516"
+M.keepass_size = "800 500"
 M.nnn_size = "1267 864"
 M.sideterm_size = "864 540"
 M.sideterm_move = "134 497"
-M.pomo_size = "192 108"
-M.calc_size = "576 432"
-M.calc_move = "1306 16"
+M.pomo_size = "300 300"
+M.calc_size = "420 480"
+M.calc_move = "1436 64"
 M.dragon_move = "1766 540"
-M.pomotroid_move_idle = "77 130"
+M.pomotroid_move_idle = "144 64"
 M.pomotroid_move_active = "461 259"
 
 function M.autostart()

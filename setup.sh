@@ -5,7 +5,8 @@ trap 'echo "ERROR: setup.sh failed at line $LINENO" >&2' ERR
 
 ### ------------------------------------ Variables ----------------------------------- ###
 
-BASICS=(ddcutil grim jq ripgrep slurp socat wireplumber wl-clipboard)
+BASICS=(ddcutil grim jq ripgrep slurp socat wireplumber wl-clipboard
+    plymouth-theme-spinner plymouth-plugin-two-step plymouth-plugin-label)
 
 PACKAGES=(
 	flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task trash-cli
@@ -79,6 +80,7 @@ if [ "$IS_LAPTOP" = true ]
 then
 	sudo dnf -y install "${LAPTOP[@]}"
 	sudo install -D -m 0644 ./etc/tlp.d/01-thyriaen-battery.conf /etc/tlp.d/01-thyriaen-battery.conf
+	sudo install -D -m 0644 ./etc/dracut.conf.d/10-i915.conf /etc/dracut.conf.d/10-i915.conf
 	sudo hostnamectl set-hostname carthy
 	sudo systemctl enable --now tlp.service
 	sudo tlp start
@@ -146,7 +148,11 @@ chsh -s /usr/bin/zsh
 
 # Grub
 sudo grub2-editenv - set menu_auto_hide=1
+sudo grubby --update-kernel=ALL --args="loglevel=3 rd.udev.log_level=3 vt.global_cursor_default=0"
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+
+# Quiet virtual console setup
+sudo sed -i '/^FONT=/d' /etc/vconsole.conf
 
 # Green vertical flicker fix (desktop only) -- disables AMD GPU runtime power management
 if [ "$IS_LAPTOP" = false ]
@@ -202,6 +208,11 @@ git clone --depth=1 \
 	"$SDDM_THEME_TMP/eucalyptus-drop"
 sudo mkdir -p /usr/share/sddm/themes/eucalyptus-drop
 sudo cp ./sddm/sddm.conf /etc/
+sudo install -D -m 0644 ./sddm/weston.ini /etc/sddm/weston.ini
+sudo install -D -m 0644 ./etc/systemd/system/sddm.service.d/10-cursor.conf \
+	/etc/systemd/system/sddm.service.d/10-cursor.conf
+sudo install -D -m 0644 ./etc/systemd/system/plymouth-quit.service.d/10-retain-splash.conf \
+	/etc/systemd/system/plymouth-quit.service.d/10-retain-splash.conf
 sudo cp -r "$SDDM_THEME_TMP/eucalyptus-drop/." /usr/share/sddm/themes/eucalyptus-drop/
 sudo cp ./sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
 if [ "$IS_LAPTOP" = true ]
@@ -306,6 +317,11 @@ then
 else
 	cp ./usrshare/backgrounds/wpMoonCorner16.png ~/Pictures/Wallpapers/wpMoon.png
 fi
+
+# Plymouth
+sudo plymouth-set-default-theme bgrt -R
+sudo systemctl daemon-reload
+sudo dracut -f
 
 # Services
 systemctl --user daemon-reload

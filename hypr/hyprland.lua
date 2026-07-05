@@ -22,7 +22,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("TZ=Etc/GMT-1 wlsunset -t 1000 -s 19:30 -S 07:30 -d 7200")
     hl.exec_cmd("keepassxc")
     hl.exec_cmd("synology-drive start")
-    hl.exec_cmd("flatpak run org.signal.Signal --use-tray-icon")
+    hl.exec_cmd("flatpak run org.signal.Signal --use-tray-icon --start-in-tray")
     device.autostart()
 end)
 
@@ -353,12 +353,12 @@ hl.window_rule({ name = "pomotroid-size", match = { class = "^(pomotroid)$" }, s
 hl.window_rule({
     name = "pomotroid-idle",
     match = { class = "^(pomotroid)$", title = "^(Pomotroid)$" },
-    move = device.pomotroid_move_idle or "160 84"
+    move = device.pomotroid_move_idle
 })
 hl.window_rule({
     name = "pomotroid-active",
     match = { class = "^(pomotroid)$", title = "^(Pomotroid .+)$" },
-    move = device.pomotroid_move_active or "240 128"
+    move = device.pomotroid_move_active
 })
 
 device.rules()
