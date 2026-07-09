@@ -273,25 +273,21 @@
         :orientation "horizontal"
         :space-evenly false
         :halign "center"
+        :height 72
         (image
-            :visible {progression >= 21}
-            :path "${p_ribbon}1.png"
-            :image-width {full_ribbon_width})
+            :path {progression >= 21 ? "${p_ribbon}1.png" : "${assets}/empty.png"}
+            :image-width {progression >= 21 ? full_ribbon_width : 0})
         (image
-            :visible {progression >= 22}
-            :path "${p_ribbon}2.png"
-            :image-width {full_ribbon_width})
+            :path {progression >= 22 ? "${p_ribbon}2.png" : "${assets}/empty.png"}
+            :image-width {progression >= 22 ? full_ribbon_width : 0})
         (image
-            :visible {progression >= 32}
-            :path "${p_ribbon}3.png"
-            :image-width {full_ribbon_width})
+            :path {progression >= 32 ? "${p_ribbon}3.png" : "${assets}/empty.png"}
+            :image-width {progression >= 32 ? full_ribbon_width : 0})
         (image
-            :visible {progression >= 42}
-            :path "${p_ribbon}4.png"
-            :image-width {full_ribbon_width})
+            :path {progression >= 42 ? "${p_ribbon}4.png" : "${assets}/empty.png"}
+            :image-width {progression >= 42 ? full_ribbon_width : 0})
         (image
-            :visible {progression >= 52}
-            :path "${p_ribbon}5.png"
-            :image-width {full_ribbon_width})
+            :path {progression >= 52 ? "${p_ribbon}5.png" : "${assets}/empty.png"}
+            :image-width {progression >= 52 ? full_ribbon_width : 0})
     )
 )
