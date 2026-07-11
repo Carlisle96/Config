@@ -47,6 +47,7 @@
 
   "clock": {
     "format": "󰥔\n{:%H:%M}",
+    "align": 0.5,
     "justify": "center",  
     "tooltip-format": "{:%A, %d %B %Y %H:%M:%S}"
   },
@@ -56,6 +57,8 @@
     "format-icons": ["󰃖 ", " ", "󰃗 ", "󰦇 "],
     "exec": "thywork",
     "return-type": "json",
+    "min-length": 5,
+    "align": 0.5,
     "justify": "center",
     "interval": 60
   },
@@ -65,6 +68,8 @@
     "exec": "thybattery",
     "exec-if": "test -d /sys/class/power_supply/BAT0",
     "return-type": "json",
+    "min-length": 5,
+    "align": 0.5,
     "justify": "center",
     "interval": 30
   },
@@ -73,6 +78,8 @@
     "format": "{}",
     "exec": "thynbox",
     "tooltip": false,
+    "align": 0.5,
+    "justify": "center",
     "interval": 60
   }
 

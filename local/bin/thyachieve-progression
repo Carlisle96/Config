@@ -31,6 +31,23 @@ lookup_tsv() {
   printf '%s\t%s\n' "$result_threshold" "$result_value"
 }
 
+next_threshold() {
+  local input=$1
+  local table=$2
+  local threshold _value
+
+  input=${input%.*}
+
+  while IFS=$'\t' read -r threshold _value; do
+    if (( threshold > input )); then
+      printf '%s\n' "$threshold"
+      return
+    fi
+  done < "$table"
+
+  printf '%s\n' '-'
+}
+
 roman_numeral() {
   local number=$1
   local result=""
@@ -75,11 +92,27 @@ days_since_start() {
   printf '%s\n' "$(( (date_epoch - start_epoch) / 86400 ))"
 }
 
-date_key=$(effective_date)
-days_after_start=$(days_since_start "$date_key" "$START_DATE")
+calendar_date=$(date +%F)
+effective_date_key=$(effective_date)
+calendar_days_after_start=$(days_since_start "$calendar_date" "$START_DATE")
+days_after_start=$(days_since_start "$effective_date_key" "$START_DATE")
+progression_table="${CONFIG_DIR}/progression.tsv"
 IFS=$'\t' read -r _ progression < <(
-  lookup_tsv "$days_after_start" "${CONFIG_DIR}/progression.tsv"
+  lookup_tsv "$days_after_start" "$progression_table"
 )
+next_progression_threshold=$(
+  next_threshold "$days_after_start" "$progression_table"
+)
+if [[ "$next_progression_threshold" == "-" ]]; then
+  progression_days_remaining_roman="-"
+else
+  progression_days_remaining=$((
+    next_progression_threshold - calendar_days_after_start
+  ))
+  progression_days_remaining_roman=$(
+    roman_numeral "$progression_days_remaining"
+  )
+fi
 progression_order=$(( progression / 10 ))
 progression_stage=$(( progression % 10 ))
 
@@ -87,4 +120,5 @@ eww update \
   "progression=$progression" \
   "progression_order_roman=$(roman_numeral "$progression_order")" \
   "progression_stage_roman=$(roman_numeral "$progression_stage")" \
-  "progression_days_roman=$(roman_numeral "$days_after_start")"
+  "progression_days_roman=$(roman_numeral "$days_after_start")" \
+  "progression_days_remaining_roman=$progression_days_remaining_roman"

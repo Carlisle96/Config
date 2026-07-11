@@ -19,6 +19,7 @@
 (defvar progression_order_roman "O")
 (defvar progression_stage_roman "O")
 (defvar progression_days_roman "O")
+(defvar progression_days_remaining_roman "O")
 (defvar mountain_roman "")
 (defvar mountain_points_roman "")
 (defvar work_roman "")
@@ -179,6 +180,11 @@
             :height 18)
         (label
             :class "ribbon-subtitle"
+            :visible {progression_days_remaining_roman != "-"}
+            :text "${progression_days_roman} Dies - ${progression_days_remaining_roman} Restant")
+        (label
+            :class "ribbon-subtitle"
+            :visible {progression_days_remaining_roman == "-"}
             :text "${progression_days_roman} Dies")
         (box
             :height 24
