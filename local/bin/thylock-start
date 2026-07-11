@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+if ! command -v hyprlock >/dev/null 2>&1
+then
+  logger -t thylock-start "hyprlock is missing; exiting Hyprland instead of exposing an unlocked session"
+  hyprctl dispatch exit 1 >/dev/null 2>&1 || true
+  exit 127
+fi
+
+exec hyprlock
