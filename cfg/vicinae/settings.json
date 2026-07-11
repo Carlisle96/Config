@@ -2,5 +2,48 @@
   "$schema": "https://vicinae.com/schemas/config.json",
   "imports": [
     "./thy.json"
-  ]
+  ],
+  "providers": {
+    "font": {
+      "enabled": false
+    },
+    "power": {
+      "entrypoints": {
+        "hibernate": {
+          "enabled": false
+        },
+        "logout": {
+          "enabled": false
+        },
+        "power-off": {
+          "preferences": {
+            "confirm": false
+          }
+        },
+        "reboot": {
+          "preferences": {
+            "confirm": false
+          }
+        },
+        "sleep": {
+          "enabled": false
+        },
+        "soft-reboot": {
+          "enabled": false
+        },
+        "suspend": {
+          "enabled": false
+        }
+      }
+    },
+    "raycast-compat": {
+      "enabled": false
+    },
+    "theme": {
+      "enabled": false
+    },
+    "wm": {
+      "enabled": false
+    }
+  }
 }

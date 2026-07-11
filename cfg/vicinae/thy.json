@@ -40,6 +40,15 @@
         }
       }
     },
+    "power": {
+      "entrypoints": {
+        "lock": {
+          "preferences": {
+            "customProgram": "/usr/bin/hyprlock"
+          }
+        }
+      }
+    },
     "system": {
       "entrypoints": {
         "run": {
