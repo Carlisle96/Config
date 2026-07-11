@@ -15,9 +15,7 @@ PACKAGES=(
 	gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit
 )
 
-HYPRLAND=(hyprland sddm xdg-desktop-portal-hyprland hyprpaper wlsunset dunst eww waybar)
-
-SDDMTHEME=(qt6-qt5compat qt5-qtgraphicaleffects qt5-qtquickcontrols2)
+HYPRLAND=(hyprland hyprlock xdg-desktop-portal-hyprland hyprpaper wlsunset dunst eww waybar)
 OFFICE=(libreoffice-calc libreoffice-gtk3 darktable web-eid hexchat firefox mpv remmina)
 
 LATEX=(
@@ -71,7 +69,7 @@ sudo dnf config-manager setopt google-chrome.enabled=1
 
 sudo dnf -y upgrade
 sudo dnf --refresh -y install \
-	"${BASICS[@]}" "${PACKAGES[@]}" "${SDDMTHEME[@]}" \
+	"${BASICS[@]}" "${PACKAGES[@]}" \
 	"${HYPRLAND[@]}" "${LATEX[@]}" "${OFFICE[@]}" "${EXTERNAL[@]}"
 
 mkdir -p ~/.local/bin
@@ -160,8 +158,10 @@ then
 	sudo grubby --update-kernel=ALL --args="amdgpu.runpm=0 amdgpu.gpu_recovery=1"
 fi
 
-# SDDM
-sudo systemctl enable sddm --force
+# Login manager -- tty1 autologin starts Hyprland through uwsm, then hyprlock locks immediately.
+sudo install -D -m 0644 ./etc/systemd/system/getty@tty1.service.d/10-thyriaen-autologin.conf \
+	/etc/systemd/system/getty@tty1.service.d/10-thyriaen-autologin.conf
+sudo systemctl enable getty@tty1.service
 sudo systemctl set-default graphical.target
 
 # Interface theming
@@ -200,30 +200,6 @@ then
 fi
 
 ### ----------------------------------- Copy Files ---------------------------------- ###
-
-# SDDM
-SDDM_THEME_TMP=$(mktemp -d)
-git clone --depth=1 \
-	https://gitlab.com/Matt.Jolly/sddm-eucalyptus-drop \
-	"$SDDM_THEME_TMP/eucalyptus-drop"
-sudo mkdir -p /usr/share/sddm/themes/eucalyptus-drop
-sudo cp ./sddm/sddm.conf /etc/
-sudo install -D -m 0644 ./sddm/weston.ini /etc/sddm/weston.ini
-sudo install -D -m 0644 ./etc/systemd/system/sddm.service.d/10-cursor.conf \
-	/etc/systemd/system/sddm.service.d/10-cursor.conf
-sudo install -D -m 0644 ./etc/systemd/system/plymouth-quit.service.d/10-retain-splash.conf \
-	/etc/systemd/system/plymouth-quit.service.d/10-retain-splash.conf
-sudo cp -r "$SDDM_THEME_TMP/eucalyptus-drop/." /usr/share/sddm/themes/eucalyptus-drop/
-sudo cp ./sddm/theme.conf /usr/share/sddm/themes/eucalyptus-drop/
-if [ "$IS_LAPTOP" = true ]
-then
-	sudo install -m 0644 ./usrshare/backgrounds/wpMoonLaptopCorner16.png \
-		/usr/share/sddm/themes/eucalyptus-drop/Backgrounds/wpMoon.png
-else
-	sudo install -m 0644 ./usrshare/backgrounds/wpMoonCorner16.png \
-		/usr/share/sddm/themes/eucalyptus-drop/Backgrounds/wpMoon.png
-fi
-rm -rf "$SDDM_THEME_TMP"
 
 # Binaries
 sudo cp -r ./bin/* /usr/local/bin/

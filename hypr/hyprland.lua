@@ -8,6 +8,9 @@ hl.monitor(device.monitor)
 -----------------
 
 hl.on("hyprland.start", function()
+    if os.getenv("THY_AUTOLOGIN_LOCK") == "1" then
+        hl.exec_cmd("thylock-start")
+    end
     hl.exec_cmd("waybar")
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd(

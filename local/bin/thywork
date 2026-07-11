@@ -86,7 +86,7 @@ final_threshold_secs=$(last_threshold_secs)
 
 work_per_day=$(( next_threshold_secs / 30 ))
 solid_per_day=$(( next_threshold_secs / 20 ))
-done_per_day=$(( final_threshold_secs / 30 ))
+done_per_day=$(( next_threshold_secs / 15 ))
 worked_today=$(watson_time -d)
 worked_this_month=$(watson_time -m)
 day_of_month=$(date +%-d)
