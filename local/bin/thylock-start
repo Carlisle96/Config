@@ -9,4 +9,7 @@ then
   exit 127
 fi
 
-exec hyprlock
+exec hyprlock \
+  --config "${XDG_CONFIG_HOME:-$HOME/.config}/hypr/hyprlock-startup.conf" \
+  --immediate-render \
+  --no-fade-in

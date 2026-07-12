@@ -78,6 +78,7 @@
     "format": "{}",
     "exec": "thynbox",
     "tooltip": false,
+    "min-length": 5,
     "align": 0.5,
     "justify": "center",
     "interval": 60
