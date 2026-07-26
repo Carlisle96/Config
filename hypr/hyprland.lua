@@ -88,6 +88,7 @@ hl.config({
         },
         groupbar = {
             enabled = true,
+            disable_when_only = true,
             font_size = 14,
             font_family = "Hasklug Nerd Font Propo",
             font_weight_active = "Bold",

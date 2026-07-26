@@ -26,15 +26,58 @@ M.pomotroid_move_active = "461 259"
 
 function M.autostart()
     hl.exec_cmd("light -N 1")
+    hl.exec_cmd("dunstctl reload ~/.config/dunst/dunstrc ~/.config/dunst/laptop.conf")
 end
 
 function M.binds()
     hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("light -U 10"), { locked = true, repeating = true })
     hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("light -A 10"), { locked = true, repeating = true })
     hl.bind("SUPER + slash", hl.dsp.exec_cmd("thyachieve-toggle"), { locked = true })
-    hl.gesture({ fingers = 3, direction = "vertical", action = "workspace" })
+    hl.gesture({
+        fingers = 3,
+        direction = "vertical",
+        action = "workspace",
+    })
+    hl.gesture({
+        fingers = 3,
+        direction = "left",
+        action = function()
+            hl.dispatch(hl.dsp.group.next())
+        end
+    })
+    hl.gesture({
+        fingers = 3,
+        direction = "right",
+        action = function()
+            hl.dispatch(hl.dsp.group.prev())
+        end
+    })
 end
 
-function M.rules() end
+function M.rules()
+    hl.window_rule({
+        name = "group-all-windows",
+        match = {
+            class = "negative:^(nnn|sideterm|pomotroid)$",
+            float = false,
+            fullscreen = false,
+            modal = false
+        },
+        group = "set"
+    })
+
+    hl.window_rule({
+        name = "group-windows-opened-from-nnn",
+        match = {
+            workspace = "name:special:nnn",
+            class = "negative:^nnn$",
+            float = false,
+            fullscreen = false,
+            modal = false
+        },
+        group = "override barred set"
+    })
+
+end
 
 return M

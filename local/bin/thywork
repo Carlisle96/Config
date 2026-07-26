@@ -79,12 +79,12 @@ last_threshold_secs() {
 rolling_from=$(date -d "30 days ago" +%F)
 worked_rolling=$(watson_time -f "$rolling_from")
 
-IFS=$'\t' read -r _current_threshold_secs next_threshold_secs < <(
+IFS=$'\t' read -r current_threshold_secs next_threshold_secs < <(
   lookup_thresholds "$worked_rolling"
 )
 final_threshold_secs=$(last_threshold_secs)
 
-work_per_day=$(( next_threshold_secs / 30 ))
+work_per_day=$(( current_threshold_secs / 30 ))
 solid_per_day=$(( next_threshold_secs / 20 ))
 done_per_day=$(( next_threshold_secs / 15 ))
 worked_today=$(watson_time -d)

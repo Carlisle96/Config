@@ -30,7 +30,7 @@ LATEX=(
 EXTERNAL=(google-chrome-stable sublime-text synology-drive-noextra vicinae zed)
 
 DESKTOP=(easyeffects)
-LAPTOP=(tlp light)
+LAPTOP=(tlp light intel-media-driver libva-utils)
 
 RPMFUSION="https://download1.rpmfusion.org"
 
@@ -60,6 +60,10 @@ sudo dnf config-manager addrepo \
 
 # Rpm Fusion
 sudo dnf -y install "${RPMFUSION}/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+if [ "$IS_LAPTOP" = true ]
+then
+	sudo dnf -y install "${RPMFUSION}/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+fi
 
 ### --------------------------------- DNF Packages ---------------------------------- ###
 
