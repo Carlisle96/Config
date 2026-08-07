@@ -180,16 +180,13 @@
             :height 18)
         (label
             :class "ribbon-subtitle"
-            :visible {progression_days_remaining_roman != "-" && progression_days_remaining_roman != "O"}
-            :text "${progression_days_roman} Dies - ${progression_days_remaining_roman} Restant")
-        (label
-            :class "ribbon-subtitle"
-            :visible {progression_days_remaining_roman == "O"}
-            :text "${progression_days_roman} Dies - Hodie")
-        (label
-            :class "ribbon-subtitle"
-            :visible {progression_days_remaining_roman == "-"}
-            :text "${progression_days_roman} Dies")
+            :text {
+                progression_days_remaining_roman == "-"
+                    ? "${progression_days_roman} Dies"
+                    : progression_days_remaining_roman == "O"
+                        ? "${progression_days_roman} Dies - Hodie"
+                        : "${progression_days_roman} Dies - ${progression_days_remaining_roman} Restant"
+            })
         (box
             :height 24
             :class "ribbon"

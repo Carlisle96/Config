@@ -258,6 +258,14 @@ hl.window_rule({
     match = { class = "^(MediaChips)$" },
     border_color = "rgb(7652B8) rgb(18191A)"
 })
+hl.window_rule({
+    name = "ungrouped-tiled-border",
+    match = {
+        float = false,
+        group = false
+    },
+    border_color = "rgb(94B852)"
+})
 
 hl.window_rule({
     name = "kitty-workspace",
