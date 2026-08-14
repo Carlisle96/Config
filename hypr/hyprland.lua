@@ -2,6 +2,7 @@ local device = require("device")
 require("layouts.thylayout").setup()
 
 hl.monitor(device.monitor)
+device.setup_monitors()
 
 -----------------
 --- AUTOSTART ---
@@ -14,13 +15,13 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("waybar")
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd(
-        "eww open --pos '" ..
+        "thyachieve-start '" ..
         device.achievement_compact_x ..
         "x" ..
         device.achievement_compact_y ..
-        "' --anchor '" ..
+        "' '" ..
         device.achievement_compact_anchor ..
-        "' achievements && eww open achievements-full && thyachieve"
+        "'"
     )
     hl.exec_cmd("/usr/libexec/xfce-polkit")
     hl.exec_cmd("/home/thyriaen/.config/hypr/scripts/nnn-listen.sh")

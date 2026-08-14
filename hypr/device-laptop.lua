@@ -7,6 +7,13 @@ M.monitor = {
     scale = "1",
 }
 
+local external_monitor = {
+    output = "DP-1",
+    mode = "2560x1440@60",
+    position = "0x0",
+    scale = "1",
+}
+
 M.center_single_master = false
 M.achievement_display = "compact"
 M.achievement_compact_x = "40"
@@ -23,6 +30,46 @@ M.calc_move = "1436 64"
 M.dragon_move = "1766 540"
 M.pomotroid_move_idle = "144 64"
 M.pomotroid_move_active = "461 259"
+
+local function use_internal_monitor()
+    hl.monitor(M.monitor)
+end
+
+local function use_external_monitor()
+    hl.monitor(external_monitor)
+    hl.monitor({
+        output = M.monitor.output,
+        disabled = true,
+    })
+end
+
+function M.setup_monitors()
+    -- Keep a mode rule ready so DP-1 is fully active before eDP-1 is disabled.
+    hl.monitor(external_monitor)
+
+    local function use_external_if_connected()
+        if hl.get_monitor(external_monitor.output) ~= nil then
+            use_external_monitor()
+        end
+    end
+
+    use_external_if_connected()
+    hl.on("hyprland.start", use_external_if_connected)
+
+    hl.on("monitor.added", function(monitor)
+        if monitor.name == external_monitor.output then
+            use_external_monitor()
+        end
+    end)
+
+    hl.on("monitor.removed", function(monitor)
+        if monitor.name == external_monitor.output then
+            use_internal_monitor()
+            -- Apply the pending rule even though no active output can render a frame.
+            hl.exec_cmd("hyprctl reload")
+        end
+    end)
+end
 
 function M.autostart()
     hl.exec_cmd("light -N 1")

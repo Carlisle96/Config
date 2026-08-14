@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+set -Eeuo pipefail
+
+compact_position=${1:?Missing compact position}
+compact_anchor=${2:?Missing compact anchor}
+
+if ! eww ping >/dev/null 2>&1; then
+  eww daemon >/dev/null 2>&1
+
+  for (( attempt = 0; attempt < 50; attempt++ )); do
+    if eww ping >/dev/null 2>&1; then
+      break
+    fi
+    sleep 0.1
+  done
+fi
+
+eww ping >/dev/null
+thyachieve
+eww open --pos "$compact_position" --anchor "$compact_anchor" achievements
+eww open achievements-full

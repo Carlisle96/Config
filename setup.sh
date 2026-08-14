@@ -5,7 +5,7 @@ trap 'echo "ERROR: setup.sh failed at line $LINENO" >&2' ERR
 
 ### ------------------------------------ Variables ----------------------------------- ###
 
-BASICS=(ddcutil grim jq ripgrep slurp socat wireplumber wl-clipboard
+BASICS=(ddcutil grim jq ripgrep vim slurp socat wireplumber wl-clipboard
     plymouth-theme-spinner plymouth-plugin-two-step plymouth-plugin-label)
 
 PACKAGES=(

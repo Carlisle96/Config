@@ -25,6 +25,9 @@ M.dragon_move = "3240 700"
 M.pomotroid_move_idle = "160 84"
 M.pomotroid_move_active = "240 128"
 
+function M.setup_monitors()
+end
+
 function M.autostart()
     hl.exec_cmd("easyeffects --gapplication-service")
 end
