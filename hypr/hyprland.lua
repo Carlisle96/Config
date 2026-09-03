@@ -150,6 +150,7 @@ hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "default
 -------------
 
 hl.bind("SUPER + TAB", hl.dsp.group.next())
+hl.bind("SUPER + slash", hl.dsp.exec_cmd("thyachieve-toggle"), { locked = true })
 hl.bind("SUPER + space", hl.dsp.exec_cmd("vicinae toggle"))
 hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"), { locked = true })
 hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%-"),
@@ -211,6 +212,17 @@ local keep_on_special = {
     pomotroid = true
 }
 
+local function move_to_bottom(size, horizontal_position)
+    local width, height = size:match("^(%d+)%s+(%d+)$")
+    assert(width ~= nil and height ~= nil, "window size must be '<width> <height>'")
+
+    local x = horizontal_position == "right"
+        and "monitor_w-" .. width .. "-64"
+        or horizontal_position
+
+    return { x, "monitor_h-" .. height .. "-64" }
+end
+
 hl.on("window.open", function(w)
     local special = hl.get_active_special_workspace()
     if special == nil then
@@ -265,7 +277,7 @@ hl.window_rule({
         float = false,
         group = false
     },
-    border_color = "rgb(94B852)"
+    border_color = "rgb(B85294) rgb(18191A)"
 })
 
 hl.window_rule({
@@ -340,12 +352,14 @@ hl.window_rule({
     size = device.nnn_size,
     center = true
 })
+local sideterm_size = "1200 720"
+
 hl.window_rule({
     name = "sideterm",
     match = { class = "^(sideterm)$" },
     float = true,
-    size = device.sideterm_size,
-    move = device.sideterm_move
+    size = sideterm_size,
+    move = move_to_bottom(sideterm_size, "128")
 })
 hl.window_rule({
     name = "sublime",
@@ -358,7 +372,7 @@ hl.window_rule({
     match = { class = "^(org\\.keepassxc\\.KeePassXC)$", title = "^.* - KeePassXC$" },
     float = true,
     size = device.keepass_size,
-    move = device.keepass_move
+    move = move_to_bottom(device.keepass_size, "right")
 })
 hl.window_rule({
     name = "mate-calc",
