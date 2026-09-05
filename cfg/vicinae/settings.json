@@ -3,7 +3,58 @@
   "imports": [
     "./thy.json"
   ],
+  "tray": {
+    "enabled": false
+  },
   "providers": {
+    "core": {
+      "entrypoints": {
+        "list-extensions": {
+          "enabled": false
+        },
+        "manage-fallback": {
+          "enabled": false
+        },
+        "open-config-file": {
+          "enabled": false
+        },
+        "open-default-config": {
+          "enabled": false
+        },
+        "refresh-apps": {
+          "enabled": false
+        },
+        "reload-scripts": {
+          "enabled": false
+        },
+        "report-bug": {
+          "enabled": false
+        },
+        "search-emojis": {
+          "enabled": false
+        },
+        "search-tray": {
+          "enabled": false
+        },
+        "show-logs": {
+          "enabled": false
+        },
+        "store": {
+          "enabled": false
+        }
+      }
+    },
+    "files": {
+      "preferences": {
+        "autoIndexing": true,
+        "excludedIndexingPaths": [
+          "/home/thyriaen/Work/03 Korten"
+        ],
+        "indexingPaths": [
+          "/home/thyriaen"
+        ]
+      }
+    },
     "font": {
       "enabled": false
     },
@@ -16,6 +67,7 @@
           "enabled": false
         },
         "power-off": {
+          "enabled": true,
           "preferences": {
             "confirm": false
           }
