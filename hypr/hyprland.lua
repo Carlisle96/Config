@@ -14,23 +14,14 @@ hl.on("hyprland.start", function()
     end
     hl.exec_cmd("waybar")
     hl.exec_cmd("hyprpaper")
-    hl.exec_cmd(
-        "thyachieve-start '" ..
-        device.achievement_compact_x ..
-        "x" ..
-        device.achievement_compact_y ..
-        "' '" ..
-        device.achievement_compact_anchor ..
-        "'"
-    )
+    hl.exec_cmd(string.format(
+        "thyachieve-start --pos '%sx%s' --anchor '%s'",
+        device.achievement_compact_x,
+        device.achievement_compact_y,
+        device.achievement_compact_anchor
+    ))
     hl.exec_cmd("/usr/libexec/xfce-polkit")
     hl.exec_cmd("/home/thyriaen/.config/hypr/scripts/nnn-listen.sh")
-    local achievement_display = device.achievement_display or "auto"
-    if achievement_display == "auto" then
-        hl.exec_cmd("/home/thyriaen/.config/hypr/scripts/thyachieve-layout-listen.sh")
-    else
-        hl.exec_cmd("eww update active_display=" .. achievement_display)
-    end
     hl.exec_cmd("TZ=Etc/GMT-1 wlsunset -t 1000 -s 19:30 -S 07:30 -d 7200")
     hl.exec_cmd("keepassxc")
     hl.exec_cmd("synology-drive start")

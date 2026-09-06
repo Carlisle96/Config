@@ -1,22 +1,15 @@
 #!/usr/bin/env bash
 
-set -Eeuo pipefail
+eww daemon || exit 1
 
-compact_position=${1:?Missing compact position}
-compact_anchor=${2:?Missing compact anchor}
-
-if ! eww ping >/dev/null 2>&1; then
-  eww daemon >/dev/null 2>&1
-
-  for (( attempt = 0; attempt < 50; attempt++ )); do
-    if eww ping >/dev/null 2>&1; then
-      break
-    fi
-    sleep 0.1
-  done
+# Daemon startup returns before its IPC socket is ready.
+if ! timeout --kill-after=2s 60s sh -c '
+  until eww --no-daemonize ping >/dev/null 2>&1; do sleep 0.2; done
+'; then
+  printf 'thyachieve-start: Eww was not ready within 60 seconds\n' >&2
+  exit 1
 fi
 
-eww ping >/dev/null
+eww --no-daemonize open achievements "$@"
+eww --no-daemonize open achievements-full
 thyachieve
-eww open --pos "$compact_position" --anchor "$compact_anchor" achievements
-eww open achievements-full

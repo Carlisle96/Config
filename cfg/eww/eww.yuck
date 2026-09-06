@@ -166,7 +166,7 @@
         :orientation "vertical"
         :space-evenly false
         :halign "center"
-        :valign "top"
+        :valign "start"
         :width 1707
         :height 846
         (box
@@ -283,18 +283,18 @@
         :height 72
         (image
             :path {progression >= 21 ? "${p_ribbon}1.png" : "${assets}/empty.png"}
-            :image-width {progression >= 21 ? full_ribbon_width : 0})
+            :image-width {progression >= 21 ? full_ribbon_width : 1})
         (image
             :path {progression >= 22 ? "${p_ribbon}2.png" : "${assets}/empty.png"}
-            :image-width {progression >= 22 ? full_ribbon_width : 0})
+            :image-width {progression >= 22 ? full_ribbon_width : 1})
         (image
             :path {progression >= 32 ? "${p_ribbon}3.png" : "${assets}/empty.png"}
-            :image-width {progression >= 32 ? full_ribbon_width : 0})
+            :image-width {progression >= 32 ? full_ribbon_width : 1})
         (image
             :path {progression >= 42 ? "${p_ribbon}4.png" : "${assets}/empty.png"}
-            :image-width {progression >= 42 ? full_ribbon_width : 0})
+            :image-width {progression >= 42 ? full_ribbon_width : 1})
         (image
             :path {progression >= 52 ? "${p_ribbon}5.png" : "${assets}/empty.png"}
-            :image-width {progression >= 52 ? full_ribbon_width : 0})
+            :image-width {progression >= 52 ? full_ribbon_width : 1})
     )
 )
