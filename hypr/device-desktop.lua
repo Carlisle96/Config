@@ -36,6 +36,17 @@ end
 
 function M.rules()
     hl.window_rule({
+        name = "group-all-windows",
+        match = {
+            class = "negative:^(nnn|sideterm|pomotroid)$",
+            float = false,
+            fullscreen = false,
+            modal = false
+        },
+        group = "set"
+    })
+
+    hl.window_rule({
         name = "cs2",
         match = { class = "^(cs2)$" },
         float = true,

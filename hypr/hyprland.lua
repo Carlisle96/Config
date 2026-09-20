@@ -360,7 +360,7 @@ hl.window_rule({
 })
 hl.window_rule({
     name = "keepass",
-    match = { class = "^(org\\.keepassxc\\.KeePassXC)$", title = "^.* - KeePassXC$" },
+    match = { class = "^(org\\.keepassxc\\.KeePassXC)$", title = "^(.* - )?KeePassXC$" },
     float = true,
     size = device.keepass_size,
     move = move_to_bottom(device.keepass_size, "right")
