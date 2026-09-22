@@ -1,13 +1,14 @@
-# Desktop-only mount reference.
-# UUIDs can change after reinstalling or reformatting. Prefer filesystem labels:
-#
-#   sudo e2label /dev/disk/by-uuid/<data-uuid> thy-data
-#   sudo e2label /dev/disk/by-uuid/<documents-uuid> thy-documents
-#
-# Then use stable label-based fstab entries:
+# Desktop-only mount reference; merge entries into /etc/fstab, do not replace it.
+# Filesystem UUIDs survive an OS reinstall if the data partition is not reformatted.
+# After reformatting or replacing a drive, check its UUID with lsblk -f.
+# Both current SATA SSDs have the label "Data", so use their unique UUIDs.
 
-LABEL=thy-data /home/thyriaen/Data ext4 defaults 0 2
-LABEL=thy-documents /home/thyriaen/Documents ext4 defaults 0 2
+# Samsung SSD 870 EVO 500GB, ext4 data partition.
+# nofail allows booting without this drive connected.
+UUID=d31436ac-5284-4f58-9916-b6ec0c5710af /home/thyriaen/Data ext4 defaults,nofail 0 2
+
+# Historical Documents mount; not used on the current installation:
+# LABEL=thy-documents /home/thyriaen/Documents ext4 defaults 0 2
 
 # Previous UUID-based entries:
 # UUID=d459de50-ebe4-4e64-9b63-a65b80d18ba6 /home/thyriaen/Data ext4 defaults 0 0

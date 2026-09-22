@@ -387,4 +387,27 @@ hl.window_rule({
     move = device.pomotroid_move_active
 })
 
+hl.window_rule({
+    name = "group-all-windows",
+    match = {
+        class = "negative:^(nnn|sideterm|pomotroid|org\\.keepassxc\\.KeePassXC)$",
+        float = false,
+        fullscreen = false,
+        modal = false
+    },
+    group = "set"
+})
+
+hl.window_rule({
+    name = "group-windows-opened-from-nnn",
+    match = {
+        workspace = "name:special:nnn",
+        class = "negative:^nnn$",
+        float = false,
+        fullscreen = false,
+        modal = false
+    },
+    group = "override barred set"
+})
+
 device.rules()

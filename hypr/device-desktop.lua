@@ -36,17 +36,6 @@ end
 
 function M.rules()
     hl.window_rule({
-        name = "group-all-windows",
-        match = {
-            class = "negative:^(nnn|sideterm|pomotroid)$",
-            float = false,
-            fullscreen = false,
-            modal = false
-        },
-        group = "set"
-    })
-
-    hl.window_rule({
         name = "cs2",
         match = { class = "^(cs2)$" },
         float = true,
@@ -57,6 +46,8 @@ function M.rules()
         match = { class = "^(steam_app_2141910)$", title = "^(MTGA)$" },
         float = true,
         fullscreen = true,
+        -- Ignore the game's fullscreen resets during scene changes.
+        suppress_event = "fullscreen",
     })
     hl.on("window.open", function(w)
         if w.class ~= "steam_app_2141910" and w.initial_class ~= "steam_app_2141910" then

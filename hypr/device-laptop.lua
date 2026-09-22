@@ -131,29 +131,6 @@ function M.binds()
 end
 
 function M.rules()
-    hl.window_rule({
-        name = "group-all-windows",
-        match = {
-            class = "negative:^(nnn|sideterm|pomotroid)$",
-            float = false,
-            fullscreen = false,
-            modal = false
-        },
-        group = "set"
-    })
-
-    hl.window_rule({
-        name = "group-windows-opened-from-nnn",
-        match = {
-            workspace = "name:special:nnn",
-            class = "negative:^nnn$",
-            float = false,
-            fullscreen = false,
-            modal = false
-        },
-        group = "override barred set"
-    })
-
 end
 
 return M
