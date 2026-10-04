@@ -1,0 +1,21 @@
+[Unit]
+Description=MediaChips backend using system Node.js (Sharp/Electron workaround)
+PartOf=graphical-session.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+WorkingDirectory=%h/.local/share/mediachips-node/app
+Environment=NODE_ENV=production
+Environment=MEDIA_CHIPS_DATA_DIR=%h/.config/MediaChips
+Environment=MEDIA_CHIPS_RESOURCES_PATH=%h/.local/share/mediachips-node/resources
+Environment=MEDIA_CHIPS_ALLOW_LAN=0
+# Detect a Node ABI change before opening the real database.
+ExecStartPre=/usr/bin/node -e "const D=require('./node_modules/better-sqlite3'); const db=new D(':memory:'); db.close();"
+ExecStart=/usr/bin/node .backend-build/app/server.js
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=20
+StandardOutput=journal
+StandardError=journal

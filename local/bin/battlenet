@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+export GAMEID=battlenet
+export WINEPREFIX="${HOME}/Games/BattleNet"
+export PROTONPATH=GE-Proton
+
+exec /usr/bin/umu-run \
+    "${WINEPREFIX}/drive_c/Program Files (x86)/Battle.net/Battle.net Launcher.exe" \
+    "$@"

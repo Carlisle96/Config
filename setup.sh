@@ -11,7 +11,7 @@ BASICS=(ddcutil grim jq ripgrep vim slurp socat wireplumber wl-clipboard
 PACKAGES=(
 	flatpak pdftk python3-pip zathura zathura-pdf-mupdf bat imv task trash-cli
 	kitty zsh zsh-syntax-highlighting fzf fastfetch mesa-libOpenCL clinfo evince
-	simple-scan keepassxc mate-calc syncthing mediawriter nemo brightnessctl
+	simple-scan keepassxc mate-calc syncthing mediawriter nemo brightnessctl graphviz
 	gtk-murrine-engine gtk3-devel fuse fuse-libs cups cups-filters pavucontrol xfce-polkit
 )
 

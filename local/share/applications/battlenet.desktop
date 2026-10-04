@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Battle.net
+Comment=Battle.net mit umu und GE-Proton starten
+Exec=/home/thyriaen/.local/bin/battlenet
+TryExec=/home/thyriaen/.local/bin/battlenet
+Icon=applications-games
+Terminal=false
+Categories=Game;

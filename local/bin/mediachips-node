@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+service=mediachips-node.service
+data_home=${XDG_DATA_HOME:-$HOME/.local/share}
+config_file=${XDG_CONFIG_HOME:-$HOME/.config}/MediaChips/config.json
+
+fail() {
+    printf 'MediaChips: %s\n' "$1" >&2
+    if command -v notify-send >/dev/null; then
+        notify-send --urgency=critical 'MediaChips' "$1" || true
+    fi
+    exit 1
+}
+
+for command in node curl systemctl google-chrome; do
+    command -v "$command" >/dev/null || fail "Benötigtes Programm fehlt: $command"
+done
+
+systemctl --user start "$service" || fail "Serverstart fehlgeschlagen. Details: journalctl --user -u $service"
+
+port=$(node -e '
+const fs = require("node:fs");
+const config = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+const port = config.port ?? 12321;
+if (!Number.isInteger(port) || port < 1 || port > 65535) process.exit(1);
+console.log(port);
+' "$config_file") || fail 'Der konfigurierte Server-Port konnte nicht gelesen werden.'
+
+url="http://127.0.0.1:$port"
+ready=false
+for ((attempt = 0; attempt < 40; attempt++)); do
+    if curl --noproxy '*' --silent --show-error --fail --max-time 1 "$url/api/health" 2>/dev/null |
+        node -e '
+let body = "";
+process.stdin.on("data", chunk => body += chunk);
+process.stdin.on("end", () => {
+    try {
+        const health = JSON.parse(body);
+        process.exit(health.service === "mediachips-server" && health.status === "online" &&
+            health.taskRoutesLoaded === true && Array.isArray(health.routeLoadErrors) &&
+            health.routeLoadErrors.length === 0 ? 0 : 1);
+    } catch { process.exit(1); }
+});'; then
+        ready=true
+        break
+    fi
+    systemctl --user is-active --quiet "$service" || fail "Server beendet. Details: journalctl --user -u $service"
+    sleep 0.5
+done
+
+[[ "$ready" == true ]] || fail "Server antwortet nicht vollständig. Details: journalctl --user -u $service"
+exec google-chrome --app="$url" --class=mediachips \
+    --user-data-dir="$data_home/mediachips-node/browser" --ozone-platform=wayland \
+    --no-first-run --no-default-browser-check

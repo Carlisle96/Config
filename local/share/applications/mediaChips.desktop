@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Name=Media Chips
+Comment=MediaChips with a native Node.js backend
+Exec=/home/thyriaen/.local/bin/mediachips-node
+Icon=/home/thyriaen/Data/Lusum/Application/mediaChips.png
+StartupWMClass=mediachips
+Categories=AudioVideo;

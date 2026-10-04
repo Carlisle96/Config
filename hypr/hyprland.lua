@@ -258,6 +258,16 @@ hl.window_rule({
     border_color = "rgb(7652B8) rgb(18191A)"
 })
 hl.window_rule({
+    name = "battle-net-wine-tray",
+    match = {
+        class = "^(steam_app_0|steam_app_2921862382)$",
+        initial_title = "^$",
+        float = true,
+    },
+    workspace = "special:wine-tray silent",
+    no_initial_focus = true,
+})
+hl.window_rule({
     name = "mediachips-border",
     match = { class = "^(MediaChips)$" },
     border_color = "rgb(7652B8) rgb(18191A)"

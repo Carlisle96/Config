@@ -35,9 +35,21 @@ function M.binds()
 end
 
 function M.rules()
+    -- umu gives Battle.net and its games the shared class steam_app_0.
+    hl.window_rule({
+        name = "games-never-group",
+        match = { class = "^(cs2|dota2|steam_app_(0|570|730|2141910|2921862382))$" },
+        group = "override deny",
+    })
     hl.window_rule({
         name = "cs2",
-        match = { class = "^(cs2)$" },
+        match = { class = "^(cs2|steam_app_730)$" },
+        float = true,
+        fullscreen = true,
+    })
+    hl.window_rule({
+        name = "dota-2",
+        match = { class = "^(dota2|steam_app_570)$" },
         float = true,
         fullscreen = true,
     })
@@ -48,6 +60,24 @@ function M.rules()
         fullscreen = true,
         -- Ignore the game's fullscreen resets during scene changes.
         suppress_event = "fullscreen",
+    })
+    hl.window_rule({
+        name = "fullscreen-games-by-title",
+        match = {
+            title = [[(?i)^(mtga|magic: the gathering arena|dota 2|cs2|counter-strike 2|starcraft (ii|2)|world of warcraft|wow (forever|classic)|hearthstone)(\b.*)?$]],
+        },
+        float = true,
+        fullscreen = true,
+        group = "override deny",
+    })
+    hl.window_rule({
+        name = "battle-net-launcher",
+        match = {
+            class = "^(steam_app_0|steam_app_2921862382)$",
+            title = "^Battle[.]net$",
+        },
+        float = true,
+        center = true,
     })
     hl.on("window.open", function(w)
         if w.class ~= "steam_app_2141910" and w.initial_class ~= "steam_app_2141910" then
