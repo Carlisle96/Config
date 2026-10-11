@@ -84,7 +84,12 @@ IFS=$'\t' read -r current_threshold_secs next_threshold_secs < <(
 )
 final_threshold_secs=$(last_threshold_secs)
 
-work_per_day=$(( current_threshold_secs / 30 ))
+# Before the first rolling threshold, use that threshold as the daily minimum.
+minimum_threshold_secs=$current_threshold_secs
+if (( minimum_threshold_secs == 0 )); then
+  minimum_threshold_secs=$next_threshold_secs
+fi
+work_per_day=$(( minimum_threshold_secs / 30 ))
 solid_per_day=$(( next_threshold_secs / 20 ))
 done_per_day=$(( next_threshold_secs / 15 ))
 worked_today=$(watson_time -d)
