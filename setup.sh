@@ -25,6 +25,7 @@ LATEX=(
 	texlive-datetime2-german texlive-hyphen-german texlive-xskak  texlive-skaknew
 	texlive-collection-fontsrecommended texlive-doi texlive-mdframed  texlive-preview
 	texlive-ebgaramond texlive-datetime2-english texlive-koma-script texlive-spreadtab
+	texlive-enumitem
 )
 
 EXTERNAL=(google-chrome-stable sublime-text synology-drive-noextra vicinae zed)
@@ -284,6 +285,7 @@ install -m 0755 "${NNN_TMP}/nnn-nerd-static" ~/.local/bin/nnn
 rm -rf "${NNN_TMP}"
 curl -fsSL --retry 3 https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh
 install -D -m 0755 ./cfg/nnn/plugins/drag ~/.config/nnn/plugins/drag
+install -D -m 0755 ./cfg/nnn/plugins/xdgdefault ~/.config/nnn/plugins/xdgdefault
 
 # Dotfiles
 cp ./home/.[!.]* ~/

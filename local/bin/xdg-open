@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# xdg-mime's generic backend uses libmagic, which mistakes %!TEX for PostScript.
+# GIO recognizes these files as TeX and honors the configured default app.
+if [ "$#" -eq 1 ]; then
+    case "$1" in
+        *.tex|*.TEX)
+            if [ -f "$1" ]; then
+                exec /usr/bin/gio open "$1"
+            fi
+            ;;
+    esac
+fi
+
+exec /usr/bin/xdg-open "$@"
