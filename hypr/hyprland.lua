@@ -238,9 +238,22 @@ hl.on("window.open", function(w)
     end
 end)
 
-hl.workspace_rule({ workspace = "special:nnn", on_created_empty = 'kitty --class=nnn sh -c "nnn -d -P p"' })
-hl.workspace_rule({ workspace = "special:sideterm", on_created_empty = "kitty --class=sideterm" })
-hl.workspace_rule({ workspace = "special:pomo", on_created_empty = "pomotroid" })
+local workspace_programs = {
+    ["special:nnn"] = 'kitty --class=nnn sh -c "nnn -d -P p"',
+    ["special:sideterm"] = "kitty --class=sideterm",
+    ["special:pomo"] = "pomotroid",
+}
+
+hl.on("workspace.created", function(ws)
+    if not ws.is_empty then
+        return
+    end
+
+    local command = workspace_programs[ws.name]
+    if command ~= nil then
+        hl.exec_cmd(command, { workspace = ws.name .. " silent" })
+    end
+end)
 
 hl.window_rule({
     name = "xwayland-error",
